@@ -495,18 +495,24 @@ def fx_to_base(
 def _index_series(
     session: Session, market: str, sector: str, as_of: date
 ) -> pd.Series | None:
+    """Benchmark series for a market/sector. More than one matching index
+    row can exist (editing universe.yml adds instruments but never deletes
+    old ones — e.g. ^SPX swapped for SPY leaves both); pick the one with
+    the longest usable price history rather than assuming exactly one."""
     q = select(Instrument).where(
         Instrument.security_type == "index",
         Instrument.market == market,
         Instrument.sector == sector,
     )
-    idx = session.execute(q).scalar_one_or_none()
-    if idx is None:
-        return None
-    df = load_price_frame(session, idx.id, as_of)
-    if df.empty:
-        return None
-    return df["adj_close"].rename(idx.ticker)
+    best: pd.Series | None = None
+    for idx in session.execute(q).scalars():
+        df = load_price_frame(session, idx.id, as_of)
+        if df.empty:
+            continue
+        series = df["adj_close"].rename(idx.ticker)
+        if best is None or len(series) > len(best):
+            best = series
+    return best
 
 
 # ---------------------------------------------------------------------------

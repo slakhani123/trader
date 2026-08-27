@@ -147,3 +147,34 @@ class TestQualityFlags:
         assert snap.info.currency == "USD"
         assert 0.70 <= snap.fx_to_base <= 0.88
         assert snap.fx_as_of is not None
+
+
+class TestBenchmarkResolution:
+    def test_duplicate_index_rows_pick_the_one_with_data(self, session):
+        """Editing universe.yml adds instruments but never deletes old ones:
+        swapping ^SPX for SPY leaves two US index rows, one with no bars.
+        The benchmark lookup must not crash and must use the live one."""
+        from vigil.data.snapshot import _index_series
+        from vigil.models import PriceBar
+
+        stale = Instrument(
+            ticker="^SPX", exchange="INDEX", market="US", name="S&P 500",
+            sector="", industry="", currency="USD", security_type="index",
+        )
+        live = Instrument(
+            ticker="SPY", exchange="NYSE", market="US", name="S&P 500 ETF",
+            sector="", industry="", currency="USD", security_type="index",
+        )
+        session.add_all([stale, live])
+        session.flush()
+        for i in range(5):
+            session.add(PriceBar(
+                instrument_id=live.id, bar_date=date(2026, 8, 17 + i),
+                open=640.0, high=645.0, low=638.0, close=642.0 + i,
+                volume=1e6, currency="USD",
+            ))
+        session.flush()
+
+        series = _index_series(session, "US", "", date(2026, 8, 25))
+        assert series is not None and series.name == "SPY" and len(series) == 5
+        assert _index_series(session, "UK", "", date(2026, 8, 25)) is None
