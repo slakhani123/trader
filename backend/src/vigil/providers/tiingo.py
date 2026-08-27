@@ -51,7 +51,15 @@ class TiingoProvider:
                 "Tiingo is not configured. Create a free account at tiingo.com and "
                 "set VIGIL_TIINGO_API_KEY to your API token."
             )
-        self._http = HttpFetcher(min_interval_s=0.15)
+        # Tiingo wants an explicit JSON content type on every request and
+        # accepts header auth as well as the token query param — send both.
+        self._http = HttpFetcher(
+            base_headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Token {self._key}",
+            },
+            min_interval_s=0.15,
+        )
         # fetch_bars and fetch_actions read the SAME response; memoise the
         # last request so ingest doesn't pay for (or get rate-limited by)
         # a duplicate call per ticker.
