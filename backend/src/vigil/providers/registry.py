@@ -122,8 +122,13 @@ class HttpFetcher:
                 if resp.status_code >= 500:
                     raise ProviderError(f"{url}: HTTP {resp.status_code}")
                 if resp.status_code >= 400:
-                    # 4xx (other than 429) will not heal on retry.
-                    raise CapabilityUnavailable(f"{url}: HTTP {resp.status_code}")
+                    # 4xx (other than 429) will not heal on retry. Carry a
+                    # body snippet — provider block pages explain themselves.
+                    snippet = " ".join(resp.text[:160].split())
+                    raise CapabilityUnavailable(
+                        f"{url}: HTTP {resp.status_code}"
+                        + (f" — {snippet}" if snippet else "")
+                    )
                 return resp.text, datetime.now(UTC), latency
             except CapabilityUnavailable:
                 raise

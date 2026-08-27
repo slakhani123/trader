@@ -158,6 +158,53 @@ def alerts(limit: int = typer.Option(10)) -> None:
 
 
 @app.command()
+def probe(ticker: str = typer.Argument("AAPL")) -> None:
+    """Diagnose data fetching for ONE ticker: shows exactly what the
+    configured price provider returns or the full error it raises."""
+    _setup_logging()
+    from datetime import timedelta
+
+    from vigil.providers.base import CapabilityUnavailable, ProviderError
+    from vigil.providers.registry import get_provider
+
+    settings = get_settings()
+    end = datetime.now().date()
+    start = end - timedelta(days=30)
+    typer.echo(f"price provider: {settings.provider_price}")
+    try:
+        prov = get_provider("prices")
+        result = prov.fetch_bars(ticker, start, end)
+        typer.echo(f"OK — {len(result.records)} daily bars for {ticker}")
+        if result.records:
+            last = result.records[-1]
+            typer.echo(f"latest: {last.bar_date} close {last.close} {last.currency}")
+        for w in result.warnings[:5]:
+            typer.echo(f"warning: {w}")
+        if not result.records:
+            typer.echo("NO BARS RETURNED — provider responded but with no data. "
+                       "Check the ticker spelling for this provider.")
+    except (CapabilityUnavailable, ProviderError) as exc:
+        typer.echo(f"FAILED: {exc}")
+        typer.echo(
+            "\nIf this is stooq: open "
+            f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&i=d in your web "
+            "browser. A CSV download = your network is fine and this needs a "
+            "code fix; an error page = stooq blocks/limits your network "
+            "(common on corporate networks and VPNs) — use another provider."
+        )
+    # FX probe rides along: base-currency conversion needs it.
+    try:
+        macro = get_provider("macro")
+        fx = macro.fetch_fx([("USD", "GBP")], start, end)
+        typer.echo(f"fx USD/GBP: {len(fx.records)} rates"
+                   + (f", latest {fx.records[-1].rate}" if fx.records else ""))
+        for w in fx.warnings[:3]:
+            typer.echo(f"fx warning: {w}")
+    except (CapabilityUnavailable, ProviderError) as exc:
+        typer.echo(f"fx FAILED: {exc}")
+
+
+@app.command()
 def health() -> None:
     """Provider and data health summary."""
     _setup_logging()

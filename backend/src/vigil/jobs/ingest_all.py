@@ -7,6 +7,7 @@ Used both by the demo seed (synthetic provider) and by real refresh jobs.
 from __future__ import annotations
 
 import logging
+from typing import Any
 from datetime import UTC, date, datetime
 
 from sqlalchemy.orm import Session
@@ -54,7 +55,7 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
     job = JobRun(job_name="ingest_all", detail={})
     session.add(job)
     session.flush()
-    totals: dict[str, dict] = {}
+    totals: dict[str, Any] = {}  # IngestStats per capability; plain dict for prices
 
     ref = _resolve(session, "reference")
     if ref is None:
@@ -114,6 +115,8 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
                 _acc(totals, "fundamentals", s)
             except (CapabilityUnavailable, ProviderError) as exc:
                 record_health(session, fund.name, "fundamentals", False, f"{t}: {exc}")
+                fb = totals.setdefault("fundamentals", ingest.IngestStats())
+                fb.issues.append(f"{t}: failed")
         if est is not None:
             try:
                 _acc(totals, "estimates", ingest.ingest_estimates(
@@ -139,15 +142,31 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
             except (CapabilityUnavailable, ProviderError) as exc:
                 record_health(session, own.name, "ownership", False, f"{t}: {exc}")
 
+    if fund is not None:
+        f_stats = totals.get("fundamentals")
+        f_ins = f_stats.inserted if f_stats else 0
+        f_fail = len(f_stats.issues) if f_stats else 0
+        record_health(
+            session, fund.name, "fundamentals", f_ins > 0,
+            f"{f_ins} reports ingested; {f_fail} ticker(s) failed"
+            + (" (UK tickers are expected to fail on EDGAR — it is US-only)"
+               if f_fail and fund.name == "edgar" else ""),
+        )
+
     macro = _resolve(session, "macro")
     if macro is not None:
         try:
-            _acc(totals, "macro", ingest.ingest_macro(
-                session, macro.fetch_macro(MACRO_SERIES, start, end).records, macro.name))
-            _acc(totals, "fx", ingest.ingest_fx(
-                session, macro.fetch_fx([("USD", "GBP"), ("GBP", "USD")], start, end).records,
-                macro.name))
-            record_health(session, macro.name, "macro", True, "ok")
+            macro_res = macro.fetch_macro(MACRO_SERIES, start, end)
+            _acc(totals, "macro", ingest.ingest_macro(session, macro_res.records, macro.name))
+            fx_res = macro.fetch_fx([("USD", "GBP"), ("GBP", "USD")], start, end)
+            _acc(totals, "fx", ingest.ingest_fx(session, fx_res.records, macro.name))
+            got = len(macro_res.records) + len(fx_res.records)
+            first_warn = (macro_res.warnings + fx_res.warnings)[:1]
+            record_health(
+                session, macro.name, "macro", got > 0,
+                f"{len(macro_res.records)} macro obs, {len(fx_res.records)} fx rates fetched"
+                + (f" — {first_warn[0]}" if got == 0 and first_warn else ""),
+            )
         except (CapabilityUnavailable, ProviderError) as exc:
             record_health(session, macro.name, "macro", False, str(exc))
 
