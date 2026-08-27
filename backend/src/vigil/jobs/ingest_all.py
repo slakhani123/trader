@@ -7,8 +7,8 @@ Used both by the demo seed (synthetic provider) and by real refresh jobs.
 from __future__ import annotations
 
 import logging
-from typing import Any
 from datetime import UTC, date, datetime
+from typing import Any
 
 from sqlalchemy.orm import Session
 
