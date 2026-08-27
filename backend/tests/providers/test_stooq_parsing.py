@@ -69,7 +69,7 @@ class TestBars:
         from vigil.providers.base import CapabilityUnavailable
 
         sp = provider({})
-        with pytest.raises(CapabilityUnavailable, match="no data"):
+        with pytest.raises(CapabilityUnavailable, match="page instead of data"):
             sp.fetch_bars("ZZZZ", date(2026, 8, 1), date(2026, 8, 25))
 
 

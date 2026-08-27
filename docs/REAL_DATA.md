@@ -41,6 +41,27 @@ Notes:
   scored-but-ungated rather than alerting. That is the abstention
   principle working as designed.
 
+## Route 1b — Tiingo (free API key) when stooq won't cooperate
+
+Stooq needs no signup but blocks some networks (corporate firewalls, VPNs)
+and enforces a daily download cap. Tiingo is the reliable free
+alternative for US prices — and it serves proper per-day split/dividend
+data, which is better point-in-time hygiene than stooq. US-only on the
+free tier; UK names wait for EODHD.
+
+```powershell
+# after creating a free account at tiingo.com and copying your API token:
+cd backend
+Copy-Item env.tiingo.example .env
+notepad .env                 # paste your token + your name/email for EDGAR
+notepad universe.yml         # swap ^SPX row for SPY (see env.tiingo.example),
+                             # comment out the ^UKX row and UK companies
+Remove-Item vigil.db
+.venv\Scripts\vigil probe AAPL   # should say OK with bar counts
+.venv\Scripts\vigil seed
+.venv\Scripts\vigil scan
+```
+
 ## Route 2 — EODHD (paid, full coverage)
 
 Adds: corporate actions, UK/LSE financial statements, analyst estimates

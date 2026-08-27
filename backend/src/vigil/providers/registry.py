@@ -39,6 +39,10 @@ def _build(provider_name: str) -> Any:
         from vigil.providers.static_universe import StaticUniverseProvider
 
         return StaticUniverseProvider()
+    if provider_name == "tiingo":
+        from vigil.providers.tiingo import TiingoProvider
+
+        return TiingoProvider()
     if provider_name == "eodhd":
         from vigil.providers.eodhd import EodhdProvider
 

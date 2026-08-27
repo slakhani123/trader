@@ -141,6 +141,9 @@ class Settings(BaseSettings):
     edgar_user_agent: str = Field(
         default="", description="SEC EDGAR requires 'name email' UA; unset disables the adapter"
     )
+    tiingo_api_key: str = Field(
+        default="", description="Tiingo API token; enables the 'tiingo' adapter when set"
+    )
     eodhd_api_key: str = Field(
         default="", description="EODHD API token; enables the 'eodhd' adapter when set"
     )

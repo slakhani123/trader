@@ -68,7 +68,13 @@ class StooqProvider:
         }
         body, retrieved_at, _latency = self._http.get(BASE_URL, params=params)
         if body.strip().lower().startswith("no data") or "<html" in body[:200].lower():
-            raise CapabilityUnavailable(f"stooq: no data for symbol {symbol}")
+            import re
+
+            snippet = " ".join(re.sub(r"<[^>]+>", " ", body[:400]).split())[:160]
+            raise CapabilityUnavailable(
+                f"stooq returned a page instead of data for {symbol}: '{snippet}' "
+                "(usually their daily download limit or a network block)"
+            )
         is_gbx = symbol.endswith(".uk")
         scale = 0.01 if is_gbx else 1.0  # GBX -> GBP
         currency = "GBP" if is_gbx else "USD"
