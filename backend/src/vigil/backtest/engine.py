@@ -101,6 +101,25 @@ def _cost_frac(spread_bps: float | None, settings: Settings) -> float:
     return (settings.backtest_costs.commission_bps_per_side + half_spread) / 10_000
 
 
+def _benchmark_series(session: Session, market: str, end: date) -> pd.Series | None:
+    """Benchmark adj_close for a market. More than one index row can exist
+    (universe edits add instruments but never delete old ones — ^SPX swapped
+    for SPY leaves both); use the one with the longest usable history."""
+    rows = session.execute(
+        select(Instrument).where(
+            Instrument.security_type == "index",
+            Instrument.market == market,
+            Instrument.sector == "",
+        )
+    ).scalars()
+    best: pd.Series | None = None
+    for idx in rows:
+        series = _price_panel(session, idx.id, end)["adj_close"]
+        if len(series) and (best is None or len(series) > len(best)):
+            best = series
+    return best
+
+
 def run_backtest(
     session: Session,
     start: date,
@@ -139,15 +158,9 @@ def run_backtest(
     for inst in instruments:
         panels[inst.id] = _price_panel(session, inst.id, end)
     for market in {i.market for i in instruments}:
-        idx = session.execute(
-            select(Instrument).where(
-                Instrument.security_type == "index",
-                Instrument.market == market,
-                Instrument.sector == "",
-            )
-        ).scalar_one_or_none()
-        if idx is not None:
-            bench_by_market[market] = _price_panel(session, idx.id, end)["adj_close"]
+        bench = _benchmark_series(session, market, end)
+        if bench is not None:
+            bench_by_market[market] = bench
 
     scan_dates = list(pd.bdate_range(start, end, freq=f"{step_days}B"))
     open_positions: dict[tuple[int, str, str], _OpenPosition] = {}

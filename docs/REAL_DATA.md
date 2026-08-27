@@ -120,6 +120,18 @@ Remove-Item .env, vigil.db
 .venv\Scripts\vigil scan
 ```
 
+## Windows one-click scripts
+
+The repo root has three batch files you can double-click in File Explorer
+(or run by name from PowerShell) instead of typing the individual commands:
+
+- `update.cmd` — pulls the latest code, fetches new market data, runs a
+  scan, and prints the health summary.
+- `start.cmd` — opens the API and the dashboard in their own windows and
+  opens http://localhost:5173 in your browser.
+- `backtest.cmd` — runs the standard point-in-time backtest
+  (2021-06-01 onward, final year held out).
+
 ## Daily operation with real data
 
 Leave the scheduler running instead of scanning by hand:
