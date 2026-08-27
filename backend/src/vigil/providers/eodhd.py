@@ -60,7 +60,7 @@ class EodhdProvider:
     name = "eodhd"
 
     def __init__(self) -> None:
-        self._key = get_settings().eodhd_api_key
+        self._key = get_settings().eodhd_api_key.strip().strip('"').strip("'")
         if not self._key:
             raise CapabilityUnavailable(
                 "EODHD is not configured. Set VIGIL_EODHD_API_KEY (from eodhd.com) "

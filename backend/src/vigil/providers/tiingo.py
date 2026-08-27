@@ -45,7 +45,7 @@ class TiingoProvider:
     name = "tiingo"
 
     def __init__(self) -> None:
-        self._key = get_settings().tiingo_api_key
+        self._key = get_settings().tiingo_api_key.strip().strip('"').strip("'")
         if not self._key:
             raise CapabilityUnavailable(
                 "Tiingo is not configured. Create a free account at tiingo.com and "
