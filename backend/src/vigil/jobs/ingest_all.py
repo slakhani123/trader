@@ -80,11 +80,21 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
             stats.merge(ingest.ingest_actions(session, inst, actions.records, prices.name))
         except CapabilityUnavailable as exc:
             record_health(session, prices.name, "prices", False, str(exc))
+            bucket = totals.setdefault("prices", {"inserted": 0, "failed_tickers": 0})
+            bucket["failed_tickers"] = bucket.get("failed_tickers", 0) + 1
         except ProviderError as exc:
             record_health(session, prices.name, "prices", False, str(exc))
             log.warning("price ingest failed for %s: %s", ticker, exc)
+            bucket = totals.setdefault("prices", {"inserted": 0, "failed_tickers": 0})
+            bucket["failed_tickers"] = bucket.get("failed_tickers", 0) + 1
         totals.setdefault("prices", {"inserted": 0})["inserted"] += stats.inserted
-    record_health(session, prices.name, "prices", True, f"{totals.get('prices')}")
+    bars_in = totals.get("prices", {}).get("inserted", 0)
+    price_failures = totals.get("prices", {}).get("failed_tickers", 0)
+    record_health(
+        session, prices.name, "prices", bars_in > 0,
+        f"{bars_in} bars ingested; {price_failures} ticker(s) failed"
+        + ("" if bars_in else " — check network/provider (see per-ticker rows above)"),
+    )
 
     fund = _resolve(session, "fundamentals")
     est = _resolve(session, "estimates")

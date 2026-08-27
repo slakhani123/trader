@@ -28,7 +28,19 @@ class StooqProvider:
     name = "stooq"
 
     def __init__(self) -> None:
-        self._http = HttpFetcher(min_interval_s=1.0)  # be polite: 1 req/s
+        # stooq rejects (404s) requests without a browser-like identity, so
+        # present one; still throttled to 1 req/s to stay polite.
+        self._http = HttpFetcher(
+            base_headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+                ),
+                "Accept": "text/csv,text/plain,*/*",
+                "Referer": "https://stooq.com/",
+            },
+            min_interval_s=1.0,
+        )
 
     def _symbol(self, ticker: str, market: str | None = None) -> str:
         t = ticker.lower()

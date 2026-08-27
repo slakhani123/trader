@@ -30,6 +30,7 @@ def _setup_logging() -> None:
         level=getattr(logging, settings.log_level.upper(), logging.INFO),
         format='{"ts":"%(asctime)s","level":"%(levelname)s","logger":"%(name)s","msg":"%(message)s"}',
     )
+    logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 def _parse_date(value: str | None) -> date:
