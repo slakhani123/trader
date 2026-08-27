@@ -35,6 +35,14 @@ def _build(provider_name: str) -> Any:
         from vigil.providers.stooq import StooqProvider
 
         return StooqProvider()
+    if provider_name == "static":
+        from vigil.providers.static_universe import StaticUniverseProvider
+
+        return StaticUniverseProvider()
+    if provider_name == "eodhd":
+        from vigil.providers.eodhd import EodhdProvider
+
+        return EodhdProvider()
     raise CapabilityUnavailable(f"No adapter registered under name '{provider_name}'")
 
 
@@ -45,7 +53,7 @@ def get_provider(capability: str) -> Any:
     """Return the configured adapter instance for a capability."""
     settings = get_settings()
     mapping = {
-        "reference": settings.provider_price,  # universe rides with the price vendor
+        "reference": settings.provider_reference or settings.provider_price,
         "prices": settings.provider_price,
         "fundamentals": settings.provider_fundamentals,
         "estimates": settings.provider_estimates,

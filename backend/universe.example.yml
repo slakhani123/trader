@@ -1,0 +1,73 @@
+# Vigil universe — the companies the platform scans.
+#
+# Copy this file to universe.yml (same folder) and edit freely, then re-run:
+#   .venv\Scripts\vigil seed        (Windows)
+#   .venv/bin/vigil seed            (Mac/Linux)
+#
+# Rules of thumb:
+# - UK / London-listed tickers end in .L (e.g. VOD.L).
+# - sector matters: it is how peers are grouped for valuation comparisons,
+#   so keep it consistent between companies you want compared.
+# - Keep one `security_type: index` entry with sector: "" per market —
+#   that is the market benchmark used for relative strength and regime.
+# - On the free route (stooq + EDGAR): US names get prices AND financial
+#   statements; UK names get prices only (EDGAR is US-only), so their
+#   fundamental engines abstain until a paid feed (e.g. EODHD) is enabled.
+
+instruments:
+  # ---- market benchmarks (keep these) ----
+  - {ticker: "^SPX", name: "S&P 500", market: US, sector: "", security_type: index}
+  - {ticker: "^UKX", name: "FTSE 100", market: UK, sector: "", security_type: index}
+  # If ^UKX shows no data with your price source, try ^FTM instead.
+
+  # ---- US: Technology ----
+  - {ticker: AAPL,  name: Apple,               market: US, sector: Technology, industry: Consumer Electronics, exchange: NASDAQ}
+  - {ticker: MSFT,  name: Microsoft,           market: US, sector: Technology, industry: Software,             exchange: NASDAQ}
+  - {ticker: GOOGL, name: Alphabet,            market: US, sector: Technology, industry: Internet Services,    exchange: NASDAQ}
+  - {ticker: NVDA,  name: NVIDIA,              market: US, sector: Technology, industry: Semiconductors,       exchange: NASDAQ}
+  - {ticker: AMD,   name: Advanced Micro Devices, market: US, sector: Technology, industry: Semiconductors,    exchange: NASDAQ}
+  - {ticker: CRM,   name: Salesforce,          market: US, sector: Technology, industry: Software}
+  - {ticker: ADBE,  name: Adobe,               market: US, sector: Technology, industry: Software,             exchange: NASDAQ}
+
+  # ---- US: Consumer ----
+  - {ticker: AMZN,  name: Amazon,              market: US, sector: Consumer, industry: E-Commerce,             exchange: NASDAQ}
+  - {ticker: WMT,   name: Walmart,             market: US, sector: Consumer, industry: Retail}
+  - {ticker: MCD,   name: "McDonald's",        market: US, sector: Consumer, industry: Restaurants}
+  - {ticker: NKE,   name: Nike,                market: US, sector: Consumer, industry: Apparel}
+  - {ticker: PG,    name: Procter & Gamble,    market: US, sector: Consumer, industry: Household Products}
+  - {ticker: KO,    name: Coca-Cola,           market: US, sector: Consumer, industry: Beverages}
+
+  # ---- US: Healthcare ----
+  - {ticker: JNJ,   name: Johnson & Johnson,   market: US, sector: Healthcare, industry: Pharmaceuticals}
+  - {ticker: UNH,   name: UnitedHealth,        market: US, sector: Healthcare, industry: Health Insurance}
+  - {ticker: PFE,   name: Pfizer,              market: US, sector: Healthcare, industry: Pharmaceuticals}
+  - {ticker: TMO,   name: Thermo Fisher,       market: US, sector: Healthcare, industry: Life Sciences Tools}
+
+  # ---- US: Financials ----
+  - {ticker: JPM,   name: JPMorgan Chase,      market: US, sector: Financials, industry: Banks}
+  - {ticker: BAC,   name: Bank of America,     market: US, sector: Financials, industry: Banks}
+  - {ticker: V,     name: Visa,                market: US, sector: Financials, industry: Payments}
+  - {ticker: BLK,   name: BlackRock,           market: US, sector: Financials, industry: Asset Management}
+
+  # ---- US: Industrials & Energy ----
+  - {ticker: CAT,   name: Caterpillar,         market: US, sector: Industrials, industry: Machinery}
+  - {ticker: UNP,   name: Union Pacific,       market: US, sector: Industrials, industry: Railroads}
+  - {ticker: HON,   name: Honeywell,           market: US, sector: Industrials, industry: Conglomerates,       exchange: NASDAQ}
+  - {ticker: XOM,   name: ExxonMobil,          market: US, sector: Energy, industry: Oil & Gas}
+  - {ticker: CVX,   name: Chevron,             market: US, sector: Energy, industry: Oil & Gas}
+
+  # ---- US: Real Estate & Communication ----
+  - {ticker: PLD,   name: Prologis,            market: US, sector: Real Estate, industry: Industrial REITs}
+  - {ticker: NFLX,  name: Netflix,             market: US, sector: Technology, industry: Streaming,            exchange: NASDAQ}
+
+  # ---- UK (prices only on the free route; enable EODHD for fundamentals) ----
+  - {ticker: SHEL.L, name: Shell,              market: UK, sector: Energy, industry: Oil & Gas}
+  - {ticker: AZN.L,  name: AstraZeneca,        market: UK, sector: Healthcare, industry: Pharmaceuticals}
+  - {ticker: HSBA.L, name: HSBC,               market: UK, sector: Financials, industry: Banks}
+  - {ticker: ULVR.L, name: Unilever,           market: UK, sector: Consumer, industry: Household Products}
+  - {ticker: BP.L,   name: BP,                 market: UK, sector: Energy, industry: Oil & Gas}
+  - {ticker: GSK.L,  name: GSK,                market: UK, sector: Healthcare, industry: Pharmaceuticals}
+  - {ticker: RIO.L,  name: Rio Tinto,          market: UK, sector: Industrials, industry: Mining}
+  - {ticker: LLOY.L, name: Lloyds Banking,     market: UK, sector: Financials, industry: Banks}
+  - {ticker: VOD.L,  name: Vodafone,           market: UK, sector: Technology, industry: Telecoms}
+  - {ticker: TSCO.L, name: Tesco,              market: UK, sector: Consumer, industry: Grocery Retail}

@@ -14,6 +14,12 @@ Honest inventory, per the brief's requirement to label anything mocked.
   reports it as such.
 - **Earnings-call transcripts: not ingested** (licensing); schema supports
   them as news items.
+- **The EODHD adapter is built against documented API shapes but has not
+  been run against the live service** (no key in the build environment).
+  Contract tests pin the parsing on fixtures; parsers fail soft into Data
+  Health warnings. Its estimates/targets are current snapshots (PIT history
+  accumulates only from your own daily ingests), and short interest /
+  insiders are not mapped.
 - **Stooq prices are split-adjusted and carry no corporate actions** — the
   adapter warns; pair with an actions-capable vendor for real backtests.
 - **EDGAR adapter maps a core us-gaap concept set only**; segment data,

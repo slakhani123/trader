@@ -8,15 +8,18 @@ options) is served by a replaceable adapter chosen via
 in `providers/base.py` and the normalised store; no vendor type leaks past
 `data/ingest.py`.
 
-| Capability   | Shipped adapters              | Notes |
-|--------------|-------------------------------|-------|
-| prices       | `synthetic`, `stooq`          | stooq: split-adjusted EOD, no actions (see caveat below), GBX→GBP handled |
-| fundamentals | `synthetic`, `edgar`          | edgar: US only, core us-gaap concepts, PIT via `filed` dates |
-| estimates    | `synthetic`                   | real consensus needs a licensed vendor (see below) |
-| news         | `synthetic`                   | real news needs a licensed vendor |
-| ownership    | `synthetic`                   | short interest / insiders |
-| macro        | `synthetic`                   | rates, CPI, spreads, VIX-like |
-| options      | *(none)*                      | reported "unavailable" until configured |
+| Capability   | Shipped adapters                    | Notes |
+|--------------|-------------------------------------|-------|
+| reference    | `synthetic`, `static`, *(eodhd: declines by design)* | `static` = editable universe.yml list — the recommended real-data universe |
+| prices       | `synthetic`, `stooq`, `eodhd`       | stooq: split-adjusted EOD, no actions, GBX→GBP handled; eodhd: raw EOD + splits/dividends |
+| fundamentals | `synthetic`, `edgar`, `eodhd`       | edgar: US only, core us-gaap, PIT via `filed`; eodhd: global incl. LSE, PIT via `filing_date` |
+| estimates    | `synthetic`, `eodhd`                | eodhd: snapshot consensus + 30/90d-ago trend fields (see REAL_DATA.md caveats) |
+| news         | `synthetic`, `eodhd`                | eodhd: untyped news → conservatively weighted as commentary |
+| ownership    | `synthetic`                         | short interest / insiders (not mapped in eodhd v1) |
+| macro        | `synthetic`, `stooq`, `eodhd`       | stooq: VIX only; eodhd: VIX + US/UK CPI; rates/spreads honestly unavailable |
+| options      | *(none)*                            | reported "unavailable" until configured |
+
+Real-data setup walkthroughs (free and EODHD): **docs/REAL_DATA.md**.
 
 The Data Health page (and `vigil health`) reports each capability's
 configured/ok state honestly — an unconfigured capability shows as

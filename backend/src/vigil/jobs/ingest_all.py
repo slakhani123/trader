@@ -37,6 +37,17 @@ def record_health(
     )
 
 
+def _resolve(session: Session, capability: str):
+    """Resolve a capability's provider; an unconfigured or unconstructable
+    provider is recorded in Data Health and returns None instead of sinking
+    the whole ingest (real-data setups legitimately leave capabilities off)."""
+    try:
+        return get_provider(capability)
+    except CapabilityUnavailable as exc:
+        record_health(session, "none", capability, False, str(exc), configured=False)
+        return None
+
+
 def ingest_universe(session: Session, start: date, end: date) -> dict:
     """Ingest reference + all per-instrument capabilities. Returns stats."""
     settings = get_settings()
@@ -45,8 +56,15 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
     session.flush()
     totals: dict[str, dict] = {}
 
-    ref = get_provider("reference")
+    ref = _resolve(session, "reference")
+    if ref is None:
+        raise CapabilityUnavailable(
+            "No universe source configured. Set VIGIL_PROVIDER_REFERENCE=static and "
+            "create universe.yml (see universe.example.yml), or use the synthetic demo."
+        )
     result = ref.fetch_universe(settings.universe.markets)
+    for warning in result.warnings:
+        record_health(session, ref.name, "reference", True, warning)
     instruments = ingest.ensure_instruments(session, result.records, ref.name)
     record_health(session, ref.name, "reference", True, f"{len(instruments)} instruments")
 
@@ -68,54 +86,60 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
         totals.setdefault("prices", {"inserted": 0})["inserted"] += stats.inserted
     record_health(session, prices.name, "prices", True, f"{totals.get('prices')}")
 
-    fund = get_provider("fundamentals")
-    est = get_provider("estimates")
-    news = get_provider("news")
-    own = get_provider("ownership")
+    fund = _resolve(session, "fundamentals")
+    est = _resolve(session, "estimates")
+    news = _resolve(session, "news")
+    own = _resolve(session, "ownership")
     common = [i for i in instruments.values() if i.security_type == "common"]
     for inst in common:
         t = inst.ticker
-        try:
-            fr = fund.fetch_fundamentals(t, start, end)
-            raw_id = (
-                ingest.store_raw(session, fund.name, fr.endpoint, t, fr.raw) if fr.raw else None
-            )
-            s = ingest.ingest_fundamentals(session, inst, fr.records, fund.name, raw_id)
-            _acc(totals, "fundamentals", s)
-        except (CapabilityUnavailable, ProviderError) as exc:
-            record_health(session, fund.name, "fundamentals", False, f"{t}: {exc}")
-        try:
-            _acc(totals, "estimates", ingest.ingest_estimates(
-                session, inst, est.fetch_estimates(t, end).records, est.name))
-            _acc(totals, "targets", ingest.ingest_targets(
-                session, inst, est.fetch_targets(t, end).records, est.name))
-        except (CapabilityUnavailable, ProviderError) as exc:
-            record_health(session, est.name, "estimates", False, f"{t}: {exc}")
-        try:
-            _acc(totals, "news", ingest.ingest_news(
-                session, inst, news.fetch_news(t, start, end).records, news.name))
-            _acc(totals, "catalysts", ingest.ingest_catalysts(
-                session, inst, news.fetch_catalysts(t, end).records, news.name))
-        except (CapabilityUnavailable, ProviderError) as exc:
-            record_health(session, news.name, "news", False, f"{t}: {exc}")
-        try:
-            _acc(totals, "short_interest", ingest.ingest_short_interest(
-                session, inst, own.fetch_short_interest(t, start, end).records, own.name))
-            _acc(totals, "insiders", ingest.ingest_insiders(
-                session, inst, own.fetch_insiders(t, start, end).records, own.name))
-        except (CapabilityUnavailable, ProviderError) as exc:
-            record_health(session, own.name, "ownership", False, f"{t}: {exc}")
+        if fund is not None:
+            try:
+                fr = fund.fetch_fundamentals(t, start, end)
+                raw_id = (
+                    ingest.store_raw(session, fund.name, fr.endpoint, t, fr.raw)
+                    if fr.raw else None
+                )
+                s = ingest.ingest_fundamentals(session, inst, fr.records, fund.name, raw_id)
+                _acc(totals, "fundamentals", s)
+            except (CapabilityUnavailable, ProviderError) as exc:
+                record_health(session, fund.name, "fundamentals", False, f"{t}: {exc}")
+        if est is not None:
+            try:
+                _acc(totals, "estimates", ingest.ingest_estimates(
+                    session, inst, est.fetch_estimates(t, end).records, est.name))
+                _acc(totals, "targets", ingest.ingest_targets(
+                    session, inst, est.fetch_targets(t, end).records, est.name))
+            except (CapabilityUnavailable, ProviderError) as exc:
+                record_health(session, est.name, "estimates", False, f"{t}: {exc}")
+        if news is not None:
+            try:
+                _acc(totals, "news", ingest.ingest_news(
+                    session, inst, news.fetch_news(t, start, end).records, news.name))
+                _acc(totals, "catalysts", ingest.ingest_catalysts(
+                    session, inst, news.fetch_catalysts(t, end).records, news.name))
+            except (CapabilityUnavailable, ProviderError) as exc:
+                record_health(session, news.name, "news", False, f"{t}: {exc}")
+        if own is not None:
+            try:
+                _acc(totals, "short_interest", ingest.ingest_short_interest(
+                    session, inst, own.fetch_short_interest(t, start, end).records, own.name))
+                _acc(totals, "insiders", ingest.ingest_insiders(
+                    session, inst, own.fetch_insiders(t, start, end).records, own.name))
+            except (CapabilityUnavailable, ProviderError) as exc:
+                record_health(session, own.name, "ownership", False, f"{t}: {exc}")
 
-    macro = get_provider("macro")
-    try:
-        _acc(totals, "macro", ingest.ingest_macro(
-            session, macro.fetch_macro(MACRO_SERIES, start, end).records, macro.name))
-        _acc(totals, "fx", ingest.ingest_fx(
-            session, macro.fetch_fx([("USD", "GBP"), ("GBP", "USD")], start, end).records,
-            macro.name))
-        record_health(session, macro.name, "macro", True, "ok")
-    except (CapabilityUnavailable, ProviderError) as exc:
-        record_health(session, macro.name, "macro", False, str(exc))
+    macro = _resolve(session, "macro")
+    if macro is not None:
+        try:
+            _acc(totals, "macro", ingest.ingest_macro(
+                session, macro.fetch_macro(MACRO_SERIES, start, end).records, macro.name))
+            _acc(totals, "fx", ingest.ingest_fx(
+                session, macro.fetch_fx([("USD", "GBP"), ("GBP", "USD")], start, end).records,
+                macro.name))
+            record_health(session, macro.name, "macro", True, "ok")
+        except (CapabilityUnavailable, ProviderError) as exc:
+            record_health(session, macro.name, "macro", False, str(exc))
 
     # Options capability: report configured/unavailable honestly.
     try:

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import csv
 import io
-from datetime import date
+from datetime import date, datetime, time
 
 from vigil.config import get_settings
 from vigil.providers import base as p
@@ -32,6 +32,8 @@ class StooqProvider:
 
     def _symbol(self, ticker: str, market: str | None = None) -> str:
         t = ticker.lower()
+        if t.startswith("^"):
+            return t  # index symbols (^spx, ^ukx, ^vix) pass through unchanged
         if market == "UK" or t.endswith(".l"):
             return t.removesuffix(".l") + ".uk"
         return t if "." in t else f"{t}.us"
@@ -94,6 +96,88 @@ class StooqProvider:
                 "stooq does not publish corporate actions; splits/dividends must "
                 "come from another provider"
             ],
+        )
+
+    def fetch_fx(
+        self, pairs: list[tuple[str, str]], start: date, end: date
+    ) -> p.ProviderFetchResult:
+        """Daily FX closes via stooq's forex symbols (e.g. USDGBP -> usdgbp)."""
+        records: list[p.FxPayload] = []
+        warnings: list[str] = []
+        retrieved_at = None
+        for base_ccy, quote_ccy in pairs:
+            symbol = f"{base_ccy}{quote_ccy}".lower()
+            params = {
+                "s": symbol,
+                "d1": start.strftime("%Y%m%d"),
+                "d2": end.strftime("%Y%m%d"),
+                "i": "d",
+            }
+            try:
+                body, retrieved_at, _ = self._http.get(BASE_URL, params=params)
+            except Exception as exc:
+                warnings.append(f"fx {base_ccy}/{quote_ccy}: {exc}")
+                continue
+            if "Date" not in body[:100]:
+                warnings.append(f"fx {base_ccy}/{quote_ccy}: no data for symbol {symbol}")
+                continue
+            for row in csv.DictReader(io.StringIO(body)):
+                try:
+                    records.append(
+                        p.FxPayload(
+                            base_ccy=base_ccy,
+                            quote_ccy=quote_ccy,
+                            rate_date=date.fromisoformat(row["Date"]),
+                            rate=float(row["Close"]),
+                        )
+                    )
+                except (KeyError, ValueError) as exc:
+                    warnings.append(f"fx row skipped: {exc}")
+        return p.ProviderFetchResult(
+            records=records, endpoint=f"{BASE_URL} (forex)", retrieved_at=retrieved_at,
+            warnings=warnings,
+        )
+
+    def fetch_macro(
+        self, series_ids: list[str], start: date, end: date
+    ) -> p.ProviderFetchResult:
+        """Only 'vix' is available from stooq (^vix daily closes). Rates,
+        CPI and credit spreads need another source and are reported as
+        unavailable rather than faked."""
+        records: list[p.MacroPayload] = []
+        warnings = [
+            f"stooq cannot supply macro series '{sid}'"
+            for sid in series_ids
+            if sid != "vix"
+        ]
+        retrieved_at = None
+        if "vix" in series_ids:
+            params = {
+                "s": "^vix",
+                "d1": start.strftime("%Y%m%d"),
+                "d2": end.strftime("%Y%m%d"),
+                "i": "d",
+            }
+            try:
+                body, retrieved_at, _ = self._http.get(BASE_URL, params=params)
+                for row in csv.DictReader(io.StringIO(body)):
+                    try:
+                        obs = date.fromisoformat(row["Date"])
+                        records.append(
+                            p.MacroPayload(
+                                series_id="vix",
+                                obs_date=obs,
+                                value=float(row["Close"]),
+                                published_at=datetime.combine(obs, time(21, 0)),
+                            )
+                        )
+                    except (KeyError, ValueError):
+                        continue
+            except Exception as exc:
+                warnings.append(f"vix fetch failed: {exc}")
+        return p.ProviderFetchResult(
+            records=records, endpoint=f"{BASE_URL} (^vix)", retrieved_at=retrieved_at,
+            warnings=warnings,
         )
 
     def health_check(self) -> tuple[bool, str]:

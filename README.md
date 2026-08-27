@@ -52,6 +52,10 @@ and a REIT (sector-aware scoring), an illiquid microcap (filtered by
 universe gates), a 4:1 split, a mid-history acquisition/delisting
 (survivorship control), and a revenue restatement (point-in-time control).
 
+**Real market data**: the demo runs on a synthetic world; switching to real
+companies (free Stooq+EDGAR route, or EODHD) is a copy-two-files job —
+see **docs/REAL_DATA.md**.
+
 ## Documentation
 
 | Doc | What's in it |

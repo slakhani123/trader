@@ -123,6 +123,15 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:5173"]
 
     # --- provider credentials (all optional; adapters report unavailable) ---
+    provider_reference: str = Field(
+        default="",
+        description="Universe source. Empty = same as provider_price; 'static' reads "
+        "the editable company list in VIGIL_UNIVERSE_FILE (real-data mode).",
+    )
+    universe_file: str = Field(
+        default="universe.yml",
+        description="Company list for the 'static' reference provider (see universe.example.yml)",
+    )
     provider_price: str = "synthetic"
     provider_fundamentals: str = "synthetic"
     provider_estimates: str = "synthetic"
@@ -131,6 +140,9 @@ class Settings(BaseSettings):
     provider_options: str = ""  # no default provider: options data marked unavailable
     edgar_user_agent: str = Field(
         default="", description="SEC EDGAR requires 'name email' UA; unset disables the adapter"
+    )
+    eodhd_api_key: str = Field(
+        default="", description="EODHD API token; enables the 'eodhd' adapter when set"
     )
     anthropic_api_key: str = ""
 
