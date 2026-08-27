@@ -70,6 +70,8 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
     record_health(session, ref.name, "reference", True, f"{len(instruments)} instruments")
 
     prices = get_provider("prices")
+    price_bucket = {"inserted": 0, "skipped": 0, "failed_tickers": 0}
+    totals["prices"] = price_bucket
     for ticker, inst in instruments.items():
         stats = ingest.IngestStats()
         try:
@@ -81,20 +83,22 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
             stats.merge(ingest.ingest_actions(session, inst, actions.records, prices.name))
         except CapabilityUnavailable as exc:
             record_health(session, prices.name, "prices", False, str(exc))
-            bucket = totals.setdefault("prices", {"inserted": 0, "failed_tickers": 0})
-            bucket["failed_tickers"] = bucket.get("failed_tickers", 0) + 1
+            price_bucket["failed_tickers"] += 1
         except ProviderError as exc:
             record_health(session, prices.name, "prices", False, str(exc))
             log.warning("price ingest failed for %s: %s", ticker, exc)
-            bucket = totals.setdefault("prices", {"inserted": 0, "failed_tickers": 0})
-            bucket["failed_tickers"] = bucket.get("failed_tickers", 0) + 1
-        totals.setdefault("prices", {"inserted": 0})["inserted"] += stats.inserted
-    bars_in = totals.get("prices", {}).get("inserted", 0)
-    price_failures = totals.get("prices", {}).get("failed_tickers", 0)
+            price_bucket["failed_tickers"] += 1
+        price_bucket["inserted"] += stats.inserted
+        price_bucket["skipped"] += stats.skipped
+    bars_in = price_bucket["inserted"]
+    bars_skipped = price_bucket["skipped"]
+    price_failures = price_bucket["failed_tickers"]
     record_health(
-        session, prices.name, "prices", bars_in > 0,
-        f"{bars_in} bars ingested; {price_failures} ticker(s) failed"
-        + ("" if bars_in else " — check network/provider (see per-ticker rows above)"),
+        session, prices.name, "prices", (bars_in + bars_skipped) > 0,
+        f"{bars_in} new bar/action rows ({bars_skipped} already in store); "
+        f"{price_failures} ticker(s) failed"
+        + ("" if bars_in + bars_skipped else
+           " — check network/provider (see per-ticker rows above)"),
     )
 
     fund = _resolve(session, "fundamentals")
@@ -102,6 +106,7 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
     news = _resolve(session, "news")
     own = _resolve(session, "ownership")
     common = [i for i in instruments.values() if i.security_type == "common"]
+    fund_failed = 0
     for inst in common:
         t = inst.ticker
         if fund is not None:
@@ -115,6 +120,7 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
                 _acc(totals, "fundamentals", s)
             except (CapabilityUnavailable, ProviderError) as exc:
                 record_health(session, fund.name, "fundamentals", False, f"{t}: {exc}")
+                fund_failed += 1
                 fb = totals.setdefault("fundamentals", ingest.IngestStats())
                 fb.issues.append(f"{t}: failed")
         if est is not None:
@@ -145,12 +151,13 @@ def ingest_universe(session: Session, start: date, end: date) -> dict:
     if fund is not None:
         f_stats = totals.get("fundamentals")
         f_ins = f_stats.inserted if f_stats else 0
-        f_fail = len(f_stats.issues) if f_stats else 0
+        f_skip = f_stats.skipped if f_stats else 0
         record_health(
-            session, fund.name, "fundamentals", f_ins > 0,
-            f"{f_ins} reports ingested; {f_fail} ticker(s) failed"
+            session, fund.name, "fundamentals", (f_ins + f_skip) > 0,
+            f"{f_ins} new reports ({f_skip} already in store); "
+            f"{fund_failed} ticker(s) failed"
             + (" (UK tickers are expected to fail on EDGAR — it is US-only)"
-               if f_fail and fund.name == "edgar" else ""),
+               if fund_failed and fund.name == "edgar" else ""),
         )
 
     macro = _resolve(session, "macro")

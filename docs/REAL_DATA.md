@@ -89,6 +89,22 @@ Caveats (also in docs/LIMITATIONS.md):
   history exists.
 - Short interest and insider transactions are not mapped in v1.
 
+## Reading `vigil health`
+
+The provider rows describe the LAST ingest run; the `store contents` block
+underneath is what the database actually holds. Re-running `seed` is safe
+and idempotent — a second run reports rows as "already in store" rather
+than re-inserting them, so "0 new reports (487 already in store)" is a
+healthy store, not a failure. Only "0 new … (0 already in store)" means a
+capability truly has no data.
+
+Two other things that look like errors but aren't:
+- `vigil serve` logging `GET / -> 404`: the API has no home page. The
+  dashboard is the separate frontend (`npm run dev` in the `frontend`
+  folder, then open http://localhost:5173).
+- `vigil probe TICKER` now also tests fundamentals — run it whenever a
+  capability looks wrong and paste the output when reporting a problem.
+
 ## Editing your universe
 
 Open `backend\universe.yml` in Notepad. Each line is one company; UK

@@ -203,15 +203,53 @@ def probe(ticker: str = typer.Argument("AAPL")) -> None:
     except (CapabilityUnavailable, ProviderError) as exc:
         typer.echo(f"fx FAILED: {exc}")
 
+    # Fundamentals probe: fetch ~14 months so at least one 10-K/10-Q filing
+    # (or provider statement) lands in the window.
+    if not settings.provider_fundamentals:
+        typer.echo("fundamentals: no provider configured (engines will abstain)")
+        return
+    typer.echo(f"fundamentals provider: {settings.provider_fundamentals}")
+    try:
+        fund = get_provider("fundamentals")
+        fr = fund.fetch_fundamentals(ticker, end - timedelta(days=430), end)
+        typer.echo(f"OK — {len(fr.records)} financial reports for {ticker}")
+        if fr.records:
+            latest = max(fr.records, key=lambda r: r.period_end)
+            typer.echo(
+                f"latest: {latest.period_type} period ending {latest.period_end}, "
+                f"published {latest.published_at.date()}, "
+                f"{len(latest.fields)} fields (e.g. revenue="
+                f"{latest.fields.get('revenue')})"
+            )
+        else:
+            typer.echo(
+                "NO REPORTS RETURNED — the provider responded but nothing parsed. "
+                "Report this: it likely needs an adapter fix for this ticker."
+            )
+    except (CapabilityUnavailable, ProviderError) as exc:
+        typer.echo(f"fundamentals FAILED: {exc}")
+
 
 @app.command()
 def health() -> None:
-    """Provider and data health summary."""
+    """Provider and data health summary, plus what the store actually holds."""
     _setup_logging()
     from sqlalchemy import func, select
 
     from vigil.db import create_all, session_scope
-    from vigil.models import ProviderHealthRecord
+    from vigil.models import (
+        Alert,
+        CorporateAction,
+        EstimateSnap,
+        FundamentalReport,
+        FxRate,
+        Instrument,
+        MacroObservation,
+        NewsItem,
+        PriceBar,
+        ProviderHealthRecord,
+        Signal,
+    )
 
     create_all()
     with session_scope() as session:
@@ -225,6 +263,46 @@ def health() -> None:
         for r in rows:
             status = "OK " if r.ok else ("--" if not r.configured else "ERR")
             typer.echo(f"[{status}] {r.provider:>12} {r.capability:<14} {r.message[:80]}")
+
+        # What is actually in the database right now — the ground truth that
+        # the last-run summary rows above can't show (a re-run that found
+        # nothing new still leaves a full store).
+        typer.echo("\nstore contents:")
+        n_inst = session.execute(
+            select(func.count()).select_from(Instrument)
+        ).scalar_one()
+        n_bars, bar_min, bar_max = session.execute(
+            select(func.count(), func.min(PriceBar.bar_date), func.max(PriceBar.bar_date))
+        ).one()
+        n_fund, fund_names, fund_latest = session.execute(
+            select(
+                func.count(),
+                func.count(func.distinct(FundamentalReport.instrument_id)),
+                func.max(FundamentalReport.period_end),
+            )
+        ).one()
+        counts = {
+            "corporate actions": CorporateAction,
+            "estimate snapshots": EstimateSnap,
+            "news items": NewsItem,
+            "fx rates": FxRate,
+            "macro observations": MacroObservation,
+            "signals": Signal,
+            "alerts": Alert,
+        }
+        typer.echo(f"  {n_inst:>7} instruments")
+        typer.echo(
+            f"  {n_bars:>7} price bars"
+            + (f" ({bar_min} to {bar_max})" if n_bars else "")
+        )
+        typer.echo(
+            f"  {n_fund:>7} fundamental reports"
+            + (f" across {fund_names} companies, latest period {fund_latest}"
+               if n_fund else "")
+        )
+        for label, model in counts.items():
+            n = session.execute(select(func.count()).select_from(model)).scalar_one()
+            typer.echo(f"  {n:>7} {label}")
 
 
 if __name__ == "__main__":
