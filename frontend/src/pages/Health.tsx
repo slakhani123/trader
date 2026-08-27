@@ -5,7 +5,7 @@ import { api } from '../api/client';
 import { Badge } from '../components/Badge';
 import { EmptyState } from '../components/EmptyState';
 import { QueryGate } from '../components/QueryGate';
-import { fmtDate, fmtDateTime, titleCase } from '../lib/format';
+import { asText, fmtDate, fmtDateTime, titleCase } from '../lib/format';
 
 function jobTone(status: string): 'green' | 'red' | 'amber' | 'blue' | 'neutral' {
   switch (status.toLowerCase()) {
@@ -203,7 +203,7 @@ export function HealthPage() {
                         <td className="center">
                           <Badge tone={jobTone(j.status)}>{j.status}</Badge>
                         </td>
-                        <td className="small dim">{j.detail ?? '—'}</td>
+                        <td className="small dim">{asText(j.detail)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -262,7 +262,7 @@ export function HealthPage() {
                         </Badge>
                       )}
                     </td>
-                    <td className="small dim">{n.detail ?? '—'}</td>
+                    <td className="small dim">{asText(n.detail)}</td>
                   </tr>
                 ))}
               </tbody>

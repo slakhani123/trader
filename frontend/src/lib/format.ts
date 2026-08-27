@@ -88,6 +88,18 @@ export function daysSince(iso: string | null | undefined): number | null {
   return Math.floor((Date.now() - then) / 86400000);
 }
 
+/** Render any API value as text. Detail fields are declared string|null but
+ * older API builds sent raw JSON objects — never hand an object to React. */
+export function asText(v: unknown): string {
+  if (v === null || v === undefined || v === '') return '—';
+  if (typeof v === 'string') return v;
+  try {
+    return JSON.stringify(v);
+  } catch {
+    return String(v);
+  }
+}
+
 /** snake_case / SCREAMING_CASE → Title Case. */
 export function titleCase(s: string | null | undefined): string {
   if (!s) return '—';

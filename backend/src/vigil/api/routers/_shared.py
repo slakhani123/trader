@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import date
 
 from sqlalchemy import select
@@ -52,6 +53,33 @@ def instrument_dict(inst: Instrument) -> dict:
     }
 
 
+def detail_str(detail: object) -> str | None:
+    """JSON detail columns hold dicts; the API contract (and the dashboard,
+    which renders this as text) wants a short human-readable string."""
+    if detail is None or detail == "":
+        return None
+    if isinstance(detail, str):
+        return detail
+    if isinstance(detail, dict):
+        parts = []
+        for key, val in detail.items():
+            if isinstance(val, dict) and ("inserted" in val or "skipped" in val):
+                bit = f"{key}: {val.get('inserted', 0)} new"
+                if val.get("skipped"):
+                    bit += f", {val['skipped']} already stored"
+                if val.get("failed_tickers"):
+                    bit += f", {val['failed_tickers']} ticker(s) failed"
+                if val.get("issues"):
+                    bit += f", {len(val['issues'])} issue(s)"
+                parts.append(bit)
+            elif isinstance(val, dict | list):
+                parts.append(f"{key}: {json.dumps(val, default=str)[:120]}")
+            else:
+                parts.append(f"{key}: {val}")
+        return "; ".join(parts)[:500] or None
+    return str(detail)
+
+
 def run_dict(run: ScoreRun) -> dict:
     return {
         "id": run.id,
@@ -63,7 +91,7 @@ def run_dict(run: ScoreRun) -> dict:
         "scored": run.scored,
         "abstained": run.abstained,
         "status": run.status,
-        "detail": run.detail,
+        "detail": detail_str(run.detail),
     }
 
 

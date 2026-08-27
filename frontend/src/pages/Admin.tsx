@@ -3,7 +3,7 @@ import { api } from '../api/client';
 import { Badge } from '../components/Badge';
 import { EmptyState } from '../components/EmptyState';
 import { QueryGate } from '../components/QueryGate';
-import { fmtDateTime } from '../lib/format';
+import { asText, fmtDateTime } from '../lib/format';
 
 export function AdminPage() {
   const versionsQ = useQuery({
@@ -110,7 +110,7 @@ export function AdminPage() {
                       </Badge>
                     </td>
                     <td className="mono small">{row.action}</td>
-                    <td className="small dim">{row.detail ?? '—'}</td>
+                    <td className="small dim">{asText(row.detail)}</td>
                   </tr>
                 ))}
               </tbody>

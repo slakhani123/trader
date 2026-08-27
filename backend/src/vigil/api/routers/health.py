@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 
 from vigil import __version__
 from vigil.api.deps import get_db, require_auth
+from vigil.api.routers._shared import detail_str
 from vigil.db import get_session_factory
 from vigil.models import Instrument, JobRun, PriceBar, ProviderHealthRecord, ScoreRun
 
@@ -70,7 +71,7 @@ def health_data(db: Session = Depends(get_db)) -> dict:
                 "started_at": j.started_at,
                 "finished_at": j.finished_at,
                 "status": j.status,
-                "detail": j.detail,
+                "detail": detail_str(j.detail),
             }
             for j in jobs
         ],

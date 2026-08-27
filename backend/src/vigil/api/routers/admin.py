@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from vigil.api.deps import get_db, spawn_job
-from vigil.api.routers._shared import run_dict
+from vigil.api.routers._shared import detail_str, run_dict
 from vigil.config import Settings, get_settings
 from vigil.models import AuditLog, ModelVersion, NotificationDelivery, ScoreRun
 
@@ -100,7 +100,8 @@ def list_audit(
     ).scalars().all()
     return {
         "items": [
-            {"at": a.at, "actor": a.actor, "action": a.action, "detail": a.detail} for a in rows
+            {"at": a.at, "actor": a.actor, "action": a.action, "detail": detail_str(a.detail)}
+            for a in rows
         ]
     }
 
