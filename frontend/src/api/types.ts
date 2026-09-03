@@ -688,6 +688,7 @@ export interface BacktestDetailResponse extends BacktestSummaryRow {
   by_bucket: Record<string, Record<string, BacktestMetrics>> | null;
   calibration: CalibrationBlock | null;
   trades: BacktestTrade[];
+  notes?: string | null;
   detail?: string | null;
 }
 

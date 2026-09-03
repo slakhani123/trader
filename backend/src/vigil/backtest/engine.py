@@ -21,6 +21,7 @@ Simulation model:
 from __future__ import annotations
 
 import logging
+import re
 from datetime import date, timedelta
 
 import numpy as np
@@ -101,6 +102,46 @@ def _cost_frac(spread_bps: float | None, settings: Settings) -> float:
     return (settings.backtest_costs.commission_bps_per_side + half_spread) / 10_000
 
 
+def zero_trade_notes(diagnostics: dict, scans: int, settings: Settings) -> str:
+    """Explain a zero-trade run in plain language. Abstention on sparse data
+    is a designed outcome — the report must say WHY rather than sit empty."""
+    watch = diagnostics.get("watch_candidates", 0)
+    fails = diagnostics.get("top_gate_failures", [])
+    max_conf = diagnostics.get("max_confidence_seen", 0.0)
+    lines = ["No trades were simulated."]
+    if scans == 0:
+        lines.append(
+            "No instrument could be scored on any scan date — check Data Health "
+            "for price/fundamentals coverage over the backtest window."
+        )
+        if diagnostics.get("snapshot_failures"):
+            lines.append(
+                f"{diagnostics['snapshot_failures']} scan attempts had too little "
+                "data to build a snapshot."
+            )
+        return " ".join(lines)
+    if watch:
+        lines.append(
+            f"{watch} watch-grade setups appeared, but none met the FULL trigger "
+            "conditions, so no buy signal fired (watch setups never trade)."
+        )
+    if fails:
+        top = "; ".join(f"{f['reason']} ({f['count']}x)" for f in fails[:3])
+        lines.append(f"Most common blocking gate conditions: {top}.")
+    if max_conf and max_conf < settings.gates.min_confidence:
+        lines.append(
+            f"The highest confidence any name reached was {max_conf:.1f}, below the "
+            f"buy gate's minimum of {settings.gates.min_confidence:.1f}. Confidence is "
+            "penalised for every engine without data — with estimates/news/catalyst "
+            "providers unconfigured, the gate can be structurally out of reach. "
+            "This is the abstention principle working, not a fault. Options: add a "
+            "fuller data provider (docs/REAL_DATA.md, Route 2), or consciously relax "
+            "gates for experiments, e.g. VIGIL_GATES__MIN_CONFIDENCE=4.0 in .env — "
+            "understanding that lower gates mean weaker-evidence signals."
+        )
+    return " ".join(lines)
+
+
 def _benchmark_series(session: Session, market: str, end: date) -> pd.Series | None:
     """Benchmark adj_close for a market. More than one index row can exist
     (universe edits add instruments but never delete old ones — ^SPX swapped
@@ -166,6 +207,15 @@ def run_backtest(
     open_positions: dict[tuple[int, str, str], _OpenPosition] = {}
     closed: list[SimTrade] = []
     scans = 0
+    # Diagnostics: a zero-trade run must explain itself (abstention is a
+    # designed outcome on sparse data — the run report has to say so).
+    snapshot_failures = 0
+    ineligible = 0
+    watch_candidates = 0
+    triggered_candidates = 0
+    unfilled_entries = 0
+    max_confidence = 0.0
+    gate_fail_counts: dict[str, int] = {}
 
     for ts in scan_dates:
         as_of = ts.date()
@@ -221,17 +271,31 @@ def run_backtest(
                     session, inst.id, as_of, settings, include_peers=include_peers
                 )
             except SnapshotBuildError:
+                snapshot_failures += 1
                 continue
             ok, _reasons = universe_eligible(snapshot, settings)
             if not ok:
+                ineligible += 1
                 continue
             results = run_all_engines(snapshot, settings)
             bundle = score_instrument(snapshot, results, settings, as_of)
             scans += 1
+            for hs in bundle.horizons.values():
+                if hs.abstained:
+                    continue
+                max_confidence = max(max_confidence, hs.confidence)
+                if hs.gate is not None and not hs.gate.passed:
+                    for failure in hs.gate.failures:
+                        reason = re.split(r"\d", failure, maxsplit=1)[0].strip() or failure
+                        gate_fail_counts[reason] = gate_fail_counts.get(reason, 0) + 1
             for cand in generate_candidates(snapshot, bundle, settings):
                 fam = cand.family.value
-                if fam not in BUY_FAMILIES or cand.state_hint != "TRIGGERED":
+                if fam not in BUY_FAMILIES:
                     continue
+                if cand.state_hint != "TRIGGERED":
+                    watch_candidates += 1
+                    continue
+                triggered_candidates += 1
                 key = (inst.id, fam, cand.horizon)
                 if key in open_positions:
                     continue
@@ -240,6 +304,7 @@ def run_backtest(
                 cost = _cost_frac(spread, settings)
                 fill = _fill(panel, as_of, "buy", cost)
                 if fill is None:
+                    unfilled_entries += 1
                     continue
                 entry_date, entry_px = fill
                 regime = results.get("regime")
@@ -279,15 +344,30 @@ def run_backtest(
     holdout = [t for t in trades if holdout_start is not None and t.signal_date >= holdout_start]
 
     daily = _daily_curve(trades, panels, start, end)
+    diagnostics = {
+        "snapshot_failures": snapshot_failures,
+        "ineligible": ineligible,
+        "watch_candidates": watch_candidates,
+        "triggered_candidates": triggered_candidates,
+        "unfilled_entries": unfilled_entries,
+        "max_confidence_seen": round(max_confidence, 1),
+        "top_gate_failures": [
+            {"reason": k, "count": v}
+            for k, v in sorted(gate_fail_counts.items(), key=lambda kv: -kv[1])[:5]
+        ],
+    }
     run.metrics = {
         "all": summarize(trades) | equity_curve_metrics(trades, daily),
         "in_sample": summarize(in_sample),
         "holdout": summarize(holdout) if holdout_start else {"note": "no holdout configured"},
         "scans": scans,
+        "diagnostics": diagnostics,
         "note": "sample sizes and CIs shown per bucket; buckets with n<20 are inconclusive",
     }
     run.by_bucket = bucketize(trades)
     run.calibration = calibration(trades)
+    if not trades:
+        run.notes = zero_trade_notes(diagnostics, scans, settings)
     run.status = "ok"
 
     for t in trades:

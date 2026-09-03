@@ -120,6 +120,26 @@ Remove-Item .env, vigil.db
 .venv\Scripts\vigil scan
 ```
 
+## Backtesting on the free data tier
+
+Expect **few or zero trades**. Confidence is penalised for every engine
+without data, and with estimates/news/catalyst providers unconfigured the
+buy gate's minimum confidence can be structurally out of reach (typical
+ceiling ≈ 4.5 vs the default gate of 5.5) — some families additionally
+require catalyst support that no free source provides. Watch-grade setups
+still appear live, but a watch never trades. This is the abstention
+principle: the system refuses to simulate conviction it doesn't have.
+
+A zero-trade run now says exactly why on its detail page ("Why no
+trades?"), with the blocking gate conditions counted. Your options:
+
+- **Add richer data** (Route 2 / EODHD): estimates, news and catalysts give
+  confidence room to clear the gate — the intended path.
+- **Consciously relax gates for an experiment** in `.env`, e.g.
+  `VIGIL_GATES__MIN_CONFIDENCE=4.0` (and re-run the backtest). Lower gates
+  mean weaker-evidence signals; treat results as exploration, not
+  validation, and remove the override afterwards.
+
 ## Windows one-click scripts
 
 The repo root has three batch files you can double-click in File Explorer

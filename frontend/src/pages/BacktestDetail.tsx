@@ -504,6 +504,11 @@ export function BacktestDetailPage() {
             <h2>Trades</h2>
             <div className="rule" />
           </div>
+          {bt.trades.length === 0 && bt.notes && (
+            <div className="banner warn" style={{ marginBottom: 12 }}>
+              <strong>Why no trades?</strong> {bt.notes}
+            </div>
+          )}
           <TradesTable trades={bt.trades} />
 
           <div className="dim small" style={{ marginTop: 16 }}>
