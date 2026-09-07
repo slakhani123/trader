@@ -28,9 +28,14 @@ class FakeBroker:
         self.position = position
         self.placed = []              # (kind, symbol, qty)
         self.next_order_id = 100
-        self.buy_result = "fill"      # fill | reject | timeout
-        self.sell_result = "accept"   # accept | reject
+        self.buy_result = "fill"      # fill | reject | timeout | raise
+        self.sell_result = "accept"   # accept | reject | raise
         self.fills: dict[int, OrderResult] = {}
+        self.fills_by_ref: dict[str, OrderResult] = {}
+        self.resting: list[tuple[int, str, int]] = []   # open sell orders
+
+    def open_sell_orders(self, symbol):
+        return list(self.resting)
 
     def reference_price(self, symbol):
         return self.price
@@ -50,9 +55,12 @@ class FakeBroker:
         return OrderResult(oid, "Submitted")
 
     def place_opg_sell(self, symbol, qty, ref):
+        if self.sell_result == "raise":
+            raise ConnectionError("socket dropped mid-transmit")
         oid = self.next_order_id
         self.next_order_id += 1
         self.placed.append(("OPG_SELL", symbol, qty))
+        self.last_sell_ref = ref
         if self.sell_result == "reject":
             return OrderResult(oid, "Rejected", detail="no permissions")
         return OrderResult(oid, "PreSubmitted")
@@ -67,7 +75,10 @@ class FakeBroker:
         return OrderResult(order_id, "Submitted", detail="no fill by deadline")
 
     def order_fill(self, order_id, ref=""):
-        return self.fills.get(order_id)
+        hit = self.fills.get(order_id)
+        if hit is None and ref:
+            hit = self.fills_by_ref.get(ref)
+        return hit
 
 
 def make_cfg(tmp, **kw) -> BotConfig:
@@ -154,9 +165,25 @@ class TestSizing(unittest.TestCase):
 
 
 # ------------------------------------------------------------ kill logic
+_day_counter = [0]
+
+
 class _N:
-    """Minimal Night stand-in for evaluate_kill."""
+    """Minimal Night stand-in for evaluate_kill (one row per date)."""
     def __init__(self, pnl, buy_fill=1000.0, qty=1):
+        self.pnl = pnl
+        self.buy_fill = buy_fill
+        self.qty = qty
+        _day_counter[0] += 1
+        self.buy_date = (date(2000, 1, 1)
+                         + timedelta(days=_day_counter[0])).isoformat()
+
+
+class _NightRow:
+    """Night stand-in with an explicit date (basket tests)."""
+    def __init__(self, symbol, buy_date, pnl, buy_fill=1000.0, qty=1):
+        self.symbol = symbol
+        self.buy_date = buy_date
         self.pnl = pnl
         self.buy_fill = buy_fill
         self.qty = qty
@@ -164,30 +191,34 @@ class _N:
 
 class TestKill(unittest.TestCase):
     def test_consecutive_losses(self):
-        nights = [_N(1.0)] * 5 + [_N(-1.0)] * 15
+        nights = [_N(1.0) for _ in range(5)] + [_N(-1.0) for _ in range(15)]
         kill = KillCriteria(max_consecutive_losses=15)
         self.assertIn("consecutive", evaluate_kill(nights, kill))
 
     def test_trailing_negative(self):
-        nights = [_N(-0.5)] * 130
+        nights = [_N(-0.5) for _ in range(130)]
         kill = KillCriteria(max_consecutive_losses=999,
                             trailing_min_nights=126)
         self.assertIn("trailing", evaluate_kill(nights, kill))
 
     def test_drawdown(self):
         # +300 up, then -260: drawdown 26% of the ~$1000 nightly notional
-        nights = [_N(3.0)] * 100 + [_N(-13.0), _N(-13.0)] * 10
+        nights = [_N(3.0) for _ in range(100)] \
+            + [_N(-13.0) for _ in range(20)]
         kill = KillCriteria(max_consecutive_losses=999,
                             trailing_min_nights=9999,
                             max_drawdown_pct=25.0)
         self.assertIn("drawdown", evaluate_kill(nights, kill))
 
     def test_clean(self):
-        nights = [_N(1.0), _N(-0.5)] * 100
+        nights = []
+        for _ in range(100):
+            nights.append(_N(1.0))
+            nights.append(_N(-0.5))
         self.assertIsNone(evaluate_kill(nights, KillCriteria()))
 
     def test_disabled(self):
-        nights = [_N(-1.0)] * 300
+        nights = [_N(-1.0) for _ in range(300)]
         self.assertIsNone(evaluate_kill(nights, KillCriteria(enabled=False)))
 
 
@@ -221,7 +252,9 @@ class TestBuySession(unittest.TestCase):
         self.jr.create_night("MU", TUE - timedelta(days=1), 1, 1,
                              1000.0, status="HELD")
         rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
-        self.assertEqual(rc, 1)
+        # rc 2: the inline reconcile escalates the missed exit, and the
+        # buy leg refuses to stack a new position on top
+        self.assertEqual(rc, 2)
         self.assertEqual(self.broker.placed, [])
 
     def test_window_gate(self):
@@ -285,9 +318,10 @@ class TestBuySession(unittest.TestCase):
         self.assertEqual(self.jr.night_for("MU", wed).status,
                          "PENDING_SELL_FILL")
 
-    def test_buy_timeout_with_shares_stays_blocked(self):
-        # order actually filled after the timeout: account is NOT flat,
-        # so nothing self-clears and the next day refuses to buy
+    def test_buy_timeout_with_shares_recovers_by_position(self):
+        # order actually filled after the timeout and its executions
+        # expired overnight: reconcile recovers the position into HELD
+        # (estimated fill price), alerts loudly, and refuses new buys
         self.broker.buy_result = "timeout"
         strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
         self.broker.position = 1
@@ -295,8 +329,11 @@ class TestBuySession(unittest.TestCase):
         wed = TUE + timedelta(days=1)
         rc = strategy.run_buy_session(self.cfg, self.jr, self.broker,
                                       et(wed, 15, 30))
-        self.assertEqual(rc, 1)
+        self.assertEqual(rc, 2)
         self.assertIsNone(self.jr.night_for("MU", wed))
+        n = self.jr.night_for("MU", TUE)
+        self.assertEqual(n.status, "HELD")
+        self.assertIn("ESTIMATE", n.detail)
 
     def test_place_raises_leaves_blocking_night(self):
         self.broker.buy_result = "raise"
@@ -431,16 +468,129 @@ class TestSellAndReconcile(unittest.TestCase):
         self.assertEqual(rc, 2)
         self.assertEqual(self.jr.get_night(nid).status, "HELD")
 
-    def test_reconcile_recovers_lost_buy_fill(self):
+    def test_reconcile_recovers_lost_buy_and_protects_exit(self):
+        # buy fill recovered same evening; the inline fallback immediately
+        # places the protective OPG sell as well
+        self.broker.position = 2
         nid = self.jr.create_night("MU", TUE, 2, 60, 1000.0,
                                    status="PENDING_BUY")
         self.broker.fills[60] = OrderResult(60, "Filled", 2, 1005.0, 0.5)
         rc = strategy.run_reconcile(self.cfg, self.jr, self.broker,
                                     et(TUE, 16, 30))
-        self.assertEqual(rc, 1)   # recovered but still needs a sell
+        self.assertEqual(rc, 1)
         n = self.jr.get_night(nid)
-        self.assertEqual(n.status, "HELD")
+        self.assertEqual(n.status, "PENDING_SELL_FILL")
         self.assertEqual(n.qty, 2)
+        self.assertEqual(self.broker.placed[0], ("OPG_SELL", "MU", 2))
+
+    def test_placing_sell_crash_never_double_places(self):
+        # THE naked-short scenario: the OPG reached the broker but the
+        # journal update was lost. Next morning the fallback must ADOPT
+        # the resting order, not place a second one.
+        nid = self._held_night(qty=5)
+        n = self.jr.get_night(nid)
+        ref = strategy.next_sell_ref(n)                      # ...:S1
+        self.jr.update_night(nid, sell_ref=ref, status="PLACING_SELL")
+        self.broker.resting = [(88, ref, 5)]                 # it IS resting
+        self.broker.position = 5
+        rc = strategy.run_sell_fallback(self.cfg, self.jr, self.broker,
+                                        et(TUE + timedelta(days=1), 9, 5))
+        self.assertEqual(rc, 0)
+        self.assertEqual(self.broker.placed, [])             # no duplicate!
+        n = self.jr.get_night(nid)
+        self.assertEqual(n.status, "PENDING_SELL_FILL")
+        self.assertEqual(n.sell_order_id, 88)
+
+    def test_placing_sell_that_never_arrived_is_retried_once(self):
+        nid = self._held_night(qty=1)
+        n = self.jr.get_night(nid)
+        self.jr.update_night(nid, sell_ref=strategy.next_sell_ref(n),
+                             status="PLACING_SELL")
+        # no resting order, no executions -> reconcile reverts to HELD and
+        # the inline fallback re-places with a NEW attempt ref (S2)
+        rc = strategy.run_reconcile(self.cfg, self.jr, self.broker,
+                                    et(TUE, 16, 40))
+        self.assertEqual(rc, 1)
+        n = self.jr.get_night(nid)
+        self.assertEqual(n.status, "PENDING_SELL_FILL")
+        self.assertTrue(n.sell_ref.endswith(":S2"))
+        self.assertEqual(len(self.broker.placed), 1)
+
+    def test_sell_exception_leaves_placing_sell_blocking(self):
+        nid = self._held_night(qty=1)
+        self.broker.sell_result = "raise"
+        n = self.jr.get_night(nid)
+        rc = strategy.place_protected_sell(
+            self.cfg, self.jr, self.broker,
+            strategy.Notifier(""), n, 1)
+        self.assertEqual(rc, 2)
+        self.assertEqual(self.jr.get_night(nid).status, "PLACING_SELL")
+
+    def test_partial_sell_is_never_auto_booked(self):
+        nid = self._held_night(qty=5)
+        self.jr.update_night(nid, sell_order_id=77, sell_ref="x",
+                             status="PENDING_SELL_FILL")
+        self.broker.fills[77] = OrderResult(77, "Executions", 3, 1010.0, 0.2)
+        rc = strategy.run_reconcile(self.cfg, self.jr, self.broker,
+                                    et(TUE + timedelta(days=1), 9, 50))
+        self.assertEqual(rc, 2)
+        n = self.jr.get_night(nid)
+        self.assertEqual(n.status, "ERROR")
+        self.assertIsNone(n.pnl)
+
+    def test_full_executions_recovery_closes(self):
+        nid = self._held_night(qty=5)
+        self.jr.update_night(nid, sell_order_id=77, sell_ref="refS1",
+                             status="PENDING_SELL_FILL")
+        self.broker.fills_by_ref["refS1"] = OrderResult(
+            -1, "Executions", 5, 1012.0, 0.4)
+        self.broker.fills[77] = None or self.broker.fills_by_ref["refS1"]
+        rc = strategy.run_reconcile(self.cfg, self.jr, self.broker,
+                                    et(TUE + timedelta(days=1), 9, 50))
+        self.assertEqual(rc, 0)
+        self.assertEqual(self.jr.get_night(nid).status, "CLOSED")
+
+    def test_vanished_resting_sell_with_position_reverts_to_held(self):
+        nid = self._held_night(qty=1)
+        self.jr.update_night(nid, sell_order_id=77, sell_ref="refS1",
+                             status="PENDING_SELL_FILL")
+        self.broker.position = 1        # shares still here, order gone,
+        self.broker.resting = []        # no executions -> escalate
+        rc = strategy.run_reconcile(self.cfg, self.jr, self.broker,
+                                    et(TUE + timedelta(days=1), 9, 50))
+        self.assertEqual(rc, 2)
+        self.assertEqual(self.jr.get_night(nid).status, "HELD")
+
+    def test_flat_with_unrecoverable_sale_is_error(self):
+        nid = self._held_night(qty=1)
+        self.jr.update_night(nid, sell_order_id=77, sell_ref="refS1",
+                             status="PENDING_SELL_FILL")
+        self.broker.position = 0
+        rc = strategy.run_reconcile(self.cfg, self.jr, self.broker,
+                                    et(TUE + timedelta(days=2), 9, 50))
+        self.assertEqual(rc, 2)
+        n = self.jr.get_night(nid)
+        self.assertEqual(n.status, "ERROR")
+        self.assertIn("manually", n.detail)
+
+    def test_zero_price_fill_not_journaled(self):
+        self.assertFalse(strategy.good_fill(
+            OrderResult(1, "Filled", 1, 0.0)))
+        self.assertTrue(strategy.good_fill(
+            OrderResult(1, "Filled", 1, 10.0)))
+
+    def test_kill_groups_basket_by_date(self):
+        # 15 losing DATES across 2 symbols = 30 losing rows; per-date
+        # streak is 15, so a 20-loss limit must NOT trip
+        nights = []
+        for i in range(15):
+            d = (date(2026, 3, 2) + timedelta(days=i)).isoformat()
+            for sym in ("MU", "TSM"):
+                nights.append(_NightRow(sym, d, -1.0))
+        kill = KillCriteria(max_consecutive_losses=20,
+                            trailing_min_nights=9999,
+                            max_drawdown_pct=1e9)
+        self.assertIsNone(strategy.evaluate_kill(nights, kill))
 
     def test_reconcile_trips_kill(self):
         for i in range(16):

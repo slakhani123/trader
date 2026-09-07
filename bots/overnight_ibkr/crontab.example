@@ -1,21 +1,31 @@
 # Overnight bot crontab (host timezone: Europe/London).
 #
-# The bot gates itself on US/Eastern market times internally, so it is
-# safe - and REQUIRED for DST-shift weeks and 13:00 ET half-days - to
-# fire each leg at several London times: wrong firings exit 0 silently.
+# The bot gates itself on US/Eastern market times internally, so firing a
+# leg at several London times is safe and REQUIRED: London-New York is
+# usually 5h, but 4h for ~3 weeks each spring while the US is on DST and
+# the UK is not, and half-days close at 13:00 ET. Wrong firings exit 0
+# silently.
 #
-# London-vs-New-York offset is 5h in winter, and 4h for ~3 weeks/yr when
-# the US shifts before the UK. Half-days close at 13:00 ET.
+# flock serializes runs on this host: the bot must be a single process
+# (one host, one journal, one client_id - see README). -n skips instead
+# of queueing, which is correct: if the primary run is still working, a
+# backup firing has nothing to add.
 #
-# afternoon leg (regular close 16:00 ET -> submit ~15:00-15:45 ET):
-15,45 20 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
-15,45 19 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
-# half-day leg (close 13:00 ET -> submit ~12:00-12:45 ET):
-15,40 17 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
-15,40 16 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
+# afternoon buy leg (target ~15:30 ET; window 14:45-15:50 ET):
+30 20 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py buy >> bot.log 2>&1
+30 19 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py buy >> bot.log 2>&1
+# half-day buy leg (13:00 ET close -> window 11:45-12:50 ET):
+30 17 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py buy >> bot.log 2>&1
+30 16 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py buy >> bot.log 2>&1
+# evening reconcile (~16:30+ ET, while today's execution records are
+# still queryable - IBKR only serves executions same-day, so this run is
+# what recovers a fill if the buy process crashed mid-wait):
+30 21 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py reconcile >> bot.log 2>&1
+35 20 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py reconcile >> bot.log 2>&1
 # morning safety net (before the 09:28 ET MOO cutoff):
-05 14 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py sell  >> bot.log 2>&1
-05 13 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py sell  >> bot.log 2>&1
-# morning reconcile (after the open; records fills, P&L, kill criteria):
-50 14 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py reconcile >> bot.log 2>&1
-50 13 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py reconcile >> bot.log 2>&1
+05 14 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py sell >> bot.log 2>&1
+05 13 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py sell >> bot.log 2>&1
+# morning reconcile (after the open; records fills, P&L, kill criteria;
+# also re-places a missing exit itself, so cron ordering is not relied on):
+50 14 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py reconcile >> bot.log 2>&1
+50 13 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && flock -n .lock python3 overnight_bot.py reconcile >> bot.log 2>&1

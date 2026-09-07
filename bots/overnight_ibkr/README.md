@@ -28,6 +28,17 @@ Design properties:
 
 * **Idempotent** — one night per symbol per date (SQLite journal);
   re-running a command never double-orders.
+* **Journal-first on every order** — the intent (including an
+  attempt-unique `orderRef`) is written *before* anything is
+  transmitted, so a crash at any instant leaves a blocking journal row,
+  never an order the journal has not heard of. Recovery paths adopt a
+  resting order found at the broker instead of placing a second one —
+  the classic duplicated-sell → naked-short failure is structurally
+  excluded.
+* **Honest booking** — a night is only CLOSED on a fill whose quantity
+  matches and whose price is positive; partial or ambiguous outcomes are
+  escalated loudly, never silently booked (they would corrupt the P&L
+  the kill criteria run on).
 * **Never stacks** — an unsold overnight position blocks new buys and
   alerts instead.
 * **Sells only what it bought** — sell quantity is the journalled fill,
@@ -72,7 +83,18 @@ Design properties:
 4. **Schedule** — copy `crontab.example` (`crontab -e`). It fires each
    leg at several London times because the bot gates itself on US
    Eastern time internally; wrong firings exit silently. This also
-   covers the ~3 weeks/yr of GMT/EST mismatch and 13:00 ET half-days.
+   covers the ~3 weeks/yr of GMT/EDT mismatch and 13:00 ET half-days.
+   The evening reconcile rows matter: IBKR serves execution records
+   same-day only, so that run is what recovers a fill if the buy
+   process crashed mid-wait.
+
+   **Operational invariants:** one host, one journal, one `client_id` —
+   forever. The `flock` in the cron lines serializes same-host runs;
+   nothing protects two hosts or two journals. Never change `client_id`
+   once live (resting orders re-bind to it), and never use TWS's
+   "Reset API order ID sequence". Set `notify_url` (a free
+   [ntfy.sh](https://ntfy.sh) topic works) — without it, critical
+   alerts exist only in `bot.log`.
 
 5. **Go live small.** First month at 1 share/day (≈$15 of total
    friction) and compare journalled fills with the official
@@ -102,8 +124,11 @@ alerts for every ERROR-level event.
 | symptom | meaning | action |
 |---|---|---|
 | `unsold overnight position … not buying` | last night's exit failed | `reconcile`, then `sell` before 09:28 ET; investigate before resuming |
-| `OPG sell REJECTED` | sell didn't rest after the buy | morning `sell` cron covers it; if that also fails, close manually |
-| `past MOO cutoff with an unsold position` | both sell paths missed | sell manually at market; `reconcile` will still record it via executions if done same-day, else mark the night manually |
+| `OPG sell REJECTED` | sell didn't rest after the buy | the reconcile/sell crons retry with a fresh attempt ref; if all fail, close manually |
+| status `PLACING_SELL` | crash mid-placement; a sell *may* be resting | `reconcile` — it adopts the resting order if one exists, else reverts to HELD and retries; never places a duplicate |
+| `past MOO cutoff with an unsold position` | both sell paths missed | sell manually at market; `reconcile` records it via executions if done same-day, else mark the night manually |
+| `recovered by POSITION … P&L is an ESTIMATE` | buy fill found via position after executions expired | correct that night's `buy_fill` in the journal from your IBKR statement |
+| `NOT auto-booking … partial` | sell partially filled then died | resolve manually; partial exits are deliberately not auto-managed |
 | `KILL CRITERIA TRIPPED` | pre-registered stop hit | that was the plan — review `status` and the research before any `resume` |
 | Gateway login lost | IBC restart failed / weekly re-auth | `check` fails loudly; orders already resting at IBKR are unaffected |
 

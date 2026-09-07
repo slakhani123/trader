@@ -3,8 +3,11 @@
 Tables
 ------
 nights   one row per symbol per overnight cycle (buy at close d, sell at
-         next open). status: PENDING_BUY -> HELD -> PENDING_SELL_FILL ->
-         CLOSED, or ERROR.
+         next open). status: PENDING_BUY -> HELD -> PLACING_SELL ->
+         PENDING_SELL_FILL -> CLOSED, or ERROR. PLACING_SELL means "a
+         sell order tagged sell_ref MAY have reached the broker" - it is
+         written BEFORE the order is transmitted, so a crash can never
+         leave an order the journal has not heard of.
 events   append-only operational log (also mirrored to stderr/logfile).
 meta     key/value: halted flag + reason, schema version.
 
@@ -28,6 +31,7 @@ CREATE TABLE IF NOT EXISTS nights (
   qty INTEGER NOT NULL DEFAULT 0,
   buy_order_id INTEGER,
   sell_order_id INTEGER,
+  sell_ref TEXT DEFAULT '',
   buy_fill REAL,
   sell_fill REAL,
   buy_commission REAL DEFAULT 0,
@@ -50,7 +54,7 @@ CREATE TABLE IF NOT EXISTS meta (
 );
 """
 
-OPEN_STATUSES = ("PENDING_BUY", "HELD", "PENDING_SELL_FILL")
+OPEN_STATUSES = ("PENDING_BUY", "HELD", "PLACING_SELL", "PENDING_SELL_FILL")
 
 
 @dataclass
@@ -62,6 +66,7 @@ class Night:
     qty: int
     buy_order_id: int | None
     sell_order_id: int | None
+    sell_ref: str
     buy_fill: float | None
     sell_fill: float | None
     buy_commission: float

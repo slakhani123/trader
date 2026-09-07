@@ -114,6 +114,9 @@ class _DryRunBroker:
     def position_qty(self, symbol: str) -> int:
         return 0
 
+    def open_sell_orders(self, symbol: str):
+        return []
+
     def place_moc_buy(self, *_):        # pragma: no cover
         raise AssertionError("dry-run must not place orders")
 
