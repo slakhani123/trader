@@ -91,8 +91,9 @@ def daily_legs(rows, divs=None):
         if (cur.d - prev.d).days > 10:
             continue
         dv = divs.get(cur.d, 0.0)
-        if dv / cur.close > 0.05:      # guard: mis-scaled dividend row
-            dv = 0.0
+        if dv / prev.close > 0.05:     # guard: mis-scaled dividend row
+            dv = 0.0                   # (never fires on current data; max
+                                       # observed div/prev_close is 3.7%)
         on.append((cur.open + dv) / prev.close - 1)
         intr.append(cur.close / cur.open - 1)
         dates.append(cur.d)
@@ -121,7 +122,15 @@ def window_stats(dates, on, intr, start_year: int | None):
 
 
 def splice_validation(rows_a, rows_b):
-    """Compare daily close-to-close returns of two sources on common dates."""
+    """Compare daily close-to-close returns of two sources on common dates.
+
+    Caveat: for dividend-UNadjusted sources (A) vs dividend-adjusted ones
+    (Marjanovic), returns legitimately differ by the dividend yield on
+    ex-dates, so the p95/max stats overstate disagreement for div-paying
+    tickers (e.g. QQQ's 29.5 bps max diff is exactly its 2016-12-16
+    distribution). The spliced return series themselves are unaffected -
+    daily_legs credits the dividend back. Advisory only; nothing gates on it.
+    """
     ra = {cur.d: cur.close / prev.close - 1 for prev, cur in zip(rows_a, rows_a[1:])}
     rb = {cur.d: cur.close / prev.close - 1 for prev, cur in zip(rows_b, rows_b[1:])}
     common = sorted(set(ra) & set(rb))
@@ -155,8 +164,9 @@ def spliced_series(ticker: str, marj_start_year: int):
     marj_part = [r for r in marj_rows if r.d < cut]
     # Returns are concatenated per source rather than bridged across the
     # splice: adjustment bases differ between vendors, so a cross-source
-    # close->open ratio would be spurious. Cost: exactly one overnight
-    # observation (the splice night) is dropped per spliced series.
+    # close->open ratio would be spurious. Cost: the splice DAY's overnight
+    # and intraday returns are both dropped (verified impact ~0.6%
+    # multiplicative on a ~48,000,000% cumulative figure).
     d1, on1, id1 = daily_legs(marj_part)
     d2, on2, id2 = daily_legs(rec_rows, divs)
     dates = d1 + d2

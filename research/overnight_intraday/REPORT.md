@@ -66,10 +66,16 @@ drift, not just earnings gaps.
    prices at all for 1962–1992. Any cumulative product starting 1990
    compounds through years where the overnight/intraday split is
    unmeasurable. Our clean-window numbers above are the defensible core.
-2. **Since 2018 the intraday leg is POSITIVE (+5 bps/night).** The
-   "intraday loses everything" half of the chart is a pre-2018 story. The
-   overnight leg still dominates ~3:1, but it no longer mirrors an
-   intraday loss.
+2. **Since 2018 the intraday leg is POSITIVE (+5 bps/night; statistically
+   flat, t≈0.9).** The "intraday loses everything" half of the chart is a
+   pre-2018 story. The overnight leg still dominates ~3:1, but it no
+   longer mirrors an intraday loss.
+
+One selection caveat applies throughout: MU is studied *because* a chart
+about it went viral, so its standalone t-stats are inflated by selection.
+The mitigation is that the same-window pattern appears at equal or higher
+significance in names that were not the viral subject (TSM t=4.8,
+AVGO t=4.0, AMD t=3.8, NVDA t=3.8).
 
 ## 2. Expansion: is this a general law?
 
@@ -81,7 +87,9 @@ No. Clean-era decomposition, 34 names 2005–2017 and 26 names 2018–2026:
   Several (TSM, MRVL, ORCL, UBER, SOFI) still pair it with *negative*
   intraday.
 * **Intraday-dominated (same window):** AAPL (+0.6 ON vs +10.7 ID),
-  GOOG (+1.2 vs +9.3), META, PLTR (+12.6 vs +16.7), JPM, JNJ, PG, XOM.
+  GOOG (+1.2 vs +9.3), META, JNJ, PG; PLTR is borderline (+12.6 vs +16.7,
+  both large). JPM and XOM are overnight-dominant over the full 2018+
+  window and only tip intraday from 2021+.
 * **Regime flips are real:** AAPL was strongly overnight 2005–2017
   (+16.5 vs −2.5) and flipped completely after 2018. INTC flipped the
   other way. QCOM, MSFT, SBUX, TXN, ORCL all changed sign across eras.
@@ -140,8 +148,11 @@ Execution notes (UK-resident retail):
   auctions are the most expensive venue for impact (Goyal–Jegadeesh–Wu
   2026) and the strategy must sell at the open every day.
 * IBKR Lite ($0 commission) is not available to UK residents; IBKR Pro
-  tiered ≈ $0.35 min/side. Alpaca serves UK users commission-free but
-  without guaranteed true auction participation.
+  tiered ≈ $0.35 min/side (≈ $176/yr → net ≈ +$213/yr at 2018–26 pace).
+  Alpaca's true auction order types (OPG/CLS) are gated behind Alpaca
+  Elite (~$30k minimum deposit; router pricing ~$0.003/share — trivial
+  per trade, but the account minimum is the bind). Robinhood UK and
+  Trading 212 offer no on-open/on-close order types at all.
 * $1,000 buys ~1 share of MU at $1,016 (fractional shares are generally
   not auction-eligible — order sizing is now lumpy).
 * UK tax: this is CGT (Salt v Chamberlain; HMRC BIM56850), with same-day
@@ -166,13 +177,20 @@ with ~$5M combined AUM. The night effect inverted at the index level over
 their whole life. Anyone proposing the single-name version should know the
 index version died in production three years ago.
 
-## 6. What we could NOT verify
+## 6. The chart's own arithmetic, checked
 
-* The chart's exact printed figures (+138,330,342% / −99.92%) — they are
-  vintage- and start-date-sensitive; with MU's 10× split factor (5:2 1994,
-  2:1 1995, 2:1 2000) and the 2026 melt-up the implied ~1,100× total
-  return for 1990→2025/26 is in the plausible range, but the pre-1995
-  segment rests on opens that are provably unreliable in retail data.
+By the identity ON×ID = total, the chart's printed pair implies MU
+returned ~1,106× over its window. Both our independent price lineages
+agree MU's split-adjusted close was ≈ $1.00 in January 1990 (nominal
+~$10, cumulative split factor 10×: 5:2 1994, 2:1 1995, 2:1 2000), and MU
+traded $958–1,016 in the last week of August 2026 when the image went
+viral — an actual total of ~960–1,015×. **The chart's numbers are
+internally consistent for a 1990→Aug-2026 window** (the "2025" on its
+axis is just the last drawn tick). What remains unreliable is the
+*attribution* before 1995: the overnight/intraday split in that segment
+rests on opens that are provably synthetic or stale in retail data
+(CRSP has no opens at all before 1993), which is why our headline
+replication starts in 1995 — and still confirms the direction.
 * Intraday microstructure (does MU's open still fade in the first hour?) —
   we have daily bars only; the literature (Berkman et al.) says yes
   historically.

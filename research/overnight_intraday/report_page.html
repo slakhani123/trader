@@ -1,0 +1,512 @@
+<title>The Micron Overnight Edge</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #f6f7f7; --surface: #fcfdfd; --ink: #101314; --ink2: #4d5558;
+    --muted: #878e91; --grid: #e3e6e6; --axis: #c2c8c9; --hair: rgba(16,19,20,.10);
+    --on: #2a78d6; --id: #eb6834; --hold: #6b7276;
+    --good: #0ca30c; --good-text: #067006; --crit: #d03b3b;
+    --chip: #eef1f1; --tip-bg: #101314; --tip-ink: #f4f5f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e0f10; --surface: #17191a; --ink: #f2f4f4; --ink2: #b8bdbf;
+      --muted: #84898c; --grid: #26292a; --axis: #3a3e40; --hair: rgba(255,255,255,.10);
+      --on: #3987e5; --id: #d95926; --hold: #9aa0a3;
+      --good: #0ca30c; --good-text: #2fbb2f; --crit: #e05252;
+      --chip: #202324; --tip-bg: #f2f4f4; --tip-ink: #101314;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e0f10; --surface: #17191a; --ink: #f2f4f4; --ink2: #b8bdbf;
+    --muted: #84898c; --grid: #26292a; --axis: #3a3e40; --hair: rgba(255,255,255,.10);
+    --on: #3987e5; --id: #d95926; --hold: #9aa0a3;
+    --good: #0ca30c; --good-text: #2fbb2f; --crit: #e05252;
+    --chip: #202324; --tip-bg: #f2f4f4; --tip-ink: #101314;
+  }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Libre Franklin", system-ui, -apple-system, sans-serif;
+    font-size: 16px; line-height: 1.55; margin: 0;
+  }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  a { color: inherit; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--on); outline-offset: 2px; }
+
+  header .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+  h1 { font-weight: 900; font-size: clamp(34px, 5.4vw, 54px); letter-spacing: -.02em;
+    line-height: 1.04; margin: 10px 0 14px; text-wrap: balance; }
+  .standfirst { font-size: 18px; color: var(--ink2); max-width: 62ch; margin: 0 0 18px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+  .chip { font-family: "IBM Plex Mono", monospace; font-size: 12px; letter-spacing: .04em;
+    padding: 6px 11px; border-radius: 999px; background: var(--chip); color: var(--ink2);
+    border: 1px solid var(--hair); }
+  .chip b { color: var(--ink); font-weight: 600; }
+  .chip.good b { color: var(--good-text); }
+  .chip.crit b { color: var(--crit); }
+
+  section { margin-top: 56px; }
+  .sec-eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .sec-eyebrow .n { color: var(--on); font-weight: 600; }
+  h2 { font-weight: 800; font-size: 26px; letter-spacing: -.01em; margin: 0 0 12px; text-wrap: balance; }
+  p { max-width: 68ch; }
+  p.note { color: var(--ink2); font-size: 14.5px; }
+
+  figure { margin: 22px 0 0; background: var(--surface); border: 1px solid var(--hair);
+    border-radius: 10px; padding: 18px 18px 12px; }
+  figure .ftitle { font-weight: 600; font-size: 15px; margin: 0 0 2px; }
+  figure .fsub { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
+  figcaption { color: var(--ink2); font-size: 13.5px; margin-top: 10px; max-width: 75ch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 6px 0 4px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink2); }
+  .legend .sw { display: inline-block; width: 14px; height: 3px; border-radius: 2px;
+    vertical-align: middle; margin-right: 6px; }
+  .chart-scroll { overflow-x: auto; }
+  svg text { font-family: "IBM Plex Mono", ui-monospace, monospace; fill: var(--muted); font-size: 11px; }
+  svg .dlabel { fill: var(--ink); font-weight: 600; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px; margin-top: 20px; }
+  .tile { background: var(--surface); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 14px 16px; }
+  .tile .v { font-size: 26px; font-weight: 800; letter-spacing: -.01em; }
+  .tile .v.pos { color: var(--good-text); } .tile .v.neg { color: var(--crit); }
+  .tile .k { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; margin-top: 18px; }
+  .tablewrap { overflow-x: auto; }
+  th { text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    font-weight: 500; padding: 8px 14px 8px 0; border-bottom: 1px solid var(--axis); }
+  td { padding: 9px 14px 9px 0; border-bottom: 1px solid var(--grid);
+    font-variant-numeric: tabular-nums; }
+  td.num, th.num { text-align: right; }
+  td .pos { color: var(--good-text); font-weight: 600; }
+  td .neg { color: var(--crit); font-weight: 600; }
+
+  .cardrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px; margin-top: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--hair); border-radius: 10px;
+    padding: 16px 18px; }
+  .card h3 { margin: 0 0 6px; font-size: 15px; font-weight: 700; }
+  .card p { margin: 0; font-size: 13.8px; color: var(--ink2); }
+  .card .src { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted);
+    display: block; margin-top: 10px; }
+
+  .callout { border-left: 3px solid var(--crit); background: var(--surface);
+    border-radius: 0 10px 10px 0; padding: 16px 20px; margin-top: 22px; }
+  .callout.blue { border-left-color: var(--on); }
+  .callout p { margin: 6px 0 0; }
+  .callout .head { font-weight: 700; }
+
+  ol.steps { padding-left: 20px; max-width: 68ch; }
+  ol.steps li { margin-bottom: 10px; }
+  .foot { margin-top: 64px; padding-top: 18px; border-top: 1px solid var(--grid);
+    color: var(--muted); font-size: 13px; }
+  .foot p { max-width: none; }
+
+  #tip { position: fixed; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink);
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; line-height: 1.5;
+    padding: 8px 11px; border-radius: 7px; opacity: 0; transition: opacity .12s;
+    z-index: 10; max-width: 260px; }
+  @media (prefers-reduced-motion: reduce) { #tip { transition: none; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Vigil research note · 07 Sep 2026 · NASDAQ:MU $1,016.59</div>
+  <h1>The Micron Overnight Edge</h1>
+  <p class="standfirst">A viral chart claims almost all of Micron&rsquo;s gains happened
+  overnight &mdash; buy the close, sell the open, +138,330,342% since 1990. We rebuilt it
+  from three independent datasets, extended it to September&nbsp;2026, replicated the
+  methodology, costed the proposed $1,000-a-day bot, and stress-tested every claim.</p>
+  <div class="chips">
+    <span class="chip good">pattern <b>REAL &amp; PERSISTENT</b></span>
+    <span class="chip">headline number <b>COMPOUNDING ILLUSION</b></span>
+    <span class="chip crit">$1k/day bot <b>&asymp; LUNCH MONEY, REAL TAIL RISK</b></span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-eyebrow"><span class="n">01</span> · The claim, replicated on clean data</div>
+  <h2>Yes &mdash; Micron really did make (almost) all of it overnight</h2>
+  <p>Split every day into two trades: <b style="color:var(--on)">overnight</b>
+  (buy at the close, sell at the next open) and <b style="color:var(--id)">intraday</b>
+  (buy at the open, sell at the close). By identity the two multiply to the
+  buy-and-hold return. On clean data &mdash; opens before 1995 are provably synthetic
+  in retail datasets, so we start there &mdash; the split is extreme and it is
+  <i>not</i> a data artifact: it holds in every start-year window, in the pristine
+  2005+ era, and across two independent data sources that agree to a median
+  0.0&nbsp;bps on overlap.</p>
+
+  <figure>
+    <p class="ftitle">Growth of $1 in MU, 1995 &rarr; Sep 2026 (log scale)</p>
+    <p class="fsub">Overnight = close&rarr;next open, every night. Intraday = open&rarr;close, every day. Dividends credited to the overnight leg.</p>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--on)"></span>overnight only &rarr; $482,073</span>
+      <span><span class="sw" style="background:var(--hold)"></span>buy &amp; hold &rarr; $94</span>
+      <span><span class="sw" style="background:var(--id)"></span>intraday only &rarr; $0.0002</span>
+    </div>
+    <div class="chart-scroll" id="hero"></div>
+    <figcaption>Sources: Marjanovic archive (1995&ndash;2016) spliced with nightly-updated
+    yfinance mirror (2016&ndash;2026); 299-day overlap agrees to a median 0.0 bps. Mean
+    overnight return +18.3 bps/night (bootstrap 95% CI 14.3&ndash;22.4, t&nbsp;=&nbsp;8.5,
+    ~7,950 nights). Vertical hairline marks the source splice.</figcaption>
+  </figure>
+
+  <div class="tablewrap"><table>
+    <thead><tr><th>window</th><th class="num">overnight, cumulative</th><th class="num">intraday, cumulative</th><th class="num">overnight bps/night</th><th class="num">t-stat</th></tr></thead>
+    <tbody>
+      <tr><td>Viral chart (1990&ndash;2025, Knuteson method)</td><td class="num">+138,330,342%</td><td class="num">&minus;99.92%</td><td class="num mono">&mdash;</td><td class="num mono">&mdash;</td></tr>
+      <tr><td>Ours, clean opens (1995&ndash;2026)</td><td class="num"><span class="pos">+48,207,226%</span></td><td class="num"><span class="neg">&minus;99.98%</span></td><td class="num mono">+18.3</td><td class="num mono">8.5</td></tr>
+      <tr><td>Ours, pristine era (2005&ndash;2017)</td><td class="num"><span class="pos">+21,673%</span></td><td class="num"><span class="neg">&minus;98.3%</span></td><td class="num mono">+17.9</td><td class="num mono">6.4</td></tr>
+      <tr><td>Ours, recent (2018&ndash;2026)</td><td class="num"><span class="pos">+1,616%</span></td><td class="num"><span class="pos">+47.7%</span></td><td class="num mono">+15.4</td><td class="num mono">3.3</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The chart&rsquo;s own arithmetic checks out: its two numbers multiply to
+  &asymp;1,106&times;, and MU really did return &asymp;1,000&times; from Jan 1990 (split-adjusted
+  &asymp;$1.00) to the week it went viral. Two honest corrections still apply. First, the
+  headline is a compounding illusion &mdash; it assumes you reinvest an exponentially growing
+  pot every night for 35 years; a fixed $1,000/day earns the <i>arithmetic</i> version, a few
+  hundred dollars a year &mdash; and the overnight/intraday <i>attribution</i> before 1995 rests
+  on opens that vendors largely fabricated. Second, since 2018 Micron&rsquo;s intraday leg has
+  been <i>positive</i> (+4.9 bps/day, statistically flat): overnight still dominates 3:1, but
+  the &ldquo;day session loses everything&rdquo; half of the chart is a pre-2018 story.</p>
+</section>
+
+<section>
+  <div class="sec-eyebrow"><span class="n">02</span> · Expand to more stocks?</div>
+  <h2>It&rsquo;s a semiconductor story, not a law of nature</h2>
+  <p>Same decomposition, 2018&ndash;2026, 26 liquid names. The overnight tilt concentrates
+  exactly where the academic literature says it should &mdash; high-volatility,
+  retail-attention, news-heavy stocks, which today means the semiconductor complex.
+  Apple, Alphabet, Meta, J&amp;J and P&amp;G earned their returns
+  <i>during</i> the trading day (Palantir leans that way too). Apple itself was strongly overnight-tilted in
+  2005&ndash;2017 and flipped completely after 2018 &mdash; these regimes are not stable.</p>
+  <figure>
+    <p class="ftitle">Overnight vs intraday, mean bps per session &middot; 2018 &rarr; Sep 2026</p>
+    <p class="fsub">Each row: <span style="color:var(--on);font-weight:600">&#9679;</span> overnight mean vs <span style="color:var(--id);font-weight:600">&#9679;</span> intraday mean. Hover for exact values.</p>
+    <div class="chart-scroll" id="dumbbell"></div>
+    <figcaption>MU sits mid-pack among semis: SOFI, MRVL, AMD, TSM, NVDA all show the same
+    or stronger overnight tilt. At the index level the effect is nearly gone: SPY +4.2
+    overnight vs +2.0 intraday, and the NY&nbsp;Fed&rsquo;s 2026 follow-up reports the famous
+    overnight index drift has averaged ~zero since 2021.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-eyebrow"><span class="n">03</span> · The proposed bot, costed</div>
+  <h2>$1,000 a day captures $389 a year &mdash; before costs</h2>
+  <p>The expected gross is 252 &times; $1,000 &times; 15.4 bps. Everything hinges on
+  execution: market-on-close (submit by 15:55 ET) and market-on-open (by 09:28 ET)
+  orders fill at the official auction prints &mdash; the very prices in the data &mdash;
+  so the gross is roughly capturable. What varies is what you pay to get there. UK
+  residents don&rsquo;t get IBKR&nbsp;Lite; on IBKR&nbsp;Pro the fixed $1-minimum
+  <i>each way</i> is 20 bps of round-trip friction against a 15.4 bps edge, while
+  tiered pricing (&asymp;$0.35/side) leaves most of it. Alpaca&rsquo;s auction order
+  types sit behind a ~$30k account minimum; Robinhood&nbsp;UK and Trading&nbsp;212
+  have no on-open/on-close orders at all.</p>
+  <div class="tiles">
+    <div class="tile"><div class="v pos">+$389</div><div class="k">gross / yr · free execution</div></div>
+    <div class="tile"><div class="v pos">+$213</div><div class="k">net / yr · IBKR tiered ($0.35/side)</div></div>
+    <div class="tile"><div class="v neg">&minus;$115</div><div class="k">net / yr · IBKR fixed ($1/side)</div></div>
+    <div class="tile"><div class="v neg">&minus;64%</div><div class="k">overnight leg, 2022</div></div>
+    <div class="tile"><div class="v neg">&minus;15.6%</div><div class="k">worst single night</div></div>
+  </div>
+  <figure>
+    <p class="ftitle">The overnight leg, year by year &middot; sum of nightly returns, gross</p>
+    <p class="fsub">2026 is through 4 Sep. Hover for values.</p>
+    <div class="chart-scroll" id="years"></div>
+    <figcaption>The edge is real but violent: it holds every earnings gap (Micron reports
+    after the close), lost 64% in 2022, and the compounded overnight-only equity curve
+    has a &minus;54% maximum drawdown. 2024&ndash;26 numbers are inflated by the AI-memory
+    melt-up that took MU from $128 to $1,255 in a year.</figcaption>
+  </figure>
+  <p class="note">Housekeeping a real bot inherits: $1,000 buys roughly one share at
+  $1,016 (fractional shares aren&rsquo;t auction-eligible, so sizing is lumpy); ~250
+  disposals a year fall under UK CGT with same-day/30-day matching, each computed in
+  GBP at that day&rsquo;s FX; and the strategy is a standing bet that a historical
+  pattern keeps paying &mdash; see Apple, which stopped.</p>
+</section>
+
+<section>
+  <div class="sec-eyebrow"><span class="n">04</span> · The live falsification</div>
+  <h2>The index version already died in production</h2>
+  <div class="callout">
+    <span class="head">NightShares NSPY &amp; NIWM, June 2022 &rarr; July 2023</span>
+    <p>Two ETFs implemented exactly this trade &mdash; hold the index overnight, cash by
+    day. In 13 months NSPY returned about <b>&minus;6.9%</b> while the S&amp;P 500 rose
+    <b>+22%</b>; both funds liquidated with ~$5M combined assets. The night effect
+    didn&rsquo;t just underperform its backtest &mdash; it inverted. The index-level
+    anomaly the viral chart generalizes from has been approximately zero since 2021
+    (NY&nbsp;Fed, &ldquo;The Disappearing Overnight Drift&rdquo;, July 2026). What
+    survives is the single-name, retail-attention version &mdash; the part with the
+    fattest tails and the least capacity.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-eyebrow"><span class="n">05</span> · Why it exists at all</div>
+  <h2>Four mechanisms, none of them free money</h2>
+  <div class="cardrow">
+    <div class="card"><h3>Retail buys the open</h3>
+      <p>Retail orders queue overnight and hit an illiquid opening auction; opens print
+      high and fade over the first hour. Much of the &ldquo;overnight return&rdquo; is a
+      premium <i>paid by buyers at the open</i> &mdash; the strategy sells into it, which
+      is why it works best in retail-favorite names.</p>
+      <span class="src">Berkman et al. 2012 · Lachance 2023 · Elm Wealth 2024&ndash;25</span></div>
+    <div class="card"><h3>A clientele tug-of-war</h3>
+      <p>Different investor types dominate the night and the day; across 14 classic
+      anomalies, profits accrue entirely in one session, usually with the opposite sign
+      in the other. Cross-sectional splits like semis-vs-AAPL are the norm.</p>
+      <span class="src">Lou, Polk &amp; Skouras 2019 (JFE)</span></div>
+    <div class="card"><h3>Beta is priced at night</h3>
+      <p>CAPM holds overnight and fails intraday: high-beta stocks earn their premium
+      while the market is shut. MU is a leveraged-beta cyclical &mdash; it sits at the
+      intersection of every known driver.</p>
+      <span class="src">Hendershott, Livdan &amp; Roesch 2020 (JFE) · Boyarchenko et al. 2023 (RFS)</span></div>
+    <div class="card"><h3>Or&hellip; manipulation?</h3>
+      <p>The viral chart is Bruce Knuteson&rsquo;s own exhibit: he argues the pattern is
+      evidence of decades-long book-marking by large quant firms. Academia prefers the
+      retail-flow story; his hypothesis is unrefuted but unadopted. Either way, the
+      chart&rsquo;s author doesn&rsquo;t claim you can harvest it cheaply.</p>
+      <span class="src">Knuteson 2019&ndash;22 · overnightreturns.org</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-eyebrow"><span class="n">06</span> · Verdict</div>
+  <h2>Fun experiment: yes. Edge worth a bot: barely, and not like this</h2>
+  <ol class="steps">
+    <li><b>Paper-trade it first.</b> Run the MOC+MOO pair on MU for three months in a
+    paper account and measure <i>your</i> fills against the official auction prints.
+    Realized round-trip cost is the single decisive number &mdash; below ~5 bps the
+    edge survives, above it you are donating.</li>
+    <li><b>Diversify the leg.</b> The same tilt at the same strength exists in TSM, MRVL,
+    AMD, AVGO, NVDA. Five names at $200/day each keeps the bps and roughly halves the
+    single-name gap risk that defines MU (&minus;16% nights exist).</li>
+    <li><b>Size it as a hobby, not income.</b> At $1k/day the honest expectation is
+    ~$200&ndash;390/yr with &minus;60% years on the leg. At sizes where the P&amp;L
+    matters, you are running a short-vol-at-the-open book with 250 CGT disposals a
+    year &mdash; and betting a 30-year pattern that just died at index level survives
+    in single names.</li>
+    <li><b>Kill criteria before you start.</b> Pre-register them: e.g. trailing-12M
+    overnight mean &lt; 0, or realized cost &gt; 5 bps/round-trip, or a &minus;25% leg
+    drawdown &rarr; stop. Apple&rsquo;s flip is what regime death looks like; decide in
+    advance what yours looks like.</li>
+  </ol>
+  <div class="callout blue">
+    <span class="head">Bottom line</span>
+    <p>The screenshot is directionally true and honestly sourced &mdash; and MU&rsquo;s
+    overnight edge is still measurably alive (+15 bps/night since 2018, t&nbsp;=&nbsp;3.3).
+    But its headline number is a compounding illusion, the general version of the trade
+    is dead at index level, and the $1,000/day bot nets between &minus;$115 and +$215 a
+    year at a UK-accessible broker while carrying &minus;15% overnight gaps. Run it as an
+    experiment with kill criteria if it sounds fun. Do not run it as a business.</p>
+  </div>
+</section>
+
+<div class="foot">
+  <p><b>Method.</b> overnight<sub>t</sub> = open<sub>t</sub>/close<sub>t&minus;1</sub> &minus; 1;
+  intraday<sub>t</sub> = close<sub>t</sub>/open<sub>t</sub> &minus; 1; (1+on)(1+id) equals the daily
+  close-to-close return by construction. Years where &gt;25% of days print open==close (synthetic opens)
+  or &gt;40% print open==prev-close (stale opens) are excluded &mdash; that removes most pre-1995 data,
+  which is why our clean window starts in 1995. Ex-date dividends are credited to the overnight leg.
+  Analysis code (stdlib Python) and full JSON results live in the repo:
+  <span class="mono">research/overnight_intraday/</span>.</p>
+  <p><b>Data.</b> Marjanovic &ldquo;Huge Stock Market Dataset&rdquo; (1962&ndash;2017) ·
+  yennanliu/finance_data nightly yfinance mirror (2016&ndash;Sep 2026, MU close 2026-09-04 verified
+  against live quotes to the penny) · two complementary mirrors for AAPL/GOOGL/SPY ·
+  eliangcs/pystock-data as contemporaneous cross-check (exact OHLC agreement on overlap).</p>
+  <p><b>Verification.</b> Headline numbers reproduced by an independent clean-room
+  re-implementation; analysis code passed a hostile review; each conclusion survived an
+  adversarial refutation pass (details: <span class="mono">verification.md</span> in the repo).</p>
+  <p><b>Sources.</b> <a href="https://arxiv.org/abs/2201.00223">Knuteson 2022</a> ·
+  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1004081">Cliff, Cooper &amp; Gulen 2008</a> ·
+  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4139328">Haghani et al., &ldquo;Night Moves&rdquo;</a> ·
+  <a href="https://libertystreeteconomics.newyorkfed.org/2026/07/the-disappearing-overnight-drift/">NY Fed 2026</a> ·
+  <a href="https://www.bloomberg.com/news/articles/2023-07-19/-night-effect-funds-to-shut-down-with-overnight-returns-elusive">Bloomberg on NightShares</a> ·
+  <a href="https://alphaarchitect.com/trading-costs-wipe-out-the-overnight-return-anomaly/">Alpha Architect on costs</a> ·
+  <a href="https://www.gov.uk/hmrc-internal-manuals/business-income-manual/bim56850">HMRC BIM56850</a>.</p>
+  <p>Research note, not financial advice. Past overnight returns are a description of the past.</p>
+</div>
+</div>
+
+<div id="tip" role="status"></div>
+
+<script>
+const DATA = {
+  hero: {
+    years: [1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027],
+    on:  [0.0036,0.2808,0.5088,0.5296,0.7665,1.1943,1.5828,1.7236,1.6645,1.914,2.0809,2.2764,2.4293,2.5466,2.5626,2.8065,3.0486,3.2446,3.4456,3.6887,3.969,3.8946,4.1708,4.4529,4.446,4.6064,4.7393,4.9283,4.637,4.7099,4.9794,5.3125,5.6831],
+    id:  [-0.0012,-0.0028,-0.3752,-0.4244,-0.4081,-0.6539,-1.073,-1.241,-1.7035,-1.8151,-2.0408,-2.1848,-2.3213,-2.738,-3.1483,-2.8101,-3.1695,-3.4537,-3.6631,-3.3921,-3.4671,-3.7773,-3.8647,-3.8597,-3.9777,-3.91,-3.9167,-3.9931,-3.9774,-3.8338,-4.0759,-3.8498,-3.712],
+    tot: [0.0024,0.278,0.1336,0.1052,0.3584,0.5404,0.5098,0.4826,-0.039,0.0989,0.0401,0.0916,0.108,-0.1914,-0.5857,-0.0036,-0.1209,-0.2091,-0.2175,0.2966,0.5019,0.1173,0.3061,0.5932,0.4683,0.6964,0.8226,0.9352,0.6596,0.8761,0.9035,1.4627,1.9711],
+    splice: 2016.7
+  },
+  dumbbell: [
+    ["SOFI",19.2,-5.9,2.9],["MRVL",18.5,-1.4,3.8],["AMD",18.0,6.1,3.8],["TSM",17.1,-2.6,4.8],
+    ["NVDA",16.2,6.8,3.8],["MU",15.4,4.9,3.3],["AVGO",14.4,2.1,4.0],["TSLA",13.3,7.4,2.6],
+    ["PLTR",12.6,16.7,1.9],["WDC",11.8,3.5,2.6],["AMZN",9.9,-0.6,3.1],["UBER",8.1,0.1,1.9],
+    ["MSFT",7.2,3.0,2.9],["ORCL",6.9,2.2,1.9],["VTI",5.7,0.3,3.4],["XOM",5.7,1.0,2.2],
+    ["QQQ",5.4,3.0,2.7],["JPM",5.1,3.2,2.0],["INTC",4.8,3.8,1.1],["SPY",4.2,2.0,2.5],
+    ["META",3.3,6.0,0.8],["GOOGL",3.2,7.5,1.1],["JNJ",1.6,3.2,1.1],["GOOG",1.2,9.3,0.4],
+    ["AAPL",0.6,10.7,0.2],["PG",-0.5,4.5,-0.4]
+  ],
+  years: [["2018",6],["2019",37],["2020",38],["2021",47],["2022",-64],["2023",22],["2024",67],["2025",82],["2026",101]]
+};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS = "http://www.w3.org/2000/svg";
+const el = (n, at) => { const e = document.createElementNS(NS, n);
+  for (const k in at) e.setAttribute(k, at[k]); return e; };
+const tip = document.getElementById("tip");
+function showTip(html, x, y) {
+  tip.innerHTML = html; tip.style.opacity = 1;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.min(x + 14, innerWidth - w - 8) + "px";
+  tip.style.top = (y - h - 12 < 8 ? y + 16 : y - h - 12) + "px";
+}
+function hideTip() { tip.style.opacity = 0; }
+const fmtDollar = l => { const v = Math.pow(10, l);
+  if (v >= 1e6) return "$" + (v/1e6).toFixed(1) + "M";
+  if (v >= 1e3) return "$" + Math.round(v/1e3) + "k";
+  if (v >= 10) return "$" + Math.round(v);
+  if (v >= 1) return "$" + v.toFixed(2);
+  return "$" + v.toPrecision(1).replace(/e-?\d+$/, s => s); };
+
+/* ---- hero: log-scale growth of $1 ---- */
+(function () {
+  const d = DATA.hero, W = 920, H = 430, m = {t: 14, r: 88, b: 30, l: 56};
+  const x = y => m.l + (y - 1995) / (2027 - 1995) * (W - m.l - m.r);
+  const yl = v => m.t + (5.8 - v) / (5.8 - (-4.4)) * (H - m.t - m.b);
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img",
+    "aria-label": "Log-scale growth of one dollar in Micron 1995 to 2026: overnight-only grows to about 482 thousand dollars, buy and hold to 94 dollars, intraday-only collapses to a fiftieth of a cent."});
+  for (let g = -4; g <= 5; g += 1) {
+    svg.appendChild(el("line", {x1: m.l, x2: W - m.r, y1: yl(g), y2: yl(g),
+      stroke: "var(--grid)", "stroke-width": g === 0 ? 0 : 1}));
+    if (g % 2 === 0) { const t = el("text", {x: m.l - 8, y: yl(g) + 4, "text-anchor": "end"});
+      t.textContent = fmtDollar(g); svg.appendChild(t); }
+  }
+  svg.appendChild(el("line", {x1: m.l, x2: W - m.r, y1: yl(0), y2: yl(0),
+    stroke: "var(--axis)", "stroke-width": 1.4}));
+  for (let yr = 1995; yr <= 2025; yr += 5) {
+    const t = el("text", {x: x(yr), y: H - 8, "text-anchor": "middle"});
+    t.textContent = yr; svg.appendChild(t);
+  }
+  svg.appendChild(el("line", {x1: x(d.splice), x2: x(d.splice), y1: m.t, y2: H - m.b,
+    stroke: "var(--axis)", "stroke-dasharray": "2 4"}));
+  const spl = el("text", {x: x(d.splice), y: m.t + 10, "text-anchor": "middle"});
+  spl.textContent = "splice"; svg.appendChild(spl);
+  const path = (arr, color, dash) => {
+    let p = "";
+    d.years.forEach((yr, i) => { p += (i ? "L" : "M") + x(yr).toFixed(1) + " " + yl(arr[i]).toFixed(1) + " "; });
+    const e = el("path", {d: p, fill: "none", stroke: color, "stroke-width": 2,
+      "stroke-linejoin": "round"});
+    if (dash) e.setAttribute("stroke-dasharray", "5 4");
+    svg.appendChild(e);
+    const last = d.years.length - 1;
+    svg.appendChild(el("circle", {cx: x(d.years[last]), cy: yl(arr[last]), r: 3.5,
+      fill: color, stroke: "var(--surface)", "stroke-width": 2}));
+  };
+  path(d.tot, "var(--hold)", true);
+  path(d.on, "var(--on)");
+  path(d.id, "var(--id)");
+  const endLab = (arr, txt, color, dy) => {
+    const t = el("text", {x: W - m.r + 8, y: yl(arr[arr.length - 1]) + (dy || 4),
+      class: "dlabel"}); t.setAttribute("fill", color); t.textContent = txt; svg.appendChild(t);
+  };
+  endLab(d.on, "$482k", "var(--on)");
+  endLab(d.tot, "$94", "var(--ink2)");
+  endLab(d.id, "$0.0002", "var(--id)");
+  const cross = el("line", {y1: m.t, y2: H - m.b, stroke: "var(--axis)", "stroke-width": 1,
+    opacity: 0});
+  svg.appendChild(cross);
+  svg.addEventListener("pointermove", ev => {
+    const r = svg.getBoundingClientRect();
+    const px = (ev.clientX - r.left) * (W / r.width);
+    const yr = Math.round(1995 + (px - m.l) / (W - m.l - m.r) * (2027 - 1995));
+    const i = d.years.indexOf(Math.min(2027, Math.max(1995, yr)));
+    if (i < 0) return;
+    cross.setAttribute("x1", x(d.years[i])); cross.setAttribute("x2", x(d.years[i]));
+    cross.setAttribute("opacity", .6);
+    const lab = d.years[i] === 2027 ? "Sep 2026" : "start of " + d.years[i];
+    showTip(`<b>${lab}</b><br>overnight ${fmtDollar(d.on[i])}<br>buy &amp; hold ${fmtDollar(d.tot[i])}<br>intraday ${fmtDollar(d.id[i])}`, ev.clientX, ev.clientY);
+  });
+  svg.addEventListener("pointerleave", () => { cross.setAttribute("opacity", 0); hideTip(); });
+  document.getElementById("hero").appendChild(svg);
+})();
+
+/* ---- dumbbell: per-ticker ON vs ID ---- */
+(function () {
+  const rows = DATA.dumbbell, rh = 25, m = {t: 26, r: 24, b: 26, l: 64}, W = 920;
+  const H = m.t + rows.length * rh + m.b;
+  const lo = -8, hi = 21;
+  const x = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img",
+    "aria-label": "Overnight versus intraday mean returns per ticker, 2018 to 2026. Semiconductor names cluster overnight-positive; Apple, Alphabet and P and G earn returns intraday."});
+  for (let v = -5; v <= 20; v += 5) {
+    svg.appendChild(el("line", {x1: x(v), x2: x(v), y1: m.t - 6, y2: H - m.b,
+      stroke: v === 0 ? "var(--axis)" : "var(--grid)", "stroke-width": v === 0 ? 1.4 : 1}));
+    const t = el("text", {x: x(v), y: H - 8, "text-anchor": "middle"});
+    t.textContent = v === 0 ? "0" : (v > 0 ? "+" + v : v); svg.appendChild(t);
+  }
+  const axl = el("text", {x: W - m.r, y: m.t - 12, "text-anchor": "end"});
+  axl.textContent = "mean bps per session"; svg.appendChild(axl);
+  rows.forEach((r, i) => {
+    const cy = m.t + i * rh + rh / 2;
+    const band = el("rect", {x: 0, y: cy - rh / 2, width: W, height: rh, fill: "transparent"});
+    const lab = el("text", {x: m.l - 10, y: cy + 4, "text-anchor": "end", class: "dlabel"});
+    lab.textContent = r[0]; svg.appendChild(lab);
+    svg.appendChild(el("line", {x1: x(Math.min(r[1], r[2])), x2: x(Math.max(r[1], r[2])),
+      y1: cy, y2: cy, stroke: "var(--axis)", "stroke-width": 1.5}));
+    svg.appendChild(el("circle", {cx: x(r[2]), cy: cy, r: 4.5, fill: "var(--id)",
+      stroke: "var(--surface)", "stroke-width": 1.5}));
+    svg.appendChild(el("circle", {cx: x(r[1]), cy: cy, r: 4.5, fill: "var(--on)",
+      stroke: "var(--surface)", "stroke-width": 1.5}));
+    band.addEventListener("pointermove", ev => showTip(
+      `<b>${r[0]}</b><br>overnight ${r[1] > 0 ? "+" : ""}${r[1]} bps (t=${r[3]})<br>intraday ${r[2] > 0 ? "+" : ""}${r[2]} bps`,
+      ev.clientX, ev.clientY));
+    band.addEventListener("pointerleave", hideTip);
+    svg.appendChild(band);
+  });
+  document.getElementById("dumbbell").appendChild(svg);
+})();
+
+/* ---- yearly overnight sums ---- */
+(function () {
+  const d = DATA.years, W = 920, H = 240, m = {t: 18, r: 16, b: 26, l: 46};
+  const lo = -80, hi = 110;
+  const y = v => m.t + (hi - v) / (hi - lo) * (H - m.t - m.b);
+  const bw = (W - m.l - m.r) / d.length;
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img",
+    "aria-label": "Micron overnight leg by year 2018 to 2026: positive every year except 2022, which lost 64 percent."});
+  for (let v = -50; v <= 100; v += 50) {
+    svg.appendChild(el("line", {x1: m.l, x2: W - m.r, y1: y(v), y2: y(v),
+      stroke: v === 0 ? "var(--axis)" : "var(--grid)", "stroke-width": v === 0 ? 1.4 : 1}));
+    const t = el("text", {x: m.l - 8, y: y(v) + 4, "text-anchor": "end"});
+    t.textContent = v + "%"; svg.appendChild(t);
+  }
+  d.forEach((r, i) => {
+    const cx = m.l + i * bw + bw / 2, v = r[1];
+    const top = y(Math.max(0, v)), hgt = Math.abs(y(v) - y(0));
+    const bar = el("rect", {x: cx - Math.min(34, bw * .34), y: top,
+      width: Math.min(68, bw * .68), height: Math.max(hgt, 1), rx: 3,
+      fill: "var(--on)", opacity: v < 0 ? .55 : 1});
+    bar.addEventListener("pointermove", ev =>
+      showTip(`<b>${r[0]}</b><br>overnight leg ${v > 0 ? "+" : ""}${v}%`, ev.clientX, ev.clientY));
+    bar.addEventListener("pointerleave", hideTip);
+    svg.appendChild(bar);
+    const t = el("text", {x: cx, y: H - 8, "text-anchor": "middle"});
+    t.textContent = r[0]; svg.appendChild(t);
+    if (r[0] === "2022" || r[0] === "2026") {
+      const vl = el("text", {x: cx, y: v > 0 ? top - 6 : y(v) + 14, "text-anchor": "middle",
+        class: "dlabel"});
+      vl.textContent = (v > 0 ? "+" : "") + v + "%"; svg.appendChild(vl);
+    }
+  });
+  document.getElementById("years").appendChild(svg);
+})();
+</script>
