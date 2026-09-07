@@ -77,11 +77,11 @@ class IBBroker(Broker):
         )
 
     def _place(self, symbol: str, action: str, qty: int,
-               order_type: str, tif: str) -> OrderResult:
+               order_type: str, tif: str, ref: str) -> OrderResult:
         from ib_async import Order
         order = Order(action=action, orderType=order_type, totalQuantity=qty,
                       tif=tif, account=self.account, transmit=True,
-                      outsideRth=False)
+                      outsideRth=False, orderRef=ref)
         trade = self._ib.placeOrder(self._contract(symbol), order)
         self._ib.sleep(2)  # let the initial ack/reject arrive
         self._trades[trade.order.orderId] = trade
@@ -124,11 +124,11 @@ class IBBroker(Broker):
                 total += int(pos.position)
         return total
 
-    def place_moc_buy(self, symbol: str, qty: int) -> OrderResult:
-        return self._place(symbol, "BUY", qty, "MOC", "DAY")
+    def place_moc_buy(self, symbol: str, qty: int, ref: str) -> OrderResult:
+        return self._place(symbol, "BUY", qty, "MOC", "DAY", ref)
 
-    def place_opg_sell(self, symbol: str, qty: int) -> OrderResult:
-        return self._place(symbol, "SELL", qty, "MKT", "OPG")
+    def place_opg_sell(self, symbol: str, qty: int, ref: str) -> OrderResult:
+        return self._place(symbol, "SELL", qty, "MKT", "OPG", ref)
 
     def wait_for_fill(self, order_id: int, deadline: datetime) -> OrderResult:
         trade = self._trades.get(order_id)
@@ -142,17 +142,25 @@ class IBBroker(Broker):
             self._ib.sleep(5)
         return self._trade_result(trade)
 
-    def order_fill(self, order_id: int) -> OrderResult | None:
+    def order_fill(self, order_id: int, ref: str = "") -> OrderResult | None:
         # same-session trades first
         trade = self._trades.get(order_id)
         if trade is not None:
             return self._trade_result(trade)
-        # otherwise look through open trades and today's executions
+        # open/known trades from this API session (match by ref, else id)
         for t in self._ib.trades():
-            if t.order.orderId == order_id:
+            if (ref and getattr(t.order, "orderRef", "") == ref) \
+                    or (not ref and t.order.orderId == order_id):
                 return self._trade_result(t)
-        fills = [f for f in self._ib.reqExecutions()
-                 if f.execution.orderId == order_id]
+        # finally today's executions. Prefer the deterministic orderRef tag:
+        # orderId is only unique per clientId, so matching by id alone could
+        # hit an unrelated manual/TWS order after a restart.
+        def _matches(f) -> bool:
+            fref = getattr(f.execution, "orderRef", "") or ""
+            if ref:
+                return fref == ref
+            return f.execution.orderId == order_id
+        fills = [f for f in self._ib.reqExecutions() if _matches(f)]
         if fills:
             qty = int(sum(f.execution.shares for f in fills))
             value = sum(f.execution.shares * f.execution.price for f in fills)

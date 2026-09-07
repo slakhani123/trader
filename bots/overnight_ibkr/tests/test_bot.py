@@ -41,13 +41,15 @@ class FakeBroker:
     def position_qty(self, symbol):
         return self.position
 
-    def place_moc_buy(self, symbol, qty):
+    def place_moc_buy(self, symbol, qty, ref):
+        if self.buy_result == "raise":
+            raise ConnectionError("socket dropped")
         oid = self.next_order_id
         self.next_order_id += 1
         self.placed.append(("MOC_BUY", symbol, qty))
         return OrderResult(oid, "Submitted")
 
-    def place_opg_sell(self, symbol, qty):
+    def place_opg_sell(self, symbol, qty, ref):
         oid = self.next_order_id
         self.next_order_id += 1
         self.placed.append(("OPG_SELL", symbol, qty))
@@ -64,7 +66,7 @@ class FakeBroker:
             return OrderResult(order_id, "Rejected", detail="rejected")
         return OrderResult(order_id, "Submitted", detail="no fill by deadline")
 
-    def order_fill(self, order_id):
+    def order_fill(self, order_id, ref=""):
         return self.fills.get(order_id)
 
 
@@ -254,18 +256,78 @@ class TestBuySession(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertEqual(self.broker.placed, [])
 
-    def test_buy_no_fill(self):
-        self.broker.buy_result = "timeout"
+    def test_buy_rejected_is_terminal(self):
+        self.broker.buy_result = "reject"
         rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
         self.assertEqual(rc, 1)
-        n = self.jr.night_for("MU", TUE)
-        self.assertEqual(n.status, "ERROR")
-        # next day is not blocked by the errored night
+        self.assertEqual(self.jr.night_for("MU", TUE).status, "ERROR")
+        # a dead buy does not block the next day
         wed = TUE + timedelta(days=1)
         self.broker.buy_result = "fill"
         rc = strategy.run_buy_session(self.cfg, self.jr, self.broker,
                                       et(wed, 15, 30))
         self.assertEqual(rc, 0)
+
+    def test_buy_timeout_fails_closed_then_self_heals(self):
+        # non-terminal at deadline: the night stays open and BLOCKS
+        self.broker.buy_result = "timeout"
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
+        self.assertEqual(rc, 2)
+        self.assertEqual(self.jr.night_for("MU", TUE).status, "PENDING_BUY")
+        wed = TUE + timedelta(days=1)
+        self.broker.buy_result = "fill"
+        # next-day buy: inline reconcile finds no execution AND a flat
+        # account -> clears the stale night, then buys normally
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker,
+                                      et(wed, 15, 30))
+        self.assertEqual(rc, 0)
+        self.assertEqual(self.jr.night_for("MU", TUE).status, "ERROR")
+        self.assertEqual(self.jr.night_for("MU", wed).status,
+                         "PENDING_SELL_FILL")
+
+    def test_buy_timeout_with_shares_stays_blocked(self):
+        # order actually filled after the timeout: account is NOT flat,
+        # so nothing self-clears and the next day refuses to buy
+        self.broker.buy_result = "timeout"
+        strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
+        self.broker.position = 1
+        self.broker.buy_result = "fill"
+        wed = TUE + timedelta(days=1)
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker,
+                                      et(wed, 15, 30))
+        self.assertEqual(rc, 1)
+        self.assertIsNone(self.jr.night_for("MU", wed))
+
+    def test_place_raises_leaves_blocking_night(self):
+        self.broker.buy_result = "raise"
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
+        self.assertEqual(rc, 2)
+        n = self.jr.night_for("MU", TUE)
+        self.assertEqual(n.status, "PENDING_BUY")
+        self.assertIsNone(n.buy_order_id)
+
+    def test_expect_flat_blocks_unmanaged_position(self):
+        self.broker.position = 7   # user holds MU outside the journal
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
+        self.assertEqual(rc, 1)
+        self.assertEqual(self.broker.placed, [])
+        self.cfg.expect_flat = False
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
+        self.assertEqual(rc, 0)
+        self.assertTrue(self.broker.placed)
+
+    def test_missed_reconcile_self_heals_before_buy(self):
+        # yesterday's sell filled but the morning cron never ran
+        mon = TUE - timedelta(days=1)
+        nid = self.jr.create_night("MU", mon, 1, 40, 1000.0, status="HELD")
+        self.jr.update_night(nid, buy_fill=1000.0, sell_order_id=41,
+                             status="PENDING_SELL_FILL")
+        self.broker.fills[41] = OrderResult(41, "Filled", 1, 1010.0, 0.37)
+        rc = strategy.run_buy_session(self.cfg, self.jr, self.broker, self.now)
+        self.assertEqual(rc, 0)
+        self.assertEqual(self.jr.get_night(nid).status, "CLOSED")
+        self.assertEqual(self.jr.night_for("MU", TUE).status,
+                         "PENDING_SELL_FILL")
 
     def test_sell_reject_leaves_held(self):
         self.broker.sell_result = "reject"

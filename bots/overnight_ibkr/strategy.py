@@ -56,6 +56,8 @@ class BotConfig:
     dry_run: bool = False
     round_up_to_one_share: bool = True    # buy 1 share even if price > clip
     max_clip_overshoot: float = 1.6       # ...but never above clip * this
+    expect_flat: bool = True              # refuse to buy if the account holds
+                                          # the symbol outside the journal
     fill_wait_minutes: int = 12           # wait past the close for MOC fill
     notify_url: str = ""                  # optional POST target for alerts
     kill: KillCriteria = field(default_factory=KillCriteria)
@@ -90,6 +92,7 @@ def load_config(path: str) -> BotConfig:
         dry_run=bool(b.get("dry_run", False)),
         round_up_to_one_share=bool(b.get("round_up_to_one_share", True)),
         max_clip_overshoot=float(b.get("max_clip_overshoot", 1.6)),
+        expect_flat=bool(b.get("expect_flat", True)),
         fill_wait_minutes=int(b.get("fill_wait_minutes", 12)),
         notify_url=str(b.get("notify_url", "")),
         kill=kill,
@@ -118,16 +121,27 @@ class Broker(Protocol):
     def position_qty(self, symbol: str) -> int:
         """Current signed position in the account for symbol."""
 
-    def place_moc_buy(self, symbol: str, qty: int) -> OrderResult: ...
+    def place_moc_buy(self, symbol: str, qty: int, ref: str) -> OrderResult: ...
 
-    def place_opg_sell(self, symbol: str, qty: int) -> OrderResult: ...
+    def place_opg_sell(self, symbol: str, qty: int, ref: str) -> OrderResult: ...
 
     def wait_for_fill(self, order_id: int, deadline: datetime) -> OrderResult:
         """Block until the order reaches a terminal state or deadline."""
 
-    def order_fill(self, order_id: int) -> OrderResult | None:
-        """Latest known state of an order placed earlier (today or via
-        execution lookup). None if unknown."""
+    def order_fill(self, order_id: int, ref: str = "") -> OrderResult | None:
+        """Latest known state of an order placed earlier. `ref` is the
+        deterministic orderRef the order was tagged with, so a lookup
+        after a restart matches by tag rather than by the per-clientId
+        orderId (which can collide with manual/TWS orders). None if
+        unknown."""
+
+
+TERMINAL_DEAD = ("Rejected", "Cancelled", "ApiCancelled", "Inactive")
+
+
+def order_ref(symbol: str, d: date, side: str) -> str:
+    """Deterministic tag placed on every order (Execution.orderRef)."""
+    return f"ovnbot:{symbol}:{d.isoformat()}:{side}"
 
 
 # ---------------------------------------------------------------- sizing
@@ -231,6 +245,11 @@ def run_buy_session(cfg: BotConfig, jr: Journal, broker: Broker,
         jr.log("INFO", f"{today} is not a trading day; nothing to do")
         return 0
 
+    # self-heal first: if the morning reconcile cron was missed, resolve
+    # filled sells / recovered buys so stale open nights don't block today
+    if not cfg.dry_run:
+        run_reconcile(cfg, jr, broker, now)
+
     rc = 0
     for sc in cfg.symbols:
         code = _buy_one(cfg, jr, broker, notify, sc, now, today, force)
@@ -296,32 +315,66 @@ def _buy_one(cfg: BotConfig, jr: Journal, broker: Broker, notify: Notifier,
                        f"then OPG SELL {qty}")
         return 0
 
-    # place MOC buy
-    res = broker.place_moc_buy(sym, qty)
-    night_id = jr.create_night(sym, today, qty, res.order_id, price,
+    # unmanaged-position guard: shares in the account with no open night
+    # means either a prior crash left an orphan or the user holds this
+    # symbol outside the bot - both are reasons not to add exposure.
+    if cfg.expect_flat:
+        pos = broker.position_qty(sym)
+        if pos != 0:
+            msg = (f"{sym}: account holds {pos} shares outside the journal - "
+                   "not buying (set expect_flat=false only if you deliberately "
+                   "hold this symbol alongside the bot)")
+            jr.log("ERROR", msg)
+            notify.send(msg)
+            return 1
+
+    # journal FIRST, then place: a crash between the two leaves a blocking
+    # PENDING_BUY row (fail closed) instead of a live order the journal
+    # has never heard of (double exposure).
+    buy_ref = order_ref(sym, today, "B")
+    night_id = jr.create_night(sym, today, qty, None, price,
                                status="PENDING_BUY",
                                detail=f"ref_price={price:.4f}")
+    try:
+        res = broker.place_moc_buy(sym, qty, buy_ref)
+    except Exception as exc:
+        msg = f"{sym}: MOC buy placement raised: {exc} - night left PENDING_BUY"
+        jr.update_night(night_id, detail=msg)
+        jr.log("ERROR", msg)
+        notify.send(msg)
+        return 2
+    jr.update_night(night_id, buy_order_id=res.order_id)
     jr.log("INFO", f"{sym}: MOC BUY {qty} submitted (order {res.order_id})")
 
     # wait for the closing-cross fill
     close = actual_close or cal.close_dt(today)
     deadline = close + timedelta(minutes=cfg.fill_wait_minutes)
     fill = broker.wait_for_fill(res.order_id, deadline)
-    if fill.status != "Filled" or fill.filled_qty <= 0:
-        msg = (f"{sym}: MOC buy did not fill (status={fill.status} "
-               f"{fill.detail}) - no overnight position tonight")
+    if fill.status in TERMINAL_DEAD:
+        msg = (f"{sym}: MOC buy ended {fill.status} ({fill.detail}) - "
+               "no overnight position tonight")
         jr.update_night(night_id, status="ERROR", detail=msg)
         jr.log("ERROR", msg)
         notify.send(msg)
         return 1
+    if fill.status != "Filled" or fill.filled_qty <= 0:
+        # NOT terminal (timeout / connection loss): the order may still
+        # fill after we stop looking. Keep the night open and blocking;
+        # reconcile resolves it from executions.
+        msg = (f"{sym}: MOC buy state {fill.status} at deadline - keeping "
+               "night PENDING_BUY; reconcile will resolve it")
+        jr.update_night(night_id, detail=msg)
+        jr.log("ERROR", msg)
+        notify.send(msg)
+        return 2
     jr.update_night(night_id, qty=fill.filled_qty, buy_fill=fill.avg_fill_price,
                     buy_commission=fill.commission, status="HELD")
     jr.log("INFO", f"{sym}: bought {fill.filled_qty} @ {fill.avg_fill_price:.4f} "
                    f"(comm {fill.commission:.2f})")
 
     # place the OPG sell for the FILLED quantity - rests until the open
-    sell = broker.place_opg_sell(sym, fill.filled_qty)
-    if sell.status in ("Rejected", "Cancelled", "Inactive"):
+    sell = broker.place_opg_sell(sym, fill.filled_qty, order_ref(sym, today, "S"))
+    if sell.status in TERMINAL_DEAD:
         msg = (f"{sym}: OPG sell REJECTED ({sell.detail}) - position is "
                f"unprotected; morning 'sell' fallback required before 09:28 ET")
         jr.update_night(night_id, status="HELD", detail=msg)
@@ -369,8 +422,8 @@ def run_sell_fallback(cfg: BotConfig, jr: Journal, broker: Broker,
         if cfg.dry_run:
             jr.log("INFO", f"DRY-RUN {n.symbol}: would place OPG SELL {qty}")
             continue
-        sell = broker.place_opg_sell(n.symbol, qty)
-        if sell.status in ("Rejected", "Cancelled", "Inactive"):
+        sell = broker.place_opg_sell(n.symbol, qty, order_ref(n.symbol, buy_d, "S"))
+        if sell.status in TERMINAL_DEAD:
             jr.log("ERROR", f"{n.symbol}: fallback OPG sell rejected: {sell.detail}")
             notify.send(f"{n.symbol}: fallback OPG sell rejected")
             rc = max(rc, 2)
@@ -389,8 +442,10 @@ def run_reconcile(cfg: BotConfig, jr: Journal, broker: Broker,
     now = now or cal.now_et()
     rc = 0
     for n in jr.open_nights():
+        buy_d = date.fromisoformat(n.buy_date)
         if n.status == "PENDING_SELL_FILL" and n.sell_order_id is not None:
-            fill = broker.order_fill(n.sell_order_id)
+            fill = broker.order_fill(n.sell_order_id,
+                                     order_ref(n.symbol, buy_d, "S"))
             if fill is None:
                 jr.log("WARN", f"{n.symbol}: sell order {n.sell_order_id} state "
                                "unknown yet; will retry on next reconcile")
@@ -401,7 +456,7 @@ def run_reconcile(cfg: BotConfig, jr: Journal, broker: Broker,
                                      fill.commission)
                 jr.log("INFO", f"{n.symbol}: night {n.buy_date} closed "
                                f"@ {fill.avg_fill_price:.4f}  P&L {pnl:+.2f}")
-            elif fill.status in ("Rejected", "Cancelled", "Inactive"):
+            elif fill.status in TERMINAL_DEAD:
                 msg = (f"{n.symbol}: resting sell {n.sell_order_id} ended "
                        f"{fill.status} - position may still be open")
                 jr.update_night(n.id, status="HELD", detail=msg)
@@ -412,9 +467,11 @@ def run_reconcile(cfg: BotConfig, jr: Journal, broker: Broker,
                 jr.log("WARN", f"{n.symbol}: sell order {n.sell_order_id} still "
                                f"{fill.status}")
                 rc = max(rc, 1)
-        elif n.status == "PENDING_BUY" and n.buy_order_id is not None:
-            # buy session died before recording the fill
-            fill = broker.order_fill(n.buy_order_id)
+        elif n.status == "PENDING_BUY":
+            # buy session died before recording the fill (possibly even
+            # before recording the order id - the orderRef still finds it)
+            fill = broker.order_fill(n.buy_order_id or -1,
+                                     order_ref(n.symbol, buy_d, "B"))
             if fill and fill.status == "Filled" and fill.filled_qty > 0:
                 jr.update_night(n.id, qty=fill.filled_qty,
                                 buy_fill=fill.avg_fill_price,
@@ -422,13 +479,20 @@ def run_reconcile(cfg: BotConfig, jr: Journal, broker: Broker,
                 jr.log("INFO", f"{n.symbol}: recovered buy fill "
                                f"{fill.filled_qty} @ {fill.avg_fill_price:.4f}")
                 rc = max(rc, 1)   # still needs a sell -> run_sell_fallback
-            elif fill and fill.status in ("Rejected", "Cancelled", "Inactive"):
+            elif fill and fill.status in TERMINAL_DEAD:
                 jr.update_night(n.id, status="ERROR",
                                 detail=f"buy ended {fill.status}")
                 jr.log("ERROR", f"{n.symbol}: buy order ended {fill.status}")
+            elif fill is None and broker.position_qty(n.symbol) == 0:
+                # no execution anywhere and the account is flat: the order
+                # never reached the broker - safe to clear the block
+                jr.update_night(n.id, status="ERROR",
+                                detail="no execution found and account flat")
+                jr.log("WARN", f"{n.symbol}: PENDING_BUY {n.buy_date} cleared - "
+                               "no execution found, account flat")
             else:
-                jr.log("WARN", f"{n.symbol}: buy order {n.buy_order_id} state "
-                               "unknown; will retry")
+                jr.log("WARN", f"{n.symbol}: buy order state unknown; "
+                               "keeping night open")
                 rc = max(rc, 1)
 
     reason = evaluate_kill(jr.closed_nights(), cfg.kill)

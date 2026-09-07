@@ -123,7 +123,7 @@ class _DryRunBroker:
     def wait_for_fill(self, *_):        # pragma: no cover
         raise AssertionError("dry-run must not place orders")
 
-    def order_fill(self, *_):
+    def order_fill(self, *_, **__):
         return None
 
 

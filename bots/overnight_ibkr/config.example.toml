@@ -10,6 +10,10 @@ client_id = 17
 account = ""
 journal_path = "overnight.sqlite"
 dry_run = false
+# refuse to buy when the account already holds the symbol outside the
+# journal (crash orphan, or your own separate holdings). Set false ONLY
+# if you deliberately hold these tickers alongside the bot.
+expect_flat = true
 # if one share costs more than clip_usd, still buy 1 share...
 round_up_to_one_share = true
 # ...but never if the share price exceeds clip_usd * this factor
