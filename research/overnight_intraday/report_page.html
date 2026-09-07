@@ -231,6 +231,28 @@
   disposals a year fall under UK CGT with same-day/30-day matching, each computed in
   GBP at that day&rsquo;s FX; and the strategy is a standing bet that a historical
   pattern keeps paying &mdash; see Apple, which stopped.</p>
+
+  <h2 style="font-size:20px;margin-top:34px">The cheapest live route (verified Sep 2026)</h2>
+  <p>The edge is measured auction print to auction print, so &ldquo;cheapest&rdquo; must
+  include auction access &mdash; a 15:59 market order plus a queued-at-open market order
+  is a different, worse strategy. Among UK-accessible brokers, only two credible routes
+  offer an official API <i>and</i> Nasdaq cross orders:</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>route</th><th>auction access</th><th class="num">friction/yr &middot; $1k/day</th><th class="num">$10k/day</th><th>catch</th></tr></thead>
+    <tbody>
+      <tr><td><b>IBKR Pro Tiered</b> + IB Gateway</td><td>MOC + MOO (tif=OPG)</td><td class="num">&asymp; $185</td><td class="num">&asymp; $235</td><td>none &mdash; fully verified</td></tr>
+      <tr><td>Alpaca Elite (OPG/CLS)</td><td>yes, Elite tier only</td><td class="num">&asymp; $10</td><td class="num">&asymp; $75</td><td>$30k gate; UK enrollment &amp; 2026 fee wording unconfirmed; no FCA/FSCS</td></tr>
+      <tr><td>Zero-commission apps (T212, tastytrade, Alpaca basic, Webull, Robinhood&nbsp;UK)</td><td><b>none</b></td><td class="num">$5&ndash;60 explicit</td><td class="num">+ unknown slippage</td><td>continuous-session fills, 2&ndash;6 bps/side est. vs the prints</td></tr>
+      <tr><td>CFD / spread bet (IG, CMC)</td><td>no &mdash; dealer quote</td><td class="num" colspan="2">financing 6.2&ndash;7.2%/yr &gt; 3.9%/yr gross edge</td><td>structurally negative; tax-free status saves &lt;1%/yr</td></tr>
+    </tbody>
+  </table></div>
+  <figcaption style="color:var(--ink2);font-size:13.5px;margin-top:10px;max-width:75ch">
+  IBKR&rsquo;s $0.35/order minimum binds up to ~100 shares, so friction is flat while the
+  clip grows: net &asymp; +$204/yr at $1k/day (47% eaten), +$1,730 at $5k/day (11%),
+  +$3,655 at $10k/day (6%). Breakeven clip &asymp; $500/day. For a 5-name semi basket the
+  per-order minimum makes IBKR ~$900/yr while Elite pricing would be ~$100/yr &mdash; the
+  one case where Alpaca&rsquo;s $30k gate buys a real saving. Full working:
+  <span class="mono">live_costs.md</span> in the repo.</figcaption>
 </section>
 
 <section>
@@ -282,10 +304,10 @@
   <div class="sec-eyebrow"><span class="n">06</span> · Verdict</div>
   <h2>Fun experiment: yes. Edge worth a bot: barely, and not like this</h2>
   <ol class="steps">
-    <li><b>Paper-trade it first.</b> Run the MOC+MOO pair on MU for three months in a
-    paper account and measure <i>your</i> fills against the official auction prints.
-    Realized round-trip cost is the single decisive number &mdash; below ~5 bps the
-    edge survives, above it you are donating.</li>
+    <li><b>Pilot live at one share a day for the first month.</b> That costs ~$15 of
+    friction and produces the one number no backtest can: <i>your</i> realized fills
+    vs the official auction prints. Below ~5 bps round trip the edge survives;
+    above it you are donating. Then scale.</li>
     <li><b>Diversify the leg.</b> The same tilt at the same strength exists in TSM, MRVL,
     AMD, AVGO, NVDA. Five names at $200/day each keeps the bps and roughly halves the
     single-name gap risk that defines MU (&minus;16% nights exist).</li>
