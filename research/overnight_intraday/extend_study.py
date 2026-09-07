@@ -153,6 +153,10 @@ def spliced_series(ticker: str, marj_start_year: int):
 
     cut = rec_rows[0].d
     marj_part = [r for r in marj_rows if r.d < cut]
+    # Returns are concatenated per source rather than bridged across the
+    # splice: adjustment bases differ between vendors, so a cross-source
+    # close->open ratio would be spurious. Cost: exactly one overnight
+    # observation (the splice night) is dropped per spliced series.
     d1, on1, id1 = daily_legs(marj_part)
     d2, on2, id2 = daily_legs(rec_rows, divs)
     dates = d1 + d2

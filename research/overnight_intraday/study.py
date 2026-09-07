@@ -326,7 +326,10 @@ def analyse(ticker: str, rows: list[DayRow], dropped: int) -> TickerResult:
         p = periods.setdefault(period_key(d), ([], []))
         p[0].append(on[i])
         p[1].append(intr[i])
-    last5_cut = dates[-1].replace(year=dates[-1].year - 5)
+    try:
+        last5_cut = dates[-1].replace(year=dates[-1].year - 5)
+    except ValueError:            # Feb 29 with no leap-year counterpart
+        last5_cut = dates[-1].replace(year=dates[-1].year - 5, day=28)
     p = periods.setdefault("last5y", ([], []))
     for i, d in enumerate(dates):
         if d >= last5_cut:
