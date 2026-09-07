@@ -1,0 +1,4989 @@
+{
+ "generated_from": "/home/user/scienclick/stocks/data",
+ "clip_start": "2005-01-01",
+ "results": [
+  {
+   "ticker": "mu",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 17.893,
+    "std_bps": 158.3,
+    "t_stat": 6.43,
+    "win_rate": 0.5553,
+    "cum_return_pct": 21672.6,
+    "ann_return_pct": 52.04,
+    "sharpe": 1.79
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -8.526,
+    "std_bps": 283.9,
+    "t_stat": -1.71,
+    "win_rate": 0.4734,
+    "cum_return_pct": -98.3,
+    "ann_return_pct": -27.13,
+    "sharpe": -0.48
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 9.592,
+    "std_bps": 332.6,
+    "t_stat": 1.64,
+    "win_rate": 0.4935,
+    "cum_return_pct": 273.2,
+    "ann_return_pct": 10.79,
+    "sharpe": 0.46
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0068,
+   "worst_year_open_eq_close": "2016:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2015-06-26",
+     -15.6
+    ],
+    [
+     "2008-10-24",
+     -12.5
+    ],
+    [
+     "2017-03-24",
+     12.2
+    ],
+    [
+     "2015-07-14",
+     12.2
+    ],
+    [
+     "2014-01-08",
+     11.4
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 14.39,
+     "id_mean_bps": -8.55,
+     "on_cum_pct": 418.8,
+     "id_cum_pct": -83.0
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 20.12,
+     "id_mean_bps": -8.51,
+     "on_cum_pct": 4096.9,
+     "id_cum_pct": -89.9
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 19.58,
+     "id_mean_bps": 0.44,
+     "on_cum_pct": 917.9,
+     "id_cum_pct": -21.7
+    }
+   },
+   "on_mean_ci_bps": [
+    12.72,
+    23.24
+   ],
+   "breakeven_round_trip_bps": 17.89,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 451.0,
+    "1.0bps_side": 401.0,
+    "2.5bps_side": 325.0,
+    "5.0bps_side": 199.0,
+    "10.0bps_side": -53.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0,
+    0.1955,
+    0.3484,
+    0.4656,
+    0.4816,
+    0.7255,
+    0.9676,
+    1.1637,
+    1.3647,
+    1.6078,
+    1.8881,
+    1.8136,
+    2.0931,
+    2.3379
+   ],
+   "series_id_log10": [
+    -0.0125,
+    -0.144,
+    -0.2805,
+    -0.6972,
+    -1.1075,
+    -0.7693,
+    -1.1288,
+    -1.4129,
+    -1.6224,
+    -1.3513,
+    -1.4263,
+    -1.7366,
+    -1.8191,
+    -1.766
+   ]
+  },
+  {
+   "ticker": "aapl",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 16.471,
+    "std_bps": 128.6,
+    "t_stat": 7.29,
+    "win_rate": 0.5874,
+    "cum_return_pct": 15686.8,
+    "ann_return_pct": 48.28,
+    "sharpe": 2.03
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -2.479,
+    "std_bps": 174.7,
+    "t_stat": -0.81,
+    "win_rate": 0.5065,
+    "cum_return_pct": -72.7,
+    "ann_return_pct": -9.61,
+    "sharpe": -0.23
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 13.803,
+    "std_bps": 208.4,
+    "t_stat": 3.77,
+    "win_rate": 0.5287,
+    "cum_return_pct": 4210.8,
+    "ann_return_pct": 34.03,
+    "sharpe": 1.05
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0009,
+   "worst_year_open_eq_close": "2005:0.00",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2005-01-13",
+     12.9
+    ],
+    [
+     "2006-07-20",
+     12.7
+    ],
+    [
+     "2008-01-23",
+     -12.5
+    ],
+    [
+     "2013-01-24",
+     -10.5
+    ],
+    [
+     "2008-07-22",
+     -10.4
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 23.24,
+     "id_mean_bps": -4.34,
+     "on_cum_pct": 1500.1,
+     "id_cum_pct": -58.4
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 12.17,
+     "id_mean_bps": -1.3,
+     "on_cum_pct": 886.6,
+     "id_cum_pct": -34.4
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 8.13,
+     "id_mean_bps": 0.38,
+     "on_cum_pct": 158.7,
+     "id_cum_pct": -4.5
+    }
+   },
+   "on_mean_ci_bps": [
+    12.09,
+    20.73
+   ],
+   "breakeven_round_trip_bps": 16.47,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 415.0,
+    "1.0bps_side": 365.0,
+    "2.5bps_side": 289.0,
+    "5.0bps_side": 163.0,
+    "10.0bps_side": -89.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0033,
+    0.302,
+    0.6917,
+    1.1387,
+    1.0324,
+    1.2098,
+    1.4536,
+    1.5707,
+    1.8069,
+    1.9329,
+    2.0335,
+    2.131,
+    2.0962,
+    2.1983
+   ],
+   "series_id_log10": [
+    0.0012,
+    0.0713,
+    -0.2688,
+    -0.3492,
+    -0.5748,
+    -0.3796,
+    -0.4359,
+    -0.4568,
+    -0.5637,
+    -0.6757,
+    -0.6262,
+    -0.7324,
+    -0.6458,
+    -0.5637
+   ]
+  },
+  {
+   "ticker": "msft",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -0.267,
+    "std_bps": 96.9,
+    "t_stat": -0.16,
+    "win_rate": 0.475,
+    "cum_return_pct": -21.2,
+    "ann_return_pct": -1.84,
+    "sharpe": -0.04
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 5.634,
+    "std_bps": 128.5,
+    "t_stat": 2.5,
+    "win_rate": 0.5068,
+    "cum_return_pct": 374.6,
+    "ann_return_pct": 12.88,
+    "sharpe": 0.7
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 5.432,
+    "std_bps": 165.1,
+    "t_stat": 1.87,
+    "win_rate": 0.5006,
+    "cum_return_pct": 274.0,
+    "ann_return_pct": 10.81,
+    "sharpe": 0.52
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0062,
+   "worst_year_open_eq_close": "2013:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2007-10-26",
+     12.3
+    ],
+    [
+     "2006-04-28",
+     -11.0
+    ],
+    [
+     "2009-10-23",
+     9.2
+    ],
+    [
+     "2015-10-23",
+     8.9
+    ],
+    [
+     "2015-01-27",
+     -8.6
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -3.73,
+     "id_mean_bps": 6.54,
+     "on_cum_pct": -41.8,
+     "id_cum_pct": 95.9
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 1.93,
+     "id_mean_bps": 5.06,
+     "on_cum_pct": 35.4,
+     "id_cum_pct": 142.3
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 2.59,
+     "id_mean_bps": 7.98,
+     "on_cum_pct": 30.6,
+     "id_cum_pct": 155.1
+    }
+   },
+   "on_mean_ci_bps": [
+    -3.54,
+    3.06
+   ],
+   "breakeven_round_trip_bps": -0.27,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -7.0,
+    "1.0bps_side": -57.0,
+    "2.5bps_side": -133.0,
+    "5.0bps_side": -259.0,
+    "10.0bps_side": -511.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0,
+    -0.0414,
+    -0.1087,
+    -0.1324,
+    -0.2118,
+    -0.2327,
+    -0.2194,
+    -0.2584,
+    -0.2098,
+    -0.2233,
+    -0.1561,
+    -0.2012,
+    -0.1864,
+    -0.1034
+   ],
+   "series_id_log10": [
+    0.0016,
+    0.0429,
+    0.1566,
+    0.252,
+    0.0928,
+    0.2962,
+    0.2391,
+    0.2675,
+    0.2448,
+    0.4001,
+    0.4444,
+    0.5701,
+    0.6247,
+    0.6763
+   ]
+  },
+  {
+   "ticker": "nvda",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 9.391,
+    "std_bps": 158.4,
+    "t_stat": 3.37,
+    "win_rate": 0.5287,
+    "cum_return_pct": 1285.3,
+    "ann_return_pct": 22.7,
+    "sharpe": 0.94
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 5.444,
+    "std_bps": 249.0,
+    "t_stat": 1.24,
+    "win_rate": 0.504,
+    "cum_return_pct": 114.0,
+    "ann_return_pct": 6.1,
+    "sharpe": 0.35
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 14.875,
+    "std_bps": 296.8,
+    "t_stat": 2.85,
+    "win_rate": 0.5139,
+    "cum_return_pct": 2863.9,
+    "ann_return_pct": 30.18,
+    "sharpe": 0.8
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0049,
+   "worst_year_open_eq_close": "2013:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-07-03",
+     -28.0
+    ],
+    [
+     "2016-11-11",
+     17.3
+    ],
+    [
+     "2008-11-07",
+     14.2
+    ],
+    [
+     "2017-05-10",
+     11.0
+    ],
+    [
+     "2009-12-07",
+     10.6
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 6.08,
+     "id_mean_bps": 7.34,
+     "on_cum_pct": 70.2,
+     "id_cum_pct": 39.7
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 11.49,
+     "id_mean_bps": 4.24,
+     "on_cum_pct": 714.1,
+     "id_cum_pct": 53.2
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 13.65,
+     "id_mean_bps": 11.91,
+     "on_cum_pct": 406.2,
+     "id_cum_pct": 277.5
+    }
+   },
+   "on_mean_ci_bps": [
+    4.13,
+    14.63
+   ],
+   "breakeven_round_trip_bps": 9.39,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 237.0,
+    "1.0bps_side": 186.0,
+    "2.5bps_side": 111.0,
+    "5.0bps_side": -15.0,
+    "10.0bps_side": -267.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0038,
+    0.194,
+    0.2563,
+    0.5101,
+    0.2361,
+    0.2268,
+    0.2426,
+    0.3565,
+    0.4537,
+    0.4541,
+    0.5238,
+    0.5866,
+    0.8681,
+    1.1415
+   ],
+   "series_id_log10": [
+    -0.0248,
+    0.0157,
+    0.2294,
+    0.1132,
+    -0.1915,
+    0.1447,
+    0.0612,
+    -0.1045,
+    -0.2419,
+    -0.137,
+    -0.0955,
+    0.0552,
+    0.2762,
+    0.3303
+   ]
+  },
+  {
+   "ticker": "amzn",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 2.334,
+    "std_bps": 158.5,
+    "t_stat": 0.84,
+    "win_rate": 0.5161,
+    "cum_return_pct": 42.5,
+    "ann_return_pct": 2.79,
+    "sharpe": 0.23
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 10.773,
+    "std_bps": 194.9,
+    "t_stat": 3.15,
+    "win_rate": 0.5059,
+    "cum_return_pct": 1674.0,
+    "ann_return_pct": 25.08,
+    "sharpe": 0.88
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 13.08,
+    "std_bps": 250.9,
+    "t_stat": 2.97,
+    "win_rate": 0.5071,
+    "cum_return_pct": 2427.7,
+    "ann_return_pct": 28.58,
+    "sharpe": 0.83
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0006,
+   "worst_year_open_eq_close": "2014:0.00",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2007-07-25",
+     22.3
+    ],
+    [
+     "2015-07-24",
+     20.1
+    ],
+    [
+     "2007-04-25",
+     18.8
+    ],
+    [
+     "2009-10-23",
+     18.7
+    ],
+    [
+     "2005-02-03",
+     -16.7
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -6.81,
+     "id_mean_bps": 20.42,
+     "on_cum_pct": -66.2,
+     "id_cum_pct": 794.7
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 8.14,
+     "id_mean_bps": 4.65,
+     "on_cum_pct": 321.9,
+     "id_cum_pct": 98.3
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 13.16,
+     "id_mean_bps": 1.36,
+     "on_cum_pct": 370.0,
+     "id_cum_pct": 5.8
+    }
+   },
+   "on_mean_ci_bps": [
+    -2.97,
+    7.89
+   ],
+   "breakeven_round_trip_bps": 2.33,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 59.0,
+    "1.0bps_side": 8.0,
+    "2.5bps_side": -67.0,
+    "5.0bps_side": -193.0,
+    "10.0bps_side": -445.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0189,
+    -0.2149,
+    -0.3928,
+    -0.2294,
+    -0.6197,
+    -0.4658,
+    -0.5094,
+    -0.5177,
+    -0.5163,
+    -0.3766,
+    -0.4058,
+    -0.1037,
+    -0.0121,
+    0.1538
+   ],
+   "series_id_log10": [
+    -0.0049,
+    0.2438,
+    0.332,
+    0.5643,
+    0.7064,
+    0.944,
+    1.1262,
+    1.122,
+    1.2782,
+    1.3279,
+    1.2465,
+    1.2593,
+    1.2407,
+    1.2489
+   ]
+  },
+  {
+   "ticker": "googl",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 12.474,
+    "std_bps": 118.8,
+    "t_stat": 5.98,
+    "win_rate": 0.5732,
+    "cum_return_pct": 4432.0,
+    "ann_return_pct": 34.56,
+    "sharpe": 1.67
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -3.493,
+    "std_bps": 146.8,
+    "t_stat": -1.35,
+    "win_rate": 0.487,
+    "cum_return_pct": -77.3,
+    "ann_return_pct": -10.89,
+    "sharpe": -0.38
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 8.938,
+    "std_bps": 187.1,
+    "t_stat": 2.72,
+    "win_rate": 0.5179,
+    "cum_return_pct": 930.1,
+    "ann_return_pct": 19.9,
+    "sharpe": 0.76
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0012,
+   "worst_year_open_eq_close": "2007:0.00",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-04-18",
+     19.1
+    ],
+    [
+     "2005-10-21",
+     14.1
+    ],
+    [
+     "2015-07-17",
+     13.0
+    ],
+    [
+     "2011-07-15",
+     13.0
+    ],
+    [
+     "2005-02-02",
+     12.3
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 15.97,
+     "id_mean_bps": -4.27,
+     "on_cum_pct": 556.6,
+     "id_cum_pct": -53.4
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 10.25,
+     "id_mean_bps": -3.0,
+     "on_cum_pct": 590.2,
+     "id_cum_pct": -51.2
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 11.4,
+     "id_mean_bps": -1.35,
+     "on_cum_pct": 299.5,
+     "id_cum_pct": -21.2
+    }
+   },
+   "on_mean_ci_bps": [
+    8.5,
+    16.49
+   ],
+   "breakeven_round_trip_bps": 12.47,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 314.0,
+    "1.0bps_side": 264.0,
+    "2.5bps_side": 188.0,
+    "5.0bps_side": 62.0,
+    "10.0bps_side": -190.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0028,
+    0.3248,
+    0.5593,
+    0.7396,
+    0.7034,
+    0.8222,
+    0.9539,
+    1.0391,
+    1.0767,
+    1.1922,
+    1.332,
+    1.4991,
+    1.5822,
+    1.6563
+   ],
+   "series_id_log10": [
+    -0.0151,
+    0.007,
+    -0.1963,
+    -0.2107,
+    -0.5034,
+    -0.332,
+    -0.4795,
+    -0.5229,
+    -0.5243,
+    -0.4525,
+    -0.6139,
+    -0.6244,
+    -0.6806,
+    -0.6434
+   ]
+  },
+  {
+   "ticker": "tsla",
+   "start": "2010-06-28",
+   "end": "2017-11-10",
+   "n_days": 1857,
+   "overnight": {
+    "n": 1857,
+    "mean_bps": 22.907,
+    "std_bps": 186.6,
+    "t_stat": 5.29,
+    "win_rate": 0.5627,
+    "cum_return_pct": 5009.8,
+    "ann_return_pct": 70.54,
+    "sharpe": 1.95
+   },
+   "intraday": {
+    "n": 1857,
+    "mean_bps": -1.777,
+    "std_bps": 279.0,
+    "t_stat": -0.27,
+    "win_rate": 0.4825,
+    "cum_return_pct": -65.1,
+    "ann_return_pct": -13.32,
+    "sharpe": -0.1
+   },
+   "total": {
+    "n": 1857,
+    "mean_bps": 21.008,
+    "std_bps": 335.3,
+    "t_stat": 2.7,
+    "win_rate": 0.5137,
+    "cum_return_pct": 1682.3,
+    "ann_return_pct": 47.83,
+    "sharpe": 0.99
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0043,
+   "worst_year_open_eq_close": "2010:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2010-06-28",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2013-05-09",
+     25.7
+    ],
+    [
+     "2012-01-17",
+     17.0
+    ],
+    [
+     "2013-08-08",
+     15.0
+    ],
+    [
+     "2013-11-06",
+     -12.4
+    ],
+    [
+     "2015-08-24",
+     -12.1
+    ]
+   ],
+   "by_period": {
+    "2010s": {
+     "n": 1857,
+     "on_mean_bps": 22.91,
+     "id_mean_bps": -1.78,
+     "on_cum_pct": 5009.8,
+     "id_cum_pct": -65.1
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 18.99,
+     "id_mean_bps": 4.01,
+     "on_cum_pct": 783.2,
+     "id_cum_pct": 13.2
+    }
+   },
+   "on_mean_ci_bps": [
+    13.55,
+    32.54
+   ],
+   "breakeven_round_trip_bps": 22.91,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 577.0,
+    "1.0bps_side": 527.0,
+    "2.5bps_side": 451.0,
+    "5.0bps_side": 325.0,
+    "10.0bps_side": 73.0
+   },
+   "series_years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0483,
+    0.3743,
+    0.5219,
+    0.7652,
+    1.3787,
+    1.5618,
+    1.4792,
+    1.6026,
+    1.7084
+   ],
+   "series_id_log10": [
+    0.0995,
+    -0.1795,
+    -0.3039,
+    -0.4471,
+    -0.4327,
+    -0.4512,
+    -0.3606,
+    -0.4966,
+    -0.4574
+   ]
+  },
+  {
+   "ticker": "amd",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 15.533,
+    "std_bps": 204.1,
+    "t_stat": 4.33,
+    "win_rate": 0.5392,
+    "cum_return_pct": 7642.0,
+    "ann_return_pct": 40.28,
+    "sharpe": 1.21
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -10.763,
+    "std_bps": 305.6,
+    "t_stat": -2.0,
+    "win_rate": 0.4555,
+    "cum_return_pct": -99.3,
+    "ann_return_pct": -32.19,
+    "sharpe": -0.56
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 4.875,
+    "std_bps": 372.3,
+    "t_stat": 0.75,
+    "win_rate": 0.4861,
+    "cum_return_pct": -47.4,
+    "ann_return_pct": -4.88,
+    "sharpe": 0.21
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0204,
+   "worst_year_open_eq_close": "2015:0.08",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2009-11-12",
+     24.8
+    ],
+    [
+     "2008-10-07",
+     24.6
+    ],
+    [
+     "2016-04-22",
+     21.8
+    ],
+    [
+     "2014-07-18",
+     -18.4
+    ],
+    [
+     "2015-07-07",
+     -17.4
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 23.07,
+     "id_mean_bps": -21.28,
+     "on_cum_pct": 1230.4,
+     "id_cum_pct": -96.6
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 10.75,
+     "id_mean_bps": -4.08,
+     "on_cum_pct": 481.9,
+     "id_cum_pct": -80.0
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 17.24,
+     "id_mean_bps": 2.85,
+     "on_cum_pct": 575.5,
+     "id_cum_pct": -17.9
+    }
+   },
+   "on_mean_ci_bps": [
+    8.7,
+    22.31
+   ],
+   "breakeven_round_trip_bps": 15.53,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 391.0,
+    "1.0bps_side": 341.0,
+    "2.5bps_side": 265.0,
+    "5.0bps_side": 139.0,
+    "10.0bps_side": -113.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0014,
+    0.1408,
+    0.1962,
+    0.2599,
+    0.6938,
+    1.1289,
+    1.22,
+    1.1985,
+    1.1878,
+    1.4937,
+    1.5487,
+    1.3775,
+    1.7284,
+    1.8889
+   ],
+   "series_id_log10": [
+    -0.0265,
+    0.0392,
+    -0.2364,
+    -0.7368,
+    -1.6479,
+    -1.4727,
+    -1.6228,
+    -1.7903,
+    -2.1153,
+    -2.2277,
+    -2.4495,
+    -2.2656,
+    -2.001,
+    -2.1679
+   ]
+  },
+  {
+   "ticker": "intc",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -0.97,
+    "std_bps": 101.6,
+    "t_stat": -0.54,
+    "win_rate": 0.4972,
+    "cum_return_pct": -38.3,
+    "ann_return_pct": -3.68,
+    "sharpe": -0.15
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 5.317,
+    "std_bps": 144.5,
+    "t_stat": 2.09,
+    "win_rate": 0.5139,
+    "cum_return_pct": 299.1,
+    "ann_return_pct": 11.37,
+    "sharpe": 0.58
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 4.346,
+    "std_bps": 176.6,
+    "t_stat": 1.4,
+    "win_rate": 0.5182,
+    "cum_return_pct": 146.4,
+    "ann_return_pct": 7.27,
+    "sharpe": 0.39
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0086,
+   "worst_year_open_eq_close": "2017:0.03",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-01-16",
+     -11.6
+    ],
+    [
+     "2006-01-18",
+     -10.4
+    ],
+    [
+     "2016-01-15",
+     -9.2
+    ],
+    [
+     "2008-10-24",
+     -7.7
+    ],
+    [
+     "2008-04-16",
+     7.2
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -1.36,
+     "id_mean_bps": 2.82,
+     "on_cum_pct": -23.3,
+     "id_cum_pct": 15.3
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -0.72,
+     "id_mean_bps": 6.9,
+     "on_cum_pct": -19.5,
+     "id_cum_pct": 246.3
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -0.74,
+     "id_mean_bps": 9.14,
+     "on_cum_pct": -12.9,
+     "id_cum_pct": 195.2
+    }
+   },
+   "on_mean_ci_bps": [
+    -4.39,
+    2.33
+   ],
+   "breakeven_round_trip_bps": -0.97,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -24.0,
+    "1.0bps_side": -75.0,
+    "2.5bps_side": -150.0,
+    "5.0bps_side": -276.0,
+    "10.0bps_side": -528.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.002,
+    0.036,
+    -0.0058,
+    -0.0038,
+    -0.2058,
+    -0.1067,
+    -0.0261,
+    -0.0897,
+    -0.1287,
+    -0.0995,
+    -0.0874,
+    -0.2168,
+    -0.2584,
+    -0.2095
+   ],
+   "series_id_log10": [
+    -0.0108,
+    0.0086,
+    -0.0487,
+    0.0446,
+    0.0246,
+    0.0634,
+    -0.0179,
+    0.128,
+    0.1219,
+    0.1912,
+    0.3418,
+    0.4548,
+    0.5426,
+    0.601
+   ]
+  },
+  {
+   "ticker": "csco",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -0.813,
+    "std_bps": 114.9,
+    "t_stat": -0.4,
+    "win_rate": 0.4914,
+    "cum_return_pct": -38.1,
+    "ann_return_pct": -3.66,
+    "sharpe": -0.11
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 4.749,
+    "std_bps": 136.7,
+    "t_stat": 1.98,
+    "win_rate": 0.5188,
+    "cum_return_pct": 243.8,
+    "ann_return_pct": 10.09,
+    "sharpe": 0.55
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 3.966,
+    "std_bps": 180.5,
+    "t_stat": 1.25,
+    "win_rate": 0.5077,
+    "cum_return_pct": 112.9,
+    "ann_return_pct": 6.06,
+    "sharpe": 0.35
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0093,
+   "worst_year_open_eq_close": "2014:0.04",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2010-11-11",
+     -16.3
+    ],
+    [
+     "2013-11-14",
+     -12.8
+    ],
+    [
+     "2011-08-11",
+     12.6
+    ],
+    [
+     "2006-08-09",
+     12.2
+    ],
+    [
+     "2013-05-16",
+     10.9
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -2.64,
+     "id_mean_bps": 6.53,
+     "on_cum_pct": -34.2,
+     "id_cum_pct": 88.3
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 0.35,
+     "id_mean_bps": 3.61,
+     "on_cum_pct": -5.9,
+     "id_cum_pct": 82.6
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 0.6,
+     "id_mean_bps": 7.17,
+     "on_cum_pct": 1.4,
+     "id_cum_pct": 134.0
+    }
+   },
+   "on_mean_ci_bps": [
+    -4.55,
+    3.27
+   ],
+   "breakeven_round_trip_bps": -0.81,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -20.0,
+    "1.0bps_side": -71.0,
+    "2.5bps_side": -146.0,
+    "5.0bps_side": -272.0,
+    "10.0bps_side": -524.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0009,
+    -0.0307,
+    0.0077,
+    0.0232,
+    -0.1893,
+    -0.1805,
+    -0.2023,
+    -0.2164,
+    -0.1682,
+    -0.214,
+    -0.2474,
+    -0.2626,
+    -0.2295,
+    -0.208
+   ],
+   "series_id_log10": [
+    -0.0184,
+    -0.0135,
+    0.1492,
+    0.1147,
+    0.1327,
+    0.287,
+    0.2278,
+    0.2069,
+    0.207,
+    0.2999,
+    0.4451,
+    0.4545,
+    0.496,
+    0.5363
+   ]
+  },
+  {
+   "ticker": "qcom",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -0.094,
+    "std_bps": 112.3,
+    "t_stat": -0.05,
+    "win_rate": 0.5046,
+    "cum_return_pct": -20.8,
+    "ann_return_pct": -1.8,
+    "sharpe": -0.01
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 3.762,
+    "std_bps": 156.0,
+    "t_stat": 1.37,
+    "win_rate": 0.5139,
+    "cum_return_pct": 127.9,
+    "ann_return_pct": 6.62,
+    "sharpe": 0.38
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 3.718,
+    "std_bps": 194.4,
+    "t_stat": 1.09,
+    "win_rate": 0.5046,
+    "cum_return_pct": 80.5,
+    "ann_return_pct": 4.7,
+    "sharpe": 0.3
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0031,
+   "worst_year_open_eq_close": "2012:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-07-24",
+     18.8
+    ],
+    [
+     "2010-01-28",
+     -10.9
+    ],
+    [
+     "2008-10-24",
+     -8.6
+    ],
+    [
+     "2014-11-06",
+     -8.0
+    ],
+    [
+     "2012-11-08",
+     8.0
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -3.02,
+     "id_mean_bps": 6.33,
+     "on_cum_pct": -37.9,
+     "id_cum_pct": 75.9
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 1.77,
+     "id_mean_bps": 2.13,
+     "on_cum_pct": 27.4,
+     "id_cum_pct": 29.6
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -0.62,
+     "id_mean_bps": 3.32,
+     "on_cum_pct": -12.5,
+     "id_cum_pct": 37.8
+    }
+   },
+   "on_mean_ci_bps": [
+    -3.58,
+    3.78
+   ],
+   "breakeven_round_trip_bps": -0.09,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -2.0,
+    "1.0bps_side": -53.0,
+    "2.5bps_side": -128.0,
+    "5.0bps_side": -254.0,
+    "10.0bps_side": -506.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0062,
+    -0.0376,
+    0.0033,
+    -0.0226,
+    -0.0904,
+    -0.203,
+    -0.1877,
+    -0.1252,
+    -0.0361,
+    -0.0299,
+    -0.0685,
+    -0.1651,
+    -0.1316,
+    -0.1014
+   ],
+   "series_id_log10": [
+    -0.0082,
+    0.0545,
+    -0.0563,
+    -0.0198,
+    0.0326,
+    0.248,
+    0.2617,
+    0.2478,
+    0.2343,
+    0.2905,
+    0.344,
+    0.2831,
+    0.3805,
+    0.3578
+   ]
+  },
+  {
+   "ticker": "txn",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -1.701,
+    "std_bps": 101.1,
+    "t_stat": -0.96,
+    "win_rate": 0.488,
+    "cum_return_pct": -51.2,
+    "ann_return_pct": -5.43,
+    "sharpe": -0.27
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 8.186,
+    "std_bps": 151.9,
+    "t_stat": 3.07,
+    "win_rate": 0.5355,
+    "cum_return_pct": 874.0,
+    "ann_return_pct": 19.38,
+    "sharpe": 0.86
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 6.371,
+    "std_bps": 176.2,
+    "t_stat": 2.06,
+    "win_rate": 0.5207,
+    "cum_return_pct": 375.4,
+    "ann_return_pct": 12.9,
+    "sharpe": 0.57
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.004,
+   "worst_year_open_eq_close": "2012:0.03",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-07-22",
+     -12.7
+    ],
+    [
+     "2008-10-21",
+     -10.7
+    ],
+    [
+     "2007-04-24",
+     9.5
+    ],
+    [
+     "2015-10-22",
+     8.1
+    ],
+    [
+     "2015-04-23",
+     -7.5
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -3.23,
+     "id_mean_bps": 6.38,
+     "on_cum_pct": -39.5,
+     "id_cum_pct": 78.1
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -0.73,
+     "id_mean_bps": 9.33,
+     "on_cum_pct": -19.3,
+     "id_cum_pct": 446.8
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 2.71,
+     "id_mean_bps": 8.68,
+     "on_cum_pct": 35.2,
+     "id_cum_pct": 177.4
+    }
+   },
+   "on_mean_ci_bps": [
+    -5.07,
+    1.74
+   ],
+   "breakeven_round_trip_bps": -1.7,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -43.0,
+    "1.0bps_side": -93.0,
+    "2.5bps_side": -169.0,
+    "5.0bps_side": -295.0,
+    "10.0bps_side": -547.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0001,
+    0.0436,
+    0.0324,
+    0.1076,
+    -0.2154,
+    -0.2159,
+    -0.2896,
+    -0.386,
+    -0.44,
+    -0.4541,
+    -0.4144,
+    -0.4422,
+    -0.3945,
+    -0.3115
+   ],
+   "series_id_log10": [
+    -0.0106,
+    0.0947,
+    0.0399,
+    0.0188,
+    0.0371,
+    0.2476,
+    0.4211,
+    0.482,
+    0.5822,
+    0.7339,
+    0.7996,
+    0.8455,
+    0.941,
+    0.9886
+   ]
+  },
+  {
+   "ticker": "orcl",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -1.938,
+    "std_bps": 106.0,
+    "t_stat": -1.04,
+    "win_rate": 0.4704,
+    "cum_return_pct": -55.5,
+    "ann_return_pct": -6.1,
+    "sharpe": -0.29
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 7.732,
+    "std_bps": 137.8,
+    "t_stat": 3.19,
+    "win_rate": 0.5368,
+    "cum_return_pct": 798.5,
+    "ann_return_pct": 18.63,
+    "sharpe": 0.89
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 5.773,
+    "std_bps": 172.7,
+    "t_stat": 1.9,
+    "win_rate": 0.5065,
+    "cum_return_pct": 300.2,
+    "ann_return_pct": 11.4,
+    "sharpe": 0.53
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0071,
+   "worst_year_open_eq_close": "2012:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2006-09-20",
+     12.2
+    ],
+    [
+     "2011-12-21",
+     -12.0
+    ],
+    [
+     "2008-09-19",
+     12.0
+    ],
+    [
+     "2017-06-22",
+     11.4
+    ],
+    [
+     "2009-03-19",
+     11.0
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -4.79,
+     "id_mean_bps": 11.76,
+     "on_cum_pct": -50.0,
+     "id_cum_pct": 265.8
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -0.13,
+     "id_mean_bps": 5.17,
+     "on_cum_pct": -11.0,
+     "id_cum_pct": 145.6
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -1.21,
+     "id_mean_bps": 6.46,
+     "on_cum_pct": -18.2,
+     "id_cum_pct": 113.2
+    }
+   },
+   "on_mean_ci_bps": [
+    -5.36,
+    1.69
+   ],
+   "breakeven_round_trip_bps": -1.94,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -49.0,
+    "1.0bps_side": -99.0,
+    "2.5bps_side": -175.0,
+    "5.0bps_side": -301.0,
+    "10.0bps_side": -553.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0024,
+    -0.0658,
+    -0.0912,
+    -0.0803,
+    -0.27,
+    -0.2982,
+    -0.2433,
+    -0.2938,
+    -0.2454,
+    -0.2978,
+    -0.2989,
+    -0.388,
+    -0.4512,
+    -0.3513
+   ],
+   "series_id_log10": [
+    -0.0137,
+    0.0389,
+    0.2072,
+    0.305,
+    0.4077,
+    0.5662,
+    0.616,
+    0.5815,
+    0.6667,
+    0.7614,
+    0.8353,
+    0.8388,
+    0.9413,
+    0.9535
+   ]
+  },
+  {
+   "ticker": "ibm",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -5.224,
+    "std_bps": 79.1,
+    "t_stat": -3.76,
+    "win_rate": 0.4546,
+    "cum_return_pct": -83.4,
+    "ann_return_pct": -13.03,
+    "sharpe": -1.05
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 7.978,
+    "std_bps": 107.1,
+    "t_stat": 4.24,
+    "win_rate": 0.5306,
+    "cum_return_pct": 998.8,
+    "ann_return_pct": 20.51,
+    "sharpe": 1.18
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 2.757,
+    "std_bps": 133.8,
+    "t_stat": 1.17,
+    "win_rate": 0.504,
+    "cum_return_pct": 82.7,
+    "ann_return_pct": 4.8,
+    "sharpe": 0.33
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0037,
+   "worst_year_open_eq_close": "2014:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2014-10-20",
+     -8.4
+    ],
+    [
+     "2016-01-20",
+     -7.5
+    ],
+    [
+     "2008-01-14",
+     7.5
+    ],
+    [
+     "2017-10-18",
+     7.2
+    ],
+    [
+     "2013-10-17",
+     -6.9
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -8.32,
+     "id_mean_bps": 11.87,
+     "on_cum_pct": -66.4,
+     "id_cum_pct": 298.7
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -3.26,
+     "id_mean_bps": 5.51,
+     "on_cum_pct": -50.5,
+     "id_cum_pct": 175.6
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -2.96,
+     "id_mean_bps": 2.91,
+     "on_cum_pct": -33.6,
+     "id_cum_pct": 37.7
+    }
+   },
+   "on_mean_ci_bps": [
+    -7.77,
+    -2.66
+   ],
+   "breakeven_round_trip_bps": -5.22,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -132.0,
+    "1.0bps_side": -182.0,
+    "2.5bps_side": -258.0,
+    "5.0bps_side": -384.0,
+    "10.0bps_side": -636.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0,
+    -0.0428,
+    -0.1286,
+    -0.1803,
+    -0.2933,
+    -0.4729,
+    -0.5726,
+    -0.5895,
+    -0.5996,
+    -0.6494,
+    -0.7261,
+    -0.7686,
+    -0.7911,
+    -0.7791
+   ],
+   "series_id_log10": [
+    -0.0046,
+    -0.0332,
+    0.1264,
+    0.2101,
+    0.2445,
+    0.6048,
+    0.7513,
+    0.8752,
+    0.9154,
+    0.9488,
+    0.9773,
+    0.9573,
+    1.086,
+    1.0409
+   ]
+  },
+  {
+   "ticker": "nflx",
+   "start": "2005-02-25",
+   "end": "2017-11-10",
+   "n_days": 3200,
+   "overnight": {
+    "n": 3200,
+    "mean_bps": 7.348,
+    "std_bps": 223.9,
+    "t_stat": 1.86,
+    "win_rate": 0.5138,
+    "cum_return_pct": 368.6,
+    "ann_return_pct": 12.93,
+    "sharpe": 0.52
+   },
+   "intraday": {
+    "n": 3200,
+    "mean_bps": 13.721,
+    "std_bps": 266.4,
+    "t_stat": 2.91,
+    "win_rate": 0.4963,
+    "cum_return_pct": 2509.8,
+    "ann_return_pct": 29.29,
+    "sharpe": 0.82
+   },
+   "total": {
+    "n": 3200,
+    "mean_bps": 20.742,
+    "std_bps": 338.9,
+    "t_stat": 3.46,
+    "win_rate": 0.5078,
+    "cum_return_pct": 12130.6,
+    "ann_return_pct": 46.01,
+    "sharpe": 0.97
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0031,
+   "worst_year_open_eq_close": "2006:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-02-25",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2013-01-24",
+     39.4
+    ],
+    [
+     "2011-10-25",
+     -37.0
+    ],
+    [
+     "2014-10-16",
+     -25.8
+    ],
+    [
+     "2013-04-23",
+     23.7
+    ],
+    [
+     "2005-05-19",
+     22.1
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1221,
+     "on_mean_bps": 2.16,
+     "id_mean_bps": 16.9,
+     "on_cum_pct": 3.9,
+     "id_cum_pct": 382.4
+    },
+    "2010s": {
+     "n": 1979,
+     "on_mean_bps": 10.55,
+     "id_mean_bps": 11.76,
+     "on_cum_pct": 351.0,
+     "id_cum_pct": 441.0
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 19.9,
+     "id_mean_bps": 7.39,
+     "on_cum_pct": 820.5,
+     "id_cum_pct": 87.4
+    }
+   },
+   "on_mean_ci_bps": [
+    -0.1,
+    15.07
+   ],
+   "breakeven_round_trip_bps": 7.35,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 185.0,
+    "1.0bps_side": 135.0,
+    "2.5bps_side": 59.0,
+    "5.0bps_side": -67.0,
+    "10.0bps_side": -319.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0036,
+    0.2468,
+    0.2552,
+    0.2718,
+    0.0957,
+    0.0201,
+    0.1304,
+    -0.1314,
+    -0.2636,
+    0.2269,
+    0.2415,
+    0.4585,
+    0.4824,
+    0.6708
+   ],
+   "series_id_log10": [
+    -0.0152,
+    0.128,
+    0.1289,
+    0.108,
+    0.3386,
+    0.6671,
+    1.08,
+    0.9491,
+    1.1864,
+    1.2918,
+    1.2602,
+    1.3869,
+    1.4272,
+    1.4166
+   ]
+  },
+  {
+   "ticker": "fb",
+   "start": "2012-05-18",
+   "end": "2017-11-10",
+   "n_days": 1380,
+   "overnight": {
+    "n": 1380,
+    "mean_bps": 16.234,
+    "std_bps": 159.5,
+    "t_stat": 3.78,
+    "win_rate": 0.5884,
+    "cum_return_pct": 694.7,
+    "ann_return_pct": 46.01,
+    "sharpe": 1.62
+   },
+   "intraday": {
+    "n": 1380,
+    "mean_bps": -2.271,
+    "std_bps": 177.9,
+    "t_stat": -0.47,
+    "win_rate": 0.5014,
+    "cum_return_pct": -41.3,
+    "ann_return_pct": -9.26,
+    "sharpe": -0.2
+   },
+   "total": {
+    "n": 1380,
+    "mean_bps": 13.882,
+    "std_bps": 235.9,
+    "t_stat": 2.19,
+    "win_rate": 0.529,
+    "cum_return_pct": 366.8,
+    "ann_return_pct": 32.49,
+    "sharpe": 0.93
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0036,
+   "worst_year_open_eq_close": "2012:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2012-05-18",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2013-07-25",
+     26.5
+    ],
+    [
+     "2012-10-24",
+     23.7
+    ],
+    [
+     "2014-01-30",
+     16.0
+    ],
+    [
+     "2012-07-27",
+     -13.6
+    ],
+    [
+     "2016-01-28",
+     13.5
+    ]
+   ],
+   "by_period": {
+    "2010s": {
+     "n": 1380,
+     "on_mean_bps": 16.23,
+     "id_mean_bps": -2.27,
+     "on_cum_pct": 694.7,
+     "id_cum_pct": -41.3
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 15.82,
+     "id_mean_bps": 4.13,
+     "on_cum_pct": 553.8,
+     "id_cum_pct": 42.1
+    }
+   },
+   "on_mean_ci_bps": [
+    8.74,
+    24.29
+   ],
+   "breakeven_round_trip_bps": 16.23,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 409.0,
+    "1.0bps_side": 359.0,
+    "2.5bps_side": 283.0,
+    "5.0bps_side": 157.0,
+    "10.0bps_side": -95.0
+   },
+   "series_years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0198,
+    0.1192,
+    0.4382,
+    0.6074,
+    0.6943,
+    0.7953,
+    0.9002
+   ],
+   "series_id_log10": [
+    -0.0308,
+    -0.2544,
+    -0.2826,
+    -0.2952,
+    -0.2671,
+    -0.31,
+    -0.2311
+   ]
+  },
+  {
+   "ticker": "ge",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 5.819,
+    "std_bps": 111.0,
+    "t_stat": 2.98,
+    "win_rate": 0.5056,
+    "cum_return_pct": 439.3,
+    "ann_return_pct": 14.01,
+    "sharpe": 0.83
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -5.171,
+    "std_bps": 151.8,
+    "t_stat": -1.94,
+    "win_rate": 0.4753,
+    "cum_return_pct": -87.1,
+    "ann_return_pct": -14.73,
+    "sharpe": -0.54
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 0.513,
+    "std_bps": 181.1,
+    "t_stat": 0.16,
+    "win_rate": 0.4926,
+    "cum_return_pct": -30.4,
+    "ann_return_pct": -2.79,
+    "sharpe": 0.04
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0133,
+   "worst_year_open_eq_close": "2012:0.04",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-09-19",
+     17.5
+    ],
+    [
+     "2008-04-11",
+     -11.6
+    ],
+    [
+     "2008-09-16",
+     -9.9
+    ],
+    [
+     "2009-03-19",
+     8.5
+    ],
+    [
+     "2009-01-21",
+     -8.1
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 9.63,
+     "id_mean_bps": -13.57,
+     "on_cum_pct": 195.0,
+     "id_cum_pct": -86.0
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 3.4,
+     "id_mean_bps": 0.17,
+     "on_cum_pct": 82.8,
+     "id_cum_pct": -8.0
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 1.76,
+     "id_mean_bps": -0.0,
+     "on_cum_pct": 20.8,
+     "id_cum_pct": -5.5
+    }
+   },
+   "on_mean_ci_bps": [
+    2.07,
+    9.82
+   ],
+   "breakeven_round_trip_bps": 5.82,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 147.0,
+    "1.0bps_side": 96.0,
+    "2.5bps_side": 21.0,
+    "5.0bps_side": -105.0,
+    "10.0bps_side": -357.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0001,
+    0.0365,
+    0.0011,
+    0.0269,
+    0.0351,
+    0.4724,
+    0.5529,
+    0.6733,
+    0.6512,
+    0.7768,
+    0.885,
+    0.8504,
+    0.7735,
+    0.7318
+   ],
+   "series_id_log10": [
+    -0.0054,
+    -0.0513,
+    0.015,
+    -0.0249,
+    -0.3663,
+    -0.8468,
+    -0.8543,
+    -0.9579,
+    -0.8596,
+    -0.8613,
+    -0.9948,
+    -0.8571,
+    -0.7532,
+    -0.8895
+   ]
+  },
+  {
+   "ticker": "jpm",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 3.54,
+    "std_bps": 126.2,
+    "t_stat": 1.6,
+    "win_rate": 0.508,
+    "cum_return_pct": 143.6,
+    "ann_return_pct": 7.18,
+    "sharpe": 0.45
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 2.782,
+    "std_bps": 208.3,
+    "t_stat": 0.76,
+    "win_rate": 0.5151,
+    "cum_return_pct": 22.7,
+    "ann_return_pct": 1.6,
+    "sharpe": 0.21
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 6.475,
+    "std_bps": 250.3,
+    "t_stat": 1.47,
+    "win_rate": 0.504,
+    "cum_return_pct": 198.9,
+    "ann_return_pct": 8.89,
+    "sharpe": 0.41
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0049,
+   "worst_year_open_eq_close": "2016:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-09-19",
+     16.6
+    ],
+    [
+     "2009-04-09",
+     11.0
+    ],
+    [
+     "2009-03-23",
+     9.3
+    ],
+    [
+     "2009-03-10",
+     9.1
+    ],
+    [
+     "2008-09-30",
+     8.9
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 2.42,
+     "id_mean_bps": 3.52,
+     "on_cum_pct": 15.6,
+     "id_cum_pct": -7.9
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 4.25,
+     "id_mean_bps": 2.31,
+     "on_cum_pct": 110.8,
+     "id_cum_pct": 33.2
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 4.31,
+     "id_mean_bps": 4.51,
+     "on_cum_pct": 65.1,
+     "id_cum_pct": 66.0
+    }
+   },
+   "on_mean_ci_bps": [
+    -0.41,
+    7.34
+   ],
+   "breakeven_round_trip_bps": 3.54,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 89.0,
+    "1.0bps_side": 39.0,
+    "2.5bps_side": -37.0,
+    "5.0bps_side": -163.0,
+    "10.0bps_side": -415.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0019,
+    0.0521,
+    0.0096,
+    0.0276,
+    -0.0658,
+    0.0641,
+    0.1368,
+    0.1824,
+    0.1895,
+    0.2405,
+    0.2654,
+    0.3131,
+    0.332,
+    0.3867
+   ],
+   "series_id_log10": [
+    -0.0064,
+    -0.0407,
+    0.0795,
+    0.0047,
+    -0.0307,
+    -0.0249,
+    -0.0902,
+    -0.2225,
+    -0.1078,
+    -0.0318,
+    -0.0144,
+    -0.0426,
+    0.0853,
+    0.0888
+   ]
+  },
+  {
+   "ticker": "xom",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -2.047,
+    "std_bps": 74.5,
+    "t_stat": -1.56,
+    "win_rate": 0.4929,
+    "cum_return_pct": -52.9,
+    "ann_return_pct": -5.69,
+    "sharpe": -0.44
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 5.356,
+    "std_bps": 126.5,
+    "t_stat": 2.41,
+    "win_rate": 0.5201,
+    "cum_return_pct": 337.2,
+    "ann_return_pct": 12.17,
+    "sharpe": 0.67
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 3.369,
+    "std_bps": 151.2,
+    "t_stat": 1.27,
+    "win_rate": 0.509,
+    "cum_return_pct": 105.8,
+    "ann_return_pct": 5.78,
+    "sharpe": 0.35
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0028,
+   "worst_year_open_eq_close": "2017:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-24",
+     -9.1
+    ],
+    [
+     "2008-10-10",
+     -6.1
+    ],
+    [
+     "2008-01-22",
+     -6.0
+    ],
+    [
+     "2015-08-24",
+     -5.7
+    ],
+    [
+     "2008-10-28",
+     4.2
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -2.87,
+     "id_mean_bps": 7.12,
+     "on_cum_pct": -33.4,
+     "id_cum_pct": 105.5
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -1.53,
+     "id_mean_bps": 4.23,
+     "on_cum_pct": -29.4,
+     "id_cum_pct": 112.7
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -1.39,
+     "id_mean_bps": 2.91,
+     "on_cum_pct": -18.1,
+     "id_cum_pct": 37.4
+    }
+   },
+   "on_mean_ci_bps": [
+    -4.32,
+    0.23
+   ],
+   "breakeven_round_trip_bps": -2.05,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -52.0,
+    "1.0bps_side": -102.0,
+    "2.5bps_side": -178.0,
+    "5.0bps_side": -304.0,
+    "10.0bps_side": -556.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0022,
+    0.106,
+    0.1285,
+    0.1189,
+    -0.0653,
+    -0.1729,
+    -0.142,
+    -0.1937,
+    -0.2458,
+    -0.2286,
+    -0.2743,
+    -0.3077,
+    -0.3547,
+    -0.3272
+   ],
+   "series_id_log10": [
+    -0.0051,
+    -0.0388,
+    0.0417,
+    0.1523,
+    0.2775,
+    0.3156,
+    0.3173,
+    0.439,
+    0.5154,
+    0.5609,
+    0.5875,
+    0.5602,
+    0.6917,
+    0.6407
+   ]
+  },
+  {
+   "ticker": "wmt",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 0.086,
+    "std_bps": 67.8,
+    "t_stat": 0.07,
+    "win_rate": 0.5037,
+    "cum_return_pct": -4.6,
+    "ann_return_pct": -0.37,
+    "sharpe": 0.02
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 2.806,
+    "std_bps": 101.3,
+    "t_stat": 1.58,
+    "win_rate": 0.5083,
+    "cum_return_pct": 110.1,
+    "ann_return_pct": 5.95,
+    "sharpe": 0.44
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 2.86,
+    "std_bps": 119.4,
+    "t_stat": 1.36,
+    "win_rate": 0.5185,
+    "cum_return_pct": 100.5,
+    "ann_return_pct": 5.56,
+    "sharpe": 0.38
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0031,
+   "worst_year_open_eq_close": "2016:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2016-05-19",
+     7.8
+    ],
+    [
+     "2009-01-08",
+     -7.6
+    ],
+    [
+     "2017-06-16",
+     -6.3
+    ],
+    [
+     "2012-04-23",
+     -5.3
+    ],
+    [
+     "2009-04-09",
+     -4.9
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 2.03,
+     "id_mean_bps": -0.93,
+     "on_cum_pct": 24.1,
+     "id_cum_pct": -19.3
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -1.15,
+     "id_mean_bps": 5.18,
+     "on_cum_pct": -23.1,
+     "id_cum_pct": 160.4
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -1.25,
+     "id_mean_bps": 4.66,
+     "on_cum_pct": -16.6,
+     "id_cum_pct": 71.8
+    }
+   },
+   "on_mean_ci_bps": [
+    -2.18,
+    2.41
+   ],
+   "breakeven_round_trip_bps": 0.09,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 2.0,
+    "1.0bps_side": -48.0,
+    "2.5bps_side": -124.0,
+    "5.0bps_side": -250.0,
+    "10.0bps_side": -502.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0034,
+    0.0748,
+    0.0632,
+    0.0911,
+    0.0471,
+    0.0963,
+    0.0987,
+    0.0717,
+    0.0473,
+    0.033,
+    0.0113,
+    -0.0076,
+    -0.0384,
+    -0.0204
+   ],
+   "series_id_log10": [
+    -0.0045,
+    -0.1371,
+    -0.1131,
+    -0.147,
+    -0.017,
+    -0.0892,
+    -0.089,
+    -0.0127,
+    0.082,
+    0.1636,
+    0.233,
+    0.1183,
+    0.2098,
+    0.3225
+   ]
+  },
+  {
+   "ticker": "ko",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 0.954,
+    "std_bps": 59.3,
+    "t_stat": 0.92,
+    "win_rate": 0.4824,
+    "cum_return_pct": 28.7,
+    "ann_return_pct": 1.98,
+    "sharpe": 0.26
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 2.789,
+    "std_bps": 94.6,
+    "t_stat": 1.68,
+    "win_rate": 0.5161,
+    "cum_return_pct": 113.5,
+    "ann_return_pct": 6.08,
+    "sharpe": 0.47
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 3.718,
+    "std_bps": 109.5,
+    "t_stat": 1.93,
+    "win_rate": 0.5191,
+    "cum_return_pct": 174.7,
+    "ann_return_pct": 8.18,
+    "sharpe": 0.54
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0052,
+   "worst_year_open_eq_close": "2013:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-15",
+     7.1
+    ],
+    [
+     "2014-10-21",
+     -5.7
+    ],
+    [
+     "2008-10-24",
+     -4.8
+    ],
+    [
+     "2008-10-13",
+     4.6
+    ],
+    [
+     "2005-04-19",
+     4.1
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 2.31,
+     "id_mean_bps": 1.11,
+     "on_cum_pct": 30.3,
+     "id_cum_pct": 5.3
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 0.09,
+     "id_mean_bps": 3.86,
+     "on_cum_pct": -1.3,
+     "id_cum_pct": 102.7
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": -1.33,
+     "id_mean_bps": 4.95,
+     "on_cum_pct": -17.0,
+     "id_cum_pct": 80.4
+    }
+   },
+   "on_mean_ci_bps": [
+    -1.13,
+    3.06
+   ],
+   "breakeven_round_trip_bps": 0.95,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 24.0,
+    "1.0bps_side": -26.0,
+    "2.5bps_side": -102.0,
+    "5.0bps_side": -228.0,
+    "10.0bps_side": -480.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0,
+    0.051,
+    0.0578,
+    0.1098,
+    0.0925,
+    0.1162,
+    0.1066,
+    0.1393,
+    0.1946,
+    0.2565,
+    0.1691,
+    0.1679,
+    0.1315,
+    0.1095
+   ],
+   "series_id_log10": [
+    -0.0061,
+    -0.0577,
+    0.0102,
+    0.0578,
+    -0.0492,
+    0.0215,
+    0.0893,
+    0.1005,
+    0.0876,
+    0.072,
+    0.1877,
+    0.2059,
+    0.2499,
+    0.3294
+   ]
+  },
+  {
+   "ticker": "jnj",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 1.842,
+    "std_bps": 52.4,
+    "t_stat": 2.0,
+    "win_rate": 0.5154,
+    "cum_return_pct": 73.6,
+    "ann_return_pct": 4.39,
+    "sharpe": 0.56
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 1.755,
+    "std_bps": 85.0,
+    "t_stat": 1.17,
+    "win_rate": 0.5083,
+    "cum_return_pct": 57.0,
+    "ann_return_pct": 3.57,
+    "sharpe": 0.33
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 3.583,
+    "std_bps": 98.7,
+    "t_stat": 2.07,
+    "win_rate": 0.5068,
+    "cum_return_pct": 172.6,
+    "ann_return_pct": 8.12,
+    "sharpe": 0.58
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0019,
+   "worst_year_open_eq_close": "2016:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-24",
+     -5.5
+    ],
+    [
+     "2015-08-24",
+     -4.7
+    ],
+    [
+     "2008-10-13",
+     4.7
+    ],
+    [
+     "2008-10-10",
+     -3.8
+    ],
+    [
+     "2007-04-17",
+     3.6
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 1.49,
+     "id_mean_bps": -0.62,
+     "on_cum_pct": 18.0,
+     "id_cum_pct": -13.2
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 2.06,
+     "id_mean_bps": 3.27,
+     "on_cum_pct": 47.1,
+     "id_cum_pct": 80.9
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 2.44,
+     "id_mean_bps": 4.56,
+     "on_cum_pct": 34.3,
+     "id_cum_pct": 71.6
+    }
+   },
+   "on_mean_ci_bps": [
+    0.08,
+    3.6
+   ],
+   "breakeven_round_trip_bps": 1.84,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 46.0,
+    "1.0bps_side": -4.0,
+    "2.5bps_side": -80.0,
+    "5.0bps_side": -206.0,
+    "10.0bps_side": -458.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0014,
+    0.0183,
+    0.0318,
+    0.0292,
+    -0.0173,
+    0.0739,
+    0.1053,
+    0.1051,
+    0.1152,
+    0.1457,
+    0.22,
+    0.2436,
+    0.2584,
+    0.2396
+   ],
+   "series_id_log10": [
+    -0.0028,
+    -0.0272,
+    -0.0083,
+    -0.0089,
+    0.0015,
+    -0.0618,
+    -0.1058,
+    -0.0695,
+    -0.0323,
+    0.0592,
+    0.0567,
+    0.0287,
+    0.0878,
+    0.1959
+   ]
+  },
+  {
+   "ticker": "pg",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -2.195,
+    "std_bps": 59.1,
+    "t_stat": -2.11,
+    "win_rate": 0.4586,
+    "cum_return_pct": -53.6,
+    "ann_return_pct": -5.8,
+    "sharpe": -0.59
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 4.894,
+    "std_bps": 90.9,
+    "t_stat": 3.06,
+    "win_rate": 0.5281,
+    "cum_return_pct": 326.5,
+    "ann_return_pct": 11.95,
+    "sharpe": 0.85
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 2.678,
+    "std_bps": 106.6,
+    "t_stat": 1.43,
+    "win_rate": 0.508,
+    "cum_return_pct": 98.0,
+    "ann_return_pct": 5.46,
+    "sharpe": 0.4
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0062,
+   "worst_year_open_eq_close": "2014:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-24",
+     -6.1
+    ],
+    [
+     "2015-08-24",
+     -4.6
+    ],
+    [
+     "2005-01-28",
+     -4.5
+    ],
+    [
+     "2008-01-22",
+     -4.4
+    ],
+    [
+     "2015-08-25",
+     4.4
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -4.44,
+     "id_mean_bps": 6.08,
+     "on_cum_pct": -44.4,
+     "id_cum_pct": 97.7
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": -0.77,
+     "id_mean_bps": 4.14,
+     "on_cum_pct": -16.5,
+     "id_cum_pct": 115.8
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 0.87,
+     "id_mean_bps": 2.95,
+     "on_cum_pct": 9.7,
+     "id_cum_pct": 40.3
+    }
+   },
+   "on_mean_ci_bps": [
+    -4.05,
+    -0.28
+   ],
+   "breakeven_round_trip_bps": -2.19,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -55.0,
+    "1.0bps_side": -106.0,
+    "2.5bps_side": -181.0,
+    "5.0bps_side": -307.0,
+    "10.0bps_side": -559.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0005,
+    -0.0314,
+    -0.1329,
+    -0.19,
+    -0.3077,
+    -0.2517,
+    -0.3217,
+    -0.3386,
+    -0.3814,
+    -0.3797,
+    -0.3528,
+    -0.3161,
+    -0.3492,
+    -0.3333
+   ],
+   "series_id_log10": [
+    -0.0049,
+    0.0588,
+    0.2009,
+    0.3073,
+    0.3638,
+    0.296,
+    0.3912,
+    0.4324,
+    0.5059,
+    0.5822,
+    0.6191,
+    0.5343,
+    0.6126,
+    0.6299
+   ]
+  },
+  {
+   "ticker": "dis",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -0.51,
+    "std_bps": 88.3,
+    "t_stat": -0.33,
+    "win_rate": 0.5037,
+    "cum_return_pct": -25.3,
+    "ann_return_pct": -2.25,
+    "sharpe": -0.09
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 6.184,
+    "std_bps": 134.9,
+    "t_stat": 2.61,
+    "win_rate": 0.5117,
+    "cum_return_pct": 452.1,
+    "ann_return_pct": 14.22,
+    "sharpe": 0.73
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 5.691,
+    "std_bps": 162.6,
+    "t_stat": 1.99,
+    "win_rate": 0.517,
+    "cum_return_pct": 312.2,
+    "ann_return_pct": 11.65,
+    "sharpe": 0.56
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0031,
+   "worst_year_open_eq_close": "2015:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2015-08-05",
+     -8.9
+    ],
+    [
+     "2011-08-10",
+     -8.2
+    ],
+    [
+     "2009-05-06",
+     7.8
+    ],
+    [
+     "2008-10-24",
+     -7.1
+    ],
+    [
+     "2012-11-09",
+     -6.1
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -5.92,
+     "id_mean_bps": 9.11,
+     "on_cum_pct": -55.4,
+     "id_cum_pct": 159.5
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 2.93,
+     "id_mean_bps": 4.33,
+     "on_cum_pct": 67.3,
+     "id_cum_pct": 112.8
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 5.28,
+     "id_mean_bps": 2.36,
+     "on_cum_pct": 87.7,
+     "id_cum_pct": 27.8
+    }
+   },
+   "on_mean_ci_bps": [
+    -3.47,
+    2.6
+   ],
+   "breakeven_round_trip_bps": -0.51,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -13.0,
+    "1.0bps_side": -63.0,
+    "2.5bps_side": -139.0,
+    "5.0bps_side": -265.0,
+    "10.0bps_side": -517.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0057,
+    -0.0058,
+    -0.0423,
+    -0.0678,
+    -0.2972,
+    -0.3471,
+    -0.4174,
+    -0.3993,
+    -0.389,
+    -0.3399,
+    -0.1991,
+    -0.0832,
+    -0.1226,
+    -0.1269
+   ],
+   "series_id_log10": [
+    -0.0104,
+    -0.0516,
+    0.1315,
+    0.1259,
+    0.2311,
+    0.4084,
+    0.5503,
+    0.545,
+    0.6664,
+    0.7966,
+    0.7509,
+    0.6811,
+    0.7398,
+    0.742
+   ]
+  },
+  {
+   "ticker": "ba",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 4.046,
+    "std_bps": 91.8,
+    "t_stat": 2.51,
+    "win_rate": 0.5334,
+    "cum_return_pct": 223.2,
+    "ann_return_pct": 9.56,
+    "sharpe": 0.7
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 2.937,
+    "std_bps": 140.8,
+    "t_stat": 1.19,
+    "win_rate": 0.5068,
+    "cum_return_pct": 87.8,
+    "ann_return_pct": 5.03,
+    "sharpe": 0.33
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 7.055,
+    "std_bps": 172.5,
+    "t_stat": 2.33,
+    "win_rate": 0.5238,
+    "cum_return_pct": 507.1,
+    "ann_return_pct": 15.07,
+    "sharpe": 0.65
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0022,
+   "worst_year_open_eq_close": "2016:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-28",
+     9.7
+    ],
+    [
+     "2008-10-10",
+     -9.6
+    ],
+    [
+     "2008-10-24",
+     -8.6
+    ],
+    [
+     "2009-08-27",
+     7.4
+    ],
+    [
+     "2015-08-24",
+     -6.4
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 1.56,
+     "id_mean_bps": 0.94,
+     "on_cum_pct": 13.5,
+     "id_cum_pct": -6.4
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 5.63,
+     "id_mean_bps": 4.21,
+     "on_cum_pct": 184.9,
+     "id_cum_pct": 100.7
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 3.75,
+     "id_mean_bps": 8.17,
+     "on_cum_pct": 55.1,
+     "id_cum_pct": 161.1
+    }
+   },
+   "on_mean_ci_bps": [
+    1.1,
+    7.12
+   ],
+   "breakeven_round_trip_bps": 4.05,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 102.0,
+    "1.0bps_side": 52.0,
+    "2.5bps_side": -24.0,
+    "5.0bps_side": -150.0,
+    "10.0bps_side": -402.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0015,
+    0.0811,
+    0.2122,
+    0.3231,
+    0.1382,
+    0.0674,
+    0.1571,
+    0.3012,
+    0.3162,
+    0.3728,
+    0.4668,
+    0.4465,
+    0.4009,
+    0.5095
+   ],
+   "series_id_log10": [
+    -0.0101,
+    0.0588,
+    0.0308,
+    -0.0928,
+    -0.1899,
+    -0.0252,
+    -0.0422,
+    -0.13,
+    -0.1182,
+    0.0825,
+    -0.0234,
+    0.0417,
+    0.1499,
+    0.2738
+   ]
+  },
+  {
+   "ticker": "cat",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 6.74,
+    "std_bps": 116.4,
+    "t_stat": 3.3,
+    "win_rate": 0.5312,
+    "cum_return_pct": 611.4,
+    "ann_return_pct": 16.5,
+    "sharpe": 0.92
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -0.935,
+    "std_bps": 160.3,
+    "t_stat": -0.33,
+    "win_rate": 0.4991,
+    "cum_return_pct": -51.3,
+    "ann_return_pct": -5.44,
+    "sharpe": -0.09
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 5.822,
+    "std_bps": 199.1,
+    "t_stat": 1.66,
+    "win_rate": 0.513,
+    "cum_return_pct": 246.7,
+    "ann_return_pct": 10.16,
+    "sharpe": 0.46
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0031,
+   "worst_year_open_eq_close": "2005:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2009-07-21",
+     11.3
+    ],
+    [
+     "2006-10-20",
+     -10.2
+    ],
+    [
+     "2008-10-24",
+     -9.4
+    ],
+    [
+     "2005-10-21",
+     -8.8
+    ],
+    [
+     "2008-09-19",
+     8.5
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 8.81,
+     "id_mean_bps": -4.5,
+     "on_cum_pct": 170.8,
+     "id_cum_pct": -55.7
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 5.43,
+     "id_mean_bps": 1.33,
+     "on_cum_pct": 162.7,
+     "id_cum_pct": 10.1
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 2.74,
+     "id_mean_bps": 3.22,
+     "on_cum_pct": 34.3,
+     "id_cum_pct": 39.5
+    }
+   },
+   "on_mean_ci_bps": [
+    3.02,
+    10.52
+   ],
+   "breakeven_round_trip_bps": 6.74,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 170.0,
+    "1.0bps_side": 119.0,
+    "2.5bps_side": 44.0,
+    "5.0bps_side": -82.0,
+    "10.0bps_side": -334.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0045,
+    0.0974,
+    0.2074,
+    0.2633,
+    0.2329,
+    0.4377,
+    0.4972,
+    0.6756,
+    0.7459,
+    0.7389,
+    0.7718,
+    0.6336,
+    0.7086,
+    0.8521
+   ],
+   "series_id_log10": [
+    -0.0092,
+    -0.0124,
+    -0.0979,
+    -0.0912,
+    -0.2385,
+    -0.3471,
+    -0.2003,
+    -0.3735,
+    -0.4368,
+    -0.4382,
+    -0.4501,
+    -0.4267,
+    -0.3435,
+    -0.3122
+   ]
+  },
+  {
+   "ticker": "mcd",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 2.745,
+    "std_bps": 67.7,
+    "t_stat": 2.31,
+    "win_rate": 0.5102,
+    "cum_return_pct": 125.8,
+    "ann_return_pct": 6.54,
+    "sharpe": 0.64
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 3.778,
+    "std_bps": 104.7,
+    "t_stat": 2.05,
+    "win_rate": 0.5213,
+    "cum_return_pct": 184.6,
+    "ann_return_pct": 8.48,
+    "sharpe": 0.57
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 6.463,
+    "std_bps": 119.7,
+    "t_stat": 3.07,
+    "win_rate": 0.5408,
+    "cum_return_pct": 542.8,
+    "ann_return_pct": 15.58,
+    "sharpe": 0.86
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0028,
+   "worst_year_open_eq_close": "2013:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2015-10-22",
+     7.7
+    ],
+    [
+     "2008-01-22",
+     -5.8
+    ],
+    [
+     "2015-08-24",
+     -5.7
+    ],
+    [
+     "2008-10-24",
+     -5.7
+    ],
+    [
+     "2008-01-28",
+     -5.5
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 2.73,
+     "id_mean_bps": 3.9,
+     "on_cum_pct": 35.3,
+     "id_cum_pct": 45.0
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 2.75,
+     "id_mean_bps": 3.7,
+     "on_cum_pct": 66.9,
+     "id_cum_pct": 96.3
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 1.61,
+     "id_mean_bps": 5.41,
+     "on_cum_pct": 20.0,
+     "id_cum_pct": 90.8
+    }
+   },
+   "on_mean_ci_bps": [
+    0.56,
+    4.84
+   ],
+   "breakeven_round_trip_bps": 2.75,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 69.0,
+    "1.0bps_side": 19.0,
+    "2.5bps_side": -57.0,
+    "5.0bps_side": -183.0,
+    "10.0bps_side": -435.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0011,
+    -0.022,
+    0.0097,
+    0.0913,
+    0.0861,
+    0.1328,
+    0.1661,
+    0.2523,
+    0.2997,
+    0.2983,
+    0.2728,
+    0.279,
+    0.2911,
+    0.3538
+   ],
+   "series_id_log10": [
+    0.0046,
+    0.0446,
+    0.1297,
+    0.1702,
+    0.2157,
+    0.1623,
+    0.2154,
+    0.2529,
+    0.1791,
+    0.2237,
+    0.2496,
+    0.3587,
+    0.3672,
+    0.4543
+   ]
+  },
+  {
+   "ticker": "nke",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 0.629,
+    "std_bps": 93.3,
+    "t_stat": 0.38,
+    "win_rate": 0.4969,
+    "cum_return_pct": 6.5,
+    "ann_return_pct": 0.49,
+    "sharpe": 0.11
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 6.001,
+    "std_bps": 141.1,
+    "t_stat": 2.42,
+    "win_rate": 0.5077,
+    "cum_return_pct": 406.2,
+    "ann_return_pct": 13.45,
+    "sharpe": 0.68
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 6.609,
+    "std_bps": 168.1,
+    "t_stat": 2.24,
+    "win_rate": 0.5127,
+    "cum_return_pct": 438.9,
+    "ann_return_pct": 14.01,
+    "sharpe": 0.62
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0031,
+   "worst_year_open_eq_close": "2006:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2014-09-26",
+     10.3
+    ],
+    [
+     "2012-06-29",
+     -9.3
+    ],
+    [
+     "2011-03-18",
+     -8.7
+    ],
+    [
+     "2013-03-22",
+     8.2
+    ],
+    [
+     "2008-01-22",
+     -8.0
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -1.72,
+     "id_mean_bps": 6.73,
+     "on_cum_pct": -23.9,
+     "id_cum_pct": 91.6
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 2.12,
+     "id_mean_bps": 5.54,
+     "on_cum_pct": 40.0,
+     "id_cum_pct": 164.2
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 5.3,
+     "id_mean_bps": 3.17,
+     "on_cum_pct": 85.4,
+     "id_cum_pct": 39.3
+    }
+   },
+   "on_mean_ci_bps": [
+    -2.37,
+    3.83
+   ],
+   "breakeven_round_trip_bps": 0.63,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 16.0,
+    "1.0bps_side": -35.0,
+    "2.5bps_side": -110.0,
+    "5.0bps_side": -236.0,
+    "10.0bps_side": -488.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0,
+    0.1071,
+    0.0717,
+    0.1158,
+    -0.0186,
+    -0.1189,
+    -0.1349,
+    -0.1873,
+    -0.2294,
+    -0.129,
+    -0.0379,
+    0.1178,
+    0.0924,
+    0.0272
+   ],
+   "series_id_log10": [
+    -0.0061,
+    -0.1303,
+    -0.0394,
+    0.029,
+    0.0869,
+    0.2777,
+    0.4133,
+    0.5231,
+    0.6004,
+    0.6847,
+    0.6833,
+    0.6444,
+    0.6017,
+    0.7043
+   ]
+  },
+  {
+   "ticker": "sbux",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": -0.078,
+    "std_bps": 110.1,
+    "t_stat": -0.04,
+    "win_rate": 0.5136,
+    "cum_return_pct": -20.1,
+    "ann_return_pct": -1.73,
+    "sharpe": -0.01
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 6.455,
+    "std_bps": 168.1,
+    "t_stat": 2.19,
+    "win_rate": 0.5105,
+    "cum_return_pct": 413.2,
+    "ann_return_pct": 13.57,
+    "sharpe": 0.61
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 6.268,
+    "std_bps": 195.9,
+    "t_stat": 1.82,
+    "win_rate": 0.4941,
+    "cum_return_pct": 310.2,
+    "ann_return_pct": 11.61,
+    "sharpe": 0.51
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0037,
+   "worst_year_open_eq_close": "2005:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2006-08-03",
+     -12.5
+    ],
+    [
+     "2008-04-24",
+     -10.9
+    ],
+    [
+     "2008-10-24",
+     -10.7
+    ],
+    [
+     "2012-07-27",
+     -10.5
+    ],
+    [
+     "2008-01-08",
+     9.8
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": -6.49,
+     "id_mean_bps": 7.56,
+     "on_cum_pct": -60.7,
+     "id_cum_pct": 92.2
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 4.0,
+     "id_mean_bps": 5.75,
+     "on_cum_pct": 103.6,
+     "id_cum_pct": 167.1
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 5.68,
+     "id_mean_bps": 2.16,
+     "on_cum_pct": 96.3,
+     "id_cum_pct": 22.7
+    }
+   },
+   "on_mean_ci_bps": [
+    -3.94,
+    3.75
+   ],
+   "breakeven_round_trip_bps": -0.08,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": -2.0,
+    "1.0bps_side": -52.0,
+    "2.5bps_side": -128.0,
+    "5.0bps_side": -254.0,
+    "10.0bps_side": -506.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.004,
+    0.1716,
+    0.2284,
+    0.1097,
+    -0.1954,
+    -0.402,
+    -0.4521,
+    -0.4373,
+    -0.3784,
+    -0.2716,
+    -0.1675,
+    -0.026,
+    -0.0973,
+    -0.0973
+   ],
+   "series_id_log10": [
+    -0.0043,
+    -0.1673,
+    -0.1664,
+    -0.3091,
+    -0.2969,
+    0.2794,
+    0.4886,
+    0.6127,
+    0.6446,
+    0.6907,
+    0.6165,
+    0.6361,
+    0.6915,
+    0.7103
+   ]
+  },
+  {
+   "ticker": "f",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 26.453,
+    "std_bps": 190.1,
+    "t_stat": 7.92,
+    "win_rate": 0.5522,
+    "cum_return_pct": 301149.8,
+    "ann_return_pct": 86.53,
+    "sharpe": 2.21
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": -21.519,
+    "std_bps": 247.3,
+    "t_stat": -4.95,
+    "win_rate": 0.4481,
+    "cum_return_pct": -100.0,
+    "ann_return_pct": -46.24,
+    "sharpe": -1.38
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 3.768,
+    "std_bps": 271.3,
+    "t_stat": 0.79,
+    "win_rate": 0.4892,
+    "cum_return_pct": 3.6,
+    "ann_return_pct": 0.28,
+    "sharpe": 0.22
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0157,
+   "worst_year_open_eq_close": "2016:0.05",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-13",
+     49.7
+    ],
+    [
+     "2008-12-12",
+     -24.5
+    ],
+    [
+     "2008-11-24",
+     24.5
+    ],
+    [
+     "2008-10-14",
+     24.3
+    ],
+    [
+     "2009-04-24",
+     18.7
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 50.89,
+     "id_mean_bps": -44.17,
+     "on_cum_pct": 38733.1,
+     "id_cum_pct": -99.8
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 10.93,
+     "id_mean_bps": -7.13,
+     "on_cum_pct": 675.8,
+     "id_cum_pct": -80.4
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 7.45,
+     "id_mean_bps": -3.85,
+     "on_cum_pct": 143.9,
+     "id_cum_pct": -43.9
+    }
+   },
+   "on_mean_ci_bps": [
+    18.67,
+    34.78
+   ],
+   "breakeven_round_trip_bps": 26.45,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 667.0,
+    "1.0bps_side": 616.0,
+    "2.5bps_side": 541.0,
+    "5.0bps_side": 415.0,
+    "10.0bps_side": 163.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0,
+    -0.0055,
+    0.3397,
+    0.6606,
+    1.7665,
+    2.5965,
+    2.8882,
+    3.0222,
+    3.0944,
+    3.2155,
+    3.3299,
+    3.3994,
+    3.4005,
+    3.4789
+   ],
+   "series_id_log10": [
+    -0.0015,
+    -0.2683,
+    -0.6317,
+    -1.0087,
+    -2.5432,
+    -2.7522,
+    -2.8191,
+    -3.1433,
+    -3.1334,
+    -3.175,
+    -3.278,
+    -3.3713,
+    -3.3883,
+    -3.4635
+   ]
+  },
+  {
+   "ticker": "spy",
+   "start": "2005-02-25",
+   "end": "2017-11-10",
+   "n_days": 3200,
+   "overnight": {
+    "n": 3200,
+    "mean_bps": 2.255,
+    "std_bps": 67.2,
+    "t_stat": 1.9,
+    "win_rate": 0.5375,
+    "cum_return_pct": 91.4,
+    "ann_return_pct": 5.24,
+    "sharpe": 0.53
+   },
+   "intraday": {
+    "n": 3200,
+    "mean_bps": 1.205,
+    "std_bps": 94.4,
+    "t_stat": 0.72,
+    "win_rate": 0.5372,
+    "cum_return_pct": 27.5,
+    "ann_return_pct": 1.93,
+    "sharpe": 0.2
+   },
+   "total": {
+    "n": 3200,
+    "mean_bps": 3.501,
+    "std_bps": 119.5,
+    "t_stat": 1.66,
+    "win_rate": 0.5463,
+    "cum_return_pct": 144.0,
+    "ann_return_pct": 7.28,
+    "sharpe": 0.46
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0062,
+   "worst_year_open_eq_close": "2009:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-02-25",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-24",
+     -8.3
+    ],
+    [
+     "2008-10-13",
+     6.1
+    ],
+    [
+     "2008-09-19",
+     5.5
+    ],
+    [
+     "2015-08-24",
+     -5.1
+    ],
+    [
+     "2008-10-10",
+     -4.3
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1221,
+     "on_mean_bps": 1.56,
+     "id_mean_bps": -1.17,
+     "on_cum_pct": 16.4,
+     "id_cum_pct": -21.2
+    },
+    "2010s": {
+     "n": 1979,
+     "on_mean_bps": 2.68,
+     "id_mean_bps": 2.67,
+     "on_cum_pct": 64.4,
+     "id_cum_pct": 61.7
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 2.72,
+     "id_mean_bps": 3.34,
+     "on_cum_pct": 38.8,
+     "id_cum_pct": 49.1
+    }
+   },
+   "on_mean_ci_bps": [
+    0.29,
+    4.22
+   ],
+   "breakeven_round_trip_bps": 2.25,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 57.0,
+    "1.0bps_side": 6.0,
+    "2.5bps_side": -69.0,
+    "5.0bps_side": -195.0,
+    "10.0bps_side": -447.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.001,
+    0.0462,
+    0.0799,
+    0.1322,
+    0.04,
+    0.0697,
+    0.0948,
+    0.1237,
+    0.1508,
+    0.199,
+    0.2451,
+    0.2477,
+    0.2489,
+    0.2819
+   ],
+   "series_id_log10": [
+    -0.0019,
+    -0.0278,
+    -0.0139,
+    -0.0553,
+    -0.1561,
+    -0.0997,
+    -0.0751,
+    -0.0935,
+    -0.052,
+    0.0062,
+    0.019,
+    0.0157,
+    0.0731,
+    0.1054
+   ]
+  },
+  {
+   "ticker": "qqq",
+   "start": "2005-01-03",
+   "end": "2017-11-10",
+   "n_days": 3238,
+   "overnight": {
+    "n": 3238,
+    "mean_bps": 4.038,
+    "std_bps": 68.8,
+    "t_stat": 3.34,
+    "win_rate": 0.5581,
+    "cum_return_pct": 242.2,
+    "ann_return_pct": 10.05,
+    "sharpe": 0.93
+   },
+   "intraday": {
+    "n": 3238,
+    "mean_bps": 1.273,
+    "std_bps": 106.0,
+    "t_stat": 0.68,
+    "win_rate": 0.529,
+    "cum_return_pct": 25.9,
+    "ann_return_pct": 1.81,
+    "sharpe": 0.19
+   },
+   "total": {
+    "n": 3238,
+    "mean_bps": 5.311,
+    "std_bps": 126.5,
+    "t_stat": 2.39,
+    "win_rate": 0.5479,
+    "cum_return_pct": 330.7,
+    "ann_return_pct": 12.04,
+    "sharpe": 0.67
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0127,
+   "worst_year_open_eq_close": "2006:0.03",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-01-03",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2015-08-24",
+     -8.0
+    ],
+    [
+     "2008-10-24",
+     -7.4
+    ],
+    [
+     "2008-01-22",
+     -5.6
+    ],
+    [
+     "2008-09-19",
+     5.4
+    ],
+    [
+     "2008-10-13",
+     4.9
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1258,
+     "on_mean_bps": 2.96,
+     "id_mean_bps": -0.45,
+     "on_cum_pct": 39.9,
+     "id_cum_pct": -15.6
+    },
+    "2010s": {
+     "n": 1980,
+     "on_mean_bps": 4.72,
+     "id_mean_bps": 2.37,
+     "on_cum_pct": 144.7,
+     "id_cum_pct": 49.1
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 4.92,
+     "id_mean_bps": 3.03,
+     "on_cum_pct": 81.9,
+     "id_cum_pct": 41.5
+    }
+   },
+   "on_mean_ci_bps": [
+    1.93,
+    6.16
+   ],
+   "breakeven_round_trip_bps": 4.04,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 102.0,
+    "1.0bps_side": 51.0,
+    "2.5bps_side": -24.0,
+    "5.0bps_side": -150.0,
+    "10.0bps_side": -402.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    0.0018,
+    0.0688,
+    0.0988,
+    0.1731,
+    0.1007,
+    0.1511,
+    0.2183,
+    0.2346,
+    0.2902,
+    0.3547,
+    0.427,
+    0.4655,
+    0.47,
+    0.5343
+   ],
+   "series_id_log10": [
+    -0.0098,
+    -0.0479,
+    -0.0567,
+    -0.0631,
+    -0.1999,
+    -0.0729,
+    -0.0609,
+    -0.0612,
+    -0.0391,
+    0.015,
+    0.0209,
+    0.0137,
+    0.0521,
+    0.0999
+   ]
+  },
+  {
+   "ticker": "iwm",
+   "start": "2005-02-25",
+   "end": "2017-11-10",
+   "n_days": 3200,
+   "overnight": {
+    "n": 3200,
+    "mean_bps": 3.239,
+    "std_bps": 78.5,
+    "t_stat": 2.34,
+    "win_rate": 0.5431,
+    "cum_return_pct": 155.5,
+    "ann_return_pct": 7.67,
+    "sharpe": 0.66
+   },
+   "intraday": {
+    "n": 3200,
+    "mean_bps": 0.845,
+    "std_bps": 130.3,
+    "t_stat": 0.37,
+    "win_rate": 0.5184,
+    "cum_return_pct": -0.1,
+    "ann_return_pct": -0.01,
+    "sharpe": 0.1
+   },
+   "total": {
+    "n": 3200,
+    "mean_bps": 4.079,
+    "std_bps": 151.6,
+    "t_stat": 1.52,
+    "win_rate": 0.535,
+    "cum_return_pct": 155.1,
+    "ann_return_pct": 7.65,
+    "sharpe": 0.43
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0072,
+   "worst_year_open_eq_close": "2005:0.01",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-02-25",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-09-19",
+     9.9
+    ],
+    [
+     "2008-10-24",
+     -8.2
+    ],
+    [
+     "2010-05-10",
+     4.9
+    ],
+    [
+     "2015-08-24",
+     -4.8
+    ],
+    [
+     "2008-10-10",
+     -4.7
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1221,
+     "on_mean_bps": 2.6,
+     "id_mean_bps": -0.95,
+     "on_cum_pct": 30.6,
+     "id_cum_pct": -24.7
+    },
+    "2010s": {
+     "n": 1979,
+     "on_mean_bps": 3.63,
+     "id_mean_bps": 1.95,
+     "on_cum_pct": 95.6,
+     "id_cum_pct": 32.7
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 3.12,
+     "id_mean_bps": 2.84,
+     "on_cum_pct": 45.5,
+     "id_cum_pct": 36.7
+    }
+   },
+   "on_mean_ci_bps": [
+    0.8,
+    5.69
+   ],
+   "breakeven_round_trip_bps": 3.24,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 82.0,
+    "1.0bps_side": 31.0,
+    "2.5bps_side": -44.0,
+    "5.0bps_side": -170.0,
+    "10.0bps_side": -422.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.0005,
+    0.064,
+    0.0861,
+    0.1453,
+    0.0664,
+    0.1218,
+    0.1953,
+    0.2216,
+    0.2688,
+    0.3354,
+    0.371,
+    0.3526,
+    0.3699,
+    0.4073
+   ],
+   "series_id_log10": [
+    -0.0021,
+    -0.0342,
+    0.0039,
+    -0.0723,
+    -0.1685,
+    -0.1188,
+    -0.0974,
+    -0.1436,
+    -0.1183,
+    -0.0601,
+    -0.0722,
+    -0.0814,
+    -0.0014,
+    -0.0006
+   ]
+  },
+  {
+   "ticker": "dia",
+   "start": "2005-02-25",
+   "end": "2017-11-10",
+   "n_days": 3200,
+   "overnight": {
+    "n": 3200,
+    "mean_bps": 2.077,
+    "std_bps": 61.7,
+    "t_stat": 1.91,
+    "win_rate": 0.5453,
+    "cum_return_pct": 82.8,
+    "ann_return_pct": 4.87,
+    "sharpe": 0.53
+   },
+   "intraday": {
+    "n": 3200,
+    "mean_bps": 1.389,
+    "std_bps": 87.7,
+    "t_stat": 0.9,
+    "win_rate": 0.5297,
+    "cum_return_pct": 37.9,
+    "ann_return_pct": 2.56,
+    "sharpe": 0.25
+   },
+   "total": {
+    "n": 3200,
+    "mean_bps": 3.511,
+    "std_bps": 111.6,
+    "t_stat": 1.78,
+    "win_rate": 0.5409,
+    "cum_return_pct": 152.1,
+    "ann_return_pct": 7.55,
+    "sharpe": 0.5
+   },
+   "dropped_rows": 0,
+   "open_eq_close_share": 0.0087,
+   "worst_year_open_eq_close": "2017:0.02",
+   "trimmed_from": "",
+   "trim_reason": "",
+   "raw_start": "2005-02-25",
+   "n_large_gaps": 0,
+   "top_overnight_moves": [
+    [
+     "2008-10-24",
+     -8.5
+    ],
+    [
+     "2008-09-19",
+     5.6
+    ],
+    [
+     "2015-08-24",
+     -5.2
+    ],
+    [
+     "2008-10-13",
+     5.1
+    ],
+    [
+     "2008-10-28",
+     4.5
+    ]
+   ],
+   "by_period": {
+    "2000s": {
+     "n": 1221,
+     "on_mean_bps": 0.89,
+     "id_mean_bps": -0.28,
+     "on_cum_pct": 8.0,
+     "id_cum_pct": -11.1
+    },
+    "2010s": {
+     "n": 1979,
+     "on_mean_bps": 2.81,
+     "id_mean_bps": 2.42,
+     "on_cum_pct": 69.3,
+     "id_cum_pct": 55.1
+    },
+    "last5y": {
+     "n": 1260,
+     "on_mean_bps": 3.2,
+     "id_mean_bps": 2.75,
+     "on_cum_pct": 47.5,
+     "id_cum_pct": 38.6
+    }
+   },
+   "on_mean_ci_bps": [
+    0.25,
+    3.91
+   ],
+   "breakeven_round_trip_bps": 2.08,
+   "ann_pnl_per_1000_by_cost": {
+    "0.0bps_side": 52.0,
+    "1.0bps_side": 2.0,
+    "2.5bps_side": -74.0,
+    "5.0bps_side": -200.0,
+    "10.0bps_side": -452.0
+   },
+   "series_years": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "series_on_log10": [
+    -0.001,
+    0.0461,
+    0.0707,
+    0.1076,
+    0.0277,
+    0.0367,
+    0.0508,
+    0.0868,
+    0.1003,
+    0.1438,
+    0.1948,
+    0.1933,
+    0.2017,
+    0.2621
+   ],
+   "series_id_log10": [
+    -0.0016,
+    -0.0462,
+    -0.0104,
+    -0.0263,
+    -0.1073,
+    -0.0477,
+    -0.0187,
+    -0.0191,
+    0.0111,
+    0.0664,
+    0.0597,
+    0.0536,
+    0.1198,
+    0.1396
+   ]
+  }
+ ],
+ "missing": []
+}
