@@ -1,0 +1,2 @@
+# Python >= 3.11 (tomllib, zoneinfo). Stdlib otherwise.
+ib_async>=1.0.1

@@ -1,0 +1,49 @@
+# Overnight bot configuration. Copy to config.toml and edit.
+# All order sizing is WHOLE SHARES (auction orders exclude fractionals).
+
+[bot]
+# IB Gateway: live = 4001, paper = 4002. TWS: live = 7496, paper = 7497.
+host = "127.0.0.1"
+port = 4001
+client_id = 17
+# leave empty to use the first managed account on the connection
+account = ""
+journal_path = "overnight.sqlite"
+dry_run = false
+# if one share costs more than clip_usd, still buy 1 share...
+round_up_to_one_share = true
+# ...but never if the share price exceeds clip_usd * this factor
+max_clip_overshoot = 1.6
+# minutes past the close to wait for the MOC fill before giving up
+fill_wait_minutes = 12
+# optional: POST alerts to this URL (e.g. https://ntfy.sh/your-topic)
+notify_url = ""
+
+# MU at ~$1,000/share: clip_usd = 1000 buys exactly 1 share (via
+# round_up_to_one_share). Set clip_usd = 5000 for ~5 shares, etc.
+[[symbols]]
+symbol = "MU"
+clip_usd = 1000
+max_shares = 100
+
+# Optional basket - uncomment to diversify the leg (each name adds
+# ~$180/yr of IBKR per-order minimums; see research/overnight_intraday/
+# live_costs.md).
+# [[symbols]]
+# symbol = "TSM"
+# clip_usd = 1000
+# [[symbols]]
+# symbol = "AMD"
+# clip_usd = 1000
+
+[kill]
+# Pre-registered stop conditions, checked before every buy and at every
+# reconcile. A trip sets HALTED; clear it manually with `resume`.
+enabled = true
+# halt when cumulative P&L drawdown exceeds this % of avg nightly notional
+max_drawdown_pct = 25.0
+max_consecutive_losses = 15
+# halt when the trailing window's summed P&L is negative...
+trailing_window_nights = 252
+# ...once at least this many nights have accumulated
+trailing_min_nights = 126

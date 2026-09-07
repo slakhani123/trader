@@ -1,0 +1,4 @@
+config.toml
+overnight.sqlite
+bot.log
+__pycache__/

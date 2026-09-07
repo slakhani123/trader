@@ -7,9 +7,14 @@ trim, exit, and thesis-invalidated — each with its full audit trail:
 sources, publication timestamps, score explanations, entry/exit plans and
 scenarios.
 
-**Research support only.** Vigil contains no brokerage connectivity of any
-kind and cannot place trades. Nothing it produces is a guarantee or
-personalised financial advice.
+**Research support only.** The Vigil platform contains no brokerage
+connectivity of any kind and cannot place trades. Nothing it produces is a
+guarantee or personalised financial advice.
+
+(One deliberate, self-contained exception lives outside the platform:
+`bots/overnight_ibkr/`, a standalone IBKR bot for the overnight strategy
+studied in `research/overnight_intraday/`. It shares no code with Vigil
+and is opt-in only — see its README and the research before using it.)
 
 ```
 providers (replaceable) ─▶ point-in-time store ─▶ snapshot(as_of)

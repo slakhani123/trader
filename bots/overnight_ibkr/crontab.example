@@ -1,0 +1,21 @@
+# Overnight bot crontab (host timezone: Europe/London).
+#
+# The bot gates itself on US/Eastern market times internally, so it is
+# safe - and REQUIRED for DST-shift weeks and 13:00 ET half-days - to
+# fire each leg at several London times: wrong firings exit 0 silently.
+#
+# London-vs-New-York offset is 5h in winter, and 4h for ~3 weeks/yr when
+# the US shifts before the UK. Half-days close at 13:00 ET.
+#
+# afternoon leg (regular close 16:00 ET -> submit ~15:00-15:45 ET):
+15,45 20 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
+15,45 19 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
+# half-day leg (close 13:00 ET -> submit ~12:00-12:45 ET):
+15,40 17 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
+15,40 16 * * 1-5  cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py buy   >> bot.log 2>&1
+# morning safety net (before the 09:28 ET MOO cutoff):
+05 14 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py sell  >> bot.log 2>&1
+05 13 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py sell  >> bot.log 2>&1
+# morning reconcile (after the open; records fills, P&L, kill criteria):
+50 14 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py reconcile >> bot.log 2>&1
+50 13 * * 1-5     cd /path/to/trader/bots/overnight_ibkr && python3 overnight_bot.py reconcile >> bot.log 2>&1
