@@ -23,22 +23,23 @@ fill_wait_minutes = 12
 # optional: POST alerts to this URL (e.g. https://ntfy.sh/your-topic)
 notify_url = ""
 
-# MU at ~$1,000/share: clip_usd = 1000 buys exactly 1 share (via
-# round_up_to_one_share). Set clip_usd = 5000 for ~5 shares, etc.
+# Chosen pilot config (Sep 2026): the fee-optimal 2-leg basket. IBKR's
+# per-order minimums are a flat ~$188/yr PER NAME, so fewer, fatter legs
+# beat many thin ones - each leg needs >= ~$450/night just to break even.
+# AMD and TSM carry the most statistically robust overnight tilts in the
+# study (t = 3.8 / 4.8, 2018-2026). ~$2,700 deployed nightly; at the
+# historical pace: gross ~$1,200/yr, fees ~$380/yr, net ~+$830/yr.
+# Scaling rule: add a leg only per +$1,200-1,500/night of extra capital
+# (candidates: MRVL, MU, AVGO - see research/overnight_intraday/).
 [[symbols]]
-symbol = "MU"
-clip_usd = 1000
-max_shares = 100
+symbol = "AMD"
+clip_usd = 1450        # ~3 shares at $478
+max_shares = 3
 
-# Optional basket - uncomment to diversify the leg (each name adds
-# ~$180/yr of IBKR per-order minimums; see research/overnight_intraday/
-# live_costs.md).
-# [[symbols]]
-# symbol = "TSM"
-# clip_usd = 1000
-# [[symbols]]
-# symbol = "AMD"
-# clip_usd = 1000
+[[symbols]]
+symbol = "TSM"
+clip_usd = 1300        # ~3 shares at $429
+max_shares = 3
 
 [kill]
 # Pre-registered stop conditions, checked before every buy and at every
